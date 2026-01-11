@@ -9,6 +9,9 @@ export interface CompareItem {
   price: number
 }
 
+// 最大对比数量常量
+const MAX_COMPARE_ITEMS = 2
+
 export const useCompareStore = defineStore('compare', {
   state: () => ({
     cpuList: [] as CompareItem[],
@@ -39,13 +42,31 @@ export const useCompareStore = defineStore('compare', {
     canStartPK: (state) => {
       return state.cpuList.length >= 2 || state.gpuList.length >= 2
     },
+    
+    // 获取指定类型的对比列表是否已满
+    isListFull: (state) => {
+      return (type: 'cpu' | 'gpu') => {
+        const list = type === 'cpu' ? state.cpuList : state.gpuList
+        return list.length >= MAX_COMPARE_ITEMS
+      }
+    },
   },
 
   actions: {
+    // 类型守卫：判断是否为CPU
+    isCpuSpecs(item: CpuSpecs | GpuSpecs): item is CpuSpecs {
+      return 'cores' in item
+    },
+    
+    // 获取对应类型的列表
+    getListByType(type: 'cpu' | 'gpu'): CompareItem[] {
+      return type === 'cpu' ? this.cpuList : this.gpuList
+    },
+    
     // 切换硬件对比状态
     toggleCompare(item: CpuSpecs | GpuSpecs) {
-      const type = 'cores' in item ? 'cpu' : 'gpu'
-      const list = type === 'cpu' ? this.cpuList : this.gpuList
+      const type = this.isCpuSpecs(item) ? 'cpu' : 'gpu'
+      const list = this.getListByType(type)
       const index = list.findIndex(i => i.id === item.id)
       
       if (index > -1) {
@@ -54,8 +75,8 @@ export const useCompareStore = defineStore('compare', {
         return { added: false, message: '已从对比列表中移除' }
       } else {
         // 检查是否已达到上限（最多2个）
-        if (list.length >= 2) {
-          return { added: false, message: `最多只能对比2个${type === 'cpu' ? 'CPU' : '显卡'}` }
+        if (list.length >= MAX_COMPARE_ITEMS) {
+          return { added: false, message: `最多只能对比${MAX_COMPARE_ITEMS}个${type === 'cpu' ? 'CPU' : '显卡'}` }
         }
         
         // 添加到对比列表
@@ -75,26 +96,83 @@ export const useCompareStore = defineStore('compare', {
     // 清空对比列表
     clearCompare(type?: 'cpu' | 'gpu') {
       if (type) {
-        if (type === 'cpu') {
-          this.cpuList = []
-        } else {
-          this.gpuList = []
-        }
+        const list = this.getListByType(type)
+        list.length = 0 // 更高效的方式清空数组
       } else {
-        this.cpuList = []
-        this.gpuList = []
+        this.cpuList.length = 0
+        this.gpuList.length = 0
       }
     },
     
     // 移除单个对比项
     removeCompareItem(id: string, type: 'cpu' | 'gpu') {
-      const list = type === 'cpu' ? this.cpuList : this.gpuList
+      const list = this.getListByType(type)
       const index = list.findIndex(item => item.id === id)
-      if (index > -1) {
-        list.splice(index, 1)
-        return true
+      
+      // 边界检查
+      if (index < 0 || index >= list.length) {
+        return false
       }
-      return false
+      
+      list.splice(index, 1)
+      return true
+    },
+    
+    // 添加对比项（直接添加，不检查重复）
+    addCompareItem(item: CpuSpecs | GpuSpecs): { success: boolean; message: string } {
+      const type = this.isCpuSpecs(item) ? 'cpu' : 'gpu'
+      const list = this.getListByType(type)
+      
+      // 检查是否已存在
+      if (list.some(existing => existing.id === item.id)) {
+        return { success: false, message: '该硬件已在对比列表中' }
+      }
+      
+      // 检查是否已达到上限
+      if (list.length >= MAX_COMPARE_ITEMS) {
+        return { success: false, message: `最多只能对比${MAX_COMPARE_ITEMS}个${type === 'cpu' ? 'CPU' : '显卡'}` }
+      }
+      
+      // 添加到对比列表
+      const compareItem: CompareItem = {
+        id: item.id,
+        type,
+        model: item.model,
+        brand: item.brand,
+        price: item.price,
+      }
+      
+      list.push(compareItem)
+      return { success: true, message: '已加入对比列表' }
+    },
+    
+    // 批量设置对比项（用于初始化或恢复状态）
+    setCompareItems(items: CompareItem[]) {
+      // 按类型分组
+      const cpuItems: CompareItem[] = []
+      const gpuItems: CompareItem[] = []
+      
+      // 去重处理（使用数组替代 Set 以确保 ES5 兼容性）
+      const seenIds: string[] = []
+      
+      for (const item of items) {
+        // 跳过重复项（使用 indexOf 替代 includes 确保 ES5 兼容性）
+        if (seenIds.indexOf(item.id) !== -1) {
+          continue
+        }
+        
+        // 根据类型分组，并确保不超过最大数量
+        if (item.type === 'cpu' && cpuItems.length < MAX_COMPARE_ITEMS) {
+          cpuItems.push(item)
+          seenIds.push(item.id)
+        } else if (item.type === 'gpu' && gpuItems.length < MAX_COMPARE_ITEMS) {
+          gpuItems.push(item)
+          seenIds.push(item.id)
+        }
+      }
+      
+      this.cpuList = cpuItems
+      this.gpuList = gpuItems
     },
   },
 })
