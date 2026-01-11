@@ -617,7 +617,7 @@ const comparisonResults = computed(() => {
 })
 
 // 获取进度条样式类
-const getBarClass = (winner: 'left' | 'right' | null, side: 'left' | 'right') => {
+const getBarClass = (winner: string | null, side: 'left' | 'right') => {
   if (!winner) return ''
   return winner === side ? 'bar-winner' : 'bar-loser'
 }

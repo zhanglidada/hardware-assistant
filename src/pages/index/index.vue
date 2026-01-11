@@ -314,10 +314,11 @@ const filteredHardware = computed(() => {
     return data
   }
   
-  return data.filter(item => 
-    item.model.toLowerCase().includes(keyword) ||
-    item.brand.toLowerCase().includes(keyword) ||
-    (item.description && item.description.toLowerCase().includes(keyword))
+  // 使用类型断言解决联合类型调用问题，使用 indexOf 替代 includes 避免 ES2015+ 方法兼容性问题
+  return (data as (CpuSpecs | GpuSpecs)[]).filter((item: CpuSpecs | GpuSpecs) => 
+    item.model.toLowerCase().indexOf(keyword) !== -1 ||
+    item.brand.toLowerCase().indexOf(keyword) !== -1 ||
+    (item.description && item.description.toLowerCase().indexOf(keyword) !== -1)
   )
 })
 

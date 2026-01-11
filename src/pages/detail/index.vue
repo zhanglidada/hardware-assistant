@@ -259,7 +259,14 @@ const loadHardwareData = () => {
     }
     
     const dataSource = type === 'cpu' ? cpuMockData : gpuMockData
-    const found = dataSource.find(item => item.id === id)
+    // 使用 for 循环替代 find 方法，避免 ES2015+ 方法兼容性问题
+    let found: CpuSpecs | GpuSpecs | undefined = undefined
+    for (let i = 0; i < dataSource.length; i++) {
+      if (dataSource[i].id === id) {
+        found = dataSource[i]
+        break
+      }
+    }
     
     hardwareData.value = found || null
     loading.value = false
