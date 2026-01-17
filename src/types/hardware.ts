@@ -6,8 +6,8 @@ export interface BaseHardware {
   id: string;
   /** 型号名称 */
   model: string;
-  /** 品牌：Intel, AMD, NVIDIA 等 */
-  brand: 'Intel' | 'AMD' | 'NVIDIA' | '其他';
+  /** 品牌：Intel, AMD, NVIDIA, Apple, Xiaomi, Huawei, Samsung 等 */
+  brand: 'Intel' | 'AMD' | 'NVIDIA' | 'Apple' | 'Xiaomi' | 'Huawei' | 'Samsung' | '其他';
   /** 发布日期，格式：YYYY-MM-DD */
   releaseDate: string;
   /** 参考价格（人民币） */
@@ -56,4 +56,30 @@ export interface GpuSpecs extends BaseHardware {
   rayTracing: boolean;
   /** 是否支持DLSS/FSR */
   upscalingTech: 'DLSS' | 'FSR' | 'XeSS' | '无';
+}
+
+/**
+ * 手机规格接口，继承自 BaseHardware
+ */
+export interface PhoneSpecs extends BaseHardware {
+  /** 处理器型号 */
+  processor: string;
+  /** 内存大小，单位：GB */
+  ram: number;
+  /** 存储容量，单位：GB */
+  storage: number;
+  /** 屏幕尺寸，单位：英寸 */
+  screenSize: number;
+  /** 屏幕分辨率，格式：宽度x高度 */
+  resolution: string;
+  /** 刷新率，单位：Hz */
+  refreshRate: number;
+  /** 电池容量，单位：mAh */
+  batteryCapacity: number;
+  /** 摄像头配置，例如：'50MP+12MP+12MP' */
+  camera: string;
+  /** 操作系统 */
+  os: 'iOS' | 'Android';
+  /** 是否支持5G */
+  support5G: boolean;
 }

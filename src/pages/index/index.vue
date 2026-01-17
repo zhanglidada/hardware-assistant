@@ -4,7 +4,7 @@
     <view class="search-container">
       <wd-search
         v-model="searchKeyword"
-        placeholder="搜索CPU或显卡型号"
+        placeholder="搜索CPU、显卡或手机型号"
         shape="round"
         @search="handleSearch"
         @clear="handleClear"
@@ -15,6 +15,7 @@
     <wd-tabs v-model="activeTab" class="category-tabs">
       <wd-tab title="CPU" name="cpu"></wd-tab>
       <wd-tab title="显卡" name="gpu"></wd-tab>
+      <wd-tab title="手机" name="phone"></wd-tab>
     </wd-tabs>
 
     <!-- 硬件列表 -->
@@ -42,10 +43,15 @@
                     {{ (item as CpuSpecs).baseClock }}-{{ (item as CpuSpecs).boostClock }}GHz · 
                     {{ (item as CpuSpecs).tdp }}W
                   </text>
-                  <text v-else>
+                  <text v-else-if="activeTab === 'gpu'">
                     {{ (item as GpuSpecs).vram }}GB · 
                     {{ (item as GpuSpecs).busWidth }}bit · 
                     {{ (item as GpuSpecs).cudaCores }}核心
+                  </text>
+                  <text v-else>
+                    {{ (item as PhoneSpecs).ram }}GB RAM · 
+                    {{ (item as PhoneSpecs).storage }}GB 存储 · 
+                    {{ (item as PhoneSpecs).screenSize }}英寸
                   </text>
                 </view>
                 <view class="price">¥{{ item.price.toLocaleString() }}</view>
@@ -122,7 +128,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useCompareStore } from '../../stores/compare'
-import type { CpuSpecs, GpuSpecs } from '../../types/hardware'
+import type { CpuSpecs, GpuSpecs, PhoneSpecs } from '../../types/hardware'
 import type { CompareItem } from '../../stores/compare'
 
 // Pinia store
@@ -130,11 +136,12 @@ const compareStore = useCompareStore()
 
 // 响应式数据
 const searchKeyword = ref('')
-const activeTab = ref<'cpu' | 'gpu'>('cpu')
+const activeTab = ref<'cpu' | 'gpu' | 'phone'>('cpu')
 
 // 加载数据
 const cpuList = ref<CpuSpecs[]>([])
 const gpuList = ref<GpuSpecs[]>([])
+const phoneList = ref<PhoneSpecs[]>([])
 
 onMounted(() => {
   // 直接使用模拟数据，避免JSON导入问题
@@ -298,11 +305,110 @@ onMounted(() => {
       upscalingTech: 'DLSS'
     }
   ] as GpuSpecs[]
+  
+  phoneList.value = [
+    {
+      id: 'phone-001',
+      model: 'iPhone 15 Pro Max',
+      brand: 'Apple',
+      releaseDate: '2024-09-22',
+      price: 9999,
+      description: '苹果旗舰手机，A17 Pro芯片，钛金属边框',
+      processor: 'A17 Pro',
+      ram: 8,
+      storage: 256,
+      screenSize: 6.7,
+      resolution: '2796x1290',
+      refreshRate: 120,
+      batteryCapacity: 4422,
+      camera: '48MP+12MP+12MP',
+      os: 'iOS',
+      support5G: true
+    },
+    {
+      id: 'phone-002',
+      model: 'Xiaomi 14 Ultra',
+      brand: 'Xiaomi',
+      releaseDate: '2024-02-25',
+      price: 6499,
+      description: '小米影像旗舰，徕卡四摄，骁龙8 Gen 3',
+      processor: '骁龙8 Gen 3',
+      ram: 16,
+      storage: 512,
+      screenSize: 6.73,
+      resolution: '3200x1440',
+      refreshRate: 120,
+      batteryCapacity: 5300,
+      camera: '50MP+50MP+50MP+50MP',
+      os: 'Android',
+      support5G: true
+    },
+    {
+      id: 'phone-003',
+      model: 'Huawei Mate 60 Pro+',
+      brand: 'Huawei',
+      releaseDate: '2024-08-29',
+      price: 8999,
+      description: '华为旗舰，麒麟9000S芯片，卫星通话',
+      processor: '麒麟9000S',
+      ram: 12,
+      storage: 512,
+      screenSize: 6.82,
+      resolution: '2720x1260',
+      refreshRate: 120,
+      batteryCapacity: 5000,
+      camera: '50MP+48MP+40MP',
+      os: 'Android',
+      support5G: true
+    },
+    {
+      id: 'phone-004',
+      model: 'Samsung Galaxy S24 Ultra',
+      brand: 'Samsung',
+      releaseDate: '2024-01-31',
+      price: 9699,
+      description: '三星旗舰，骁龙8 Gen 3，S Pen手写笔',
+      processor: '骁龙8 Gen 3',
+      ram: 12,
+      storage: 512,
+      screenSize: 6.8,
+      resolution: '3120x1440',
+      refreshRate: 120,
+      batteryCapacity: 5000,
+      camera: '200MP+12MP+10MP+10MP',
+      os: 'Android',
+      support5G: true
+    },
+    {
+      id: 'phone-005',
+      model: 'OnePlus 12',
+      brand: '其他',
+      releaseDate: '2024-01-23',
+      price: 4299,
+      description: '一加旗舰，骁龙8 Gen 3，哈苏影像',
+      processor: '骁龙8 Gen 3',
+      ram: 16,
+      storage: 512,
+      screenSize: 6.82,
+      resolution: '3168x1440',
+      refreshRate: 120,
+      batteryCapacity: 5400,
+      camera: '50MP+48MP+64MP',
+      os: 'Android',
+      support5G: true
+    }
+  ] as PhoneSpecs[]
 })
 
 // 根据当前Tab获取数据源
 const currentDataSource = computed(() => {
-  return activeTab.value === 'cpu' ? cpuList.value : gpuList.value
+  if (activeTab.value === 'cpu') {
+    return cpuList.value
+  } else if (activeTab.value === 'gpu') {
+    return gpuList.value
+  } else {
+    return phoneList.value
+  }
 })
 
 // 过滤硬件数据
@@ -315,7 +421,7 @@ const filteredHardware = computed(() => {
   }
   
   // 使用类型断言解决联合类型调用问题，使用 indexOf 替代 includes 避免 ES2015+ 方法兼容性问题
-  return (data as (CpuSpecs | GpuSpecs)[]).filter((item: CpuSpecs | GpuSpecs) => 
+  return (data as (CpuSpecs | GpuSpecs | PhoneSpecs)[]).filter((item: CpuSpecs | GpuSpecs | PhoneSpecs) => 
     item.model.toLowerCase().indexOf(keyword) !== -1 ||
     item.brand.toLowerCase().indexOf(keyword) !== -1 ||
     (item.description && item.description.toLowerCase().indexOf(keyword) !== -1)
@@ -328,6 +434,10 @@ const getBrandClass = (brand: string) => {
     case 'Intel': return 'brand-intel'
     case 'AMD': return 'brand-amd'
     case 'NVIDIA': return 'brand-nvidia'
+    case 'Apple': return 'brand-apple'
+    case 'Xiaomi': return 'brand-xiaomi'
+    case 'Huawei': return 'brand-huawei'
+    case 'Samsung': return 'brand-samsung'
     default: return 'brand-other'
   }
 }
@@ -338,6 +448,10 @@ const getBrandShortName = (brand: string) => {
     case 'Intel': return 'INT'
     case 'AMD': return 'AMD'
     case 'NVIDIA': return 'NVI'
+    case 'Apple': return 'APP'
+    case 'Xiaomi': return 'XIA'
+    case 'Huawei': return 'HUA'
+    case 'Samsung': return 'SAM'
     default: return 'OTH'
   }
 }
@@ -353,7 +467,7 @@ const handleClear = () => {
 }
 
 // 卡片点击跳转
-const handleCardClick = (item: CpuSpecs | GpuSpecs) => {
+const handleCardClick = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
   const type = activeTab.value
   const id = item.id
   
@@ -369,9 +483,9 @@ const handleCardClick = (item: CpuSpecs | GpuSpecs) => {
   })
 }
 
-// 获取所有对比项（合并CPU和GPU）
+// 获取所有对比项（合并CPU、GPU和手机）
 const allCompareItems = computed(() => {
-  return [...compareStore.cpuList, ...compareStore.gpuList]
+  return [...compareStore.cpuList, ...compareStore.gpuList, ...compareStore.phoneList]
 })
 
 // 获取型号简称（用于标签显示）
@@ -419,12 +533,14 @@ const handleStartPK = () => {
   
   // 检查是否有足够数量的同类型硬件
   const compareItems = compareStore.compareItems
-  let compareType: 'cpu' | 'gpu' | null = null
+  let compareType: 'cpu' | 'gpu' | 'phone' | null = null
   
   if (compareItems.cpu.length >= 2) {
     compareType = 'cpu'
   } else if (compareItems.gpu.length >= 2) {
     compareType = 'gpu'
+  } else if (compareItems.phone.length >= 2) {
+    compareType = 'phone'
   }
   
   if (!compareType) {
@@ -449,14 +565,14 @@ const handleStartPK = () => {
 }
 
 // 检查项目是否已在对比列表中
-const isItemInCompare = (item: CpuSpecs | GpuSpecs) => {
+const isItemInCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
   const type = activeTab.value
-  const compareList = type === 'cpu' ? compareStore.cpuList : compareStore.gpuList
+  const compareList = type === 'cpu' ? compareStore.cpuList : type === 'gpu' ? compareStore.gpuList : compareStore.phoneList
   return compareList.some(compareItem => compareItem.id === item.id)
 }
 
 // 添加对比项
-const handleAddCompare = (item: CpuSpecs | GpuSpecs) => {
+const handleAddCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
   const result = compareStore.toggleCompare(item)
   if (result.added) {
     uni.showToast({
@@ -535,6 +651,22 @@ const handleAddCompare = (item: CpuSpecs | GpuSpecs) => {
 
 .brand-nvidia {
   background: linear-gradient(135deg, #76b900, #a8e063);
+}
+
+.brand-apple {
+  background: linear-gradient(135deg, #000000, #333333);
+}
+
+.brand-xiaomi {
+  background: linear-gradient(135deg, #ff6900, #ffa726);
+}
+
+.brand-huawei {
+  background: linear-gradient(135deg, #ff0036, #ff6b9d);
+}
+
+.brand-samsung {
+  background: linear-gradient(135deg, #1428a0, #1a73e8);
 }
 
 .brand-other {

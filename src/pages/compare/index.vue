@@ -28,11 +28,11 @@
     <!-- 对比类型标签 -->
     <view class="compare-type">
       <wd-tag 
-        :type="compareType === 'cpu' ? 'primary' : 'success'"
+        :type="compareType === 'cpu' ? 'primary' : compareType === 'gpu' ? 'success' : 'warning'"
         size="large"
         round
       >
-        {{ compareType === 'cpu' ? 'CPU 对比' : '显卡 对比' }}
+        {{ compareType === 'cpu' ? 'CPU 对比' : compareType === 'gpu' ? '显卡 对比' : '手机 对比' }}
       </wd-tag>
       <text class="compare-count">共 {{ compareItems.length }} 个硬件</text>
     </view>
@@ -200,13 +200,13 @@
 import { ref, computed } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { useCompareStore } from '../../stores/compare'
-import type { CpuSpecs, GpuSpecs } from '../../types/hardware'
+import type { CpuSpecs, GpuSpecs, PhoneSpecs } from '../../types/hardware'
 
 // Pinia store
 const compareStore = useCompareStore()
 
 // 路由参数
-const queryParams = ref<{ type?: 'cpu' | 'gpu' }>({})
+const queryParams = ref<{ type?: 'cpu' | 'gpu' | 'phone' }>({})
 
 // 模拟数据
 const cpuMockData: CpuSpecs[] = [
@@ -370,6 +370,99 @@ const gpuMockData: GpuSpecs[] = [
   }
 ]
 
+const phoneMockData: PhoneSpecs[] = [
+  {
+    id: 'phone-001',
+    model: 'iPhone 15 Pro Max',
+    brand: 'Apple',
+    releaseDate: '2024-09-22',
+    price: 9999,
+    description: '苹果旗舰手机，A17 Pro芯片，钛金属边框',
+    processor: 'A17 Pro',
+    ram: 8,
+    storage: 256,
+    screenSize: 6.7,
+    resolution: '2796x1290',
+    refreshRate: 120,
+    batteryCapacity: 4422,
+    camera: '48MP+12MP+12MP',
+    os: 'iOS',
+    support5G: true
+  },
+  {
+    id: 'phone-002',
+    model: 'Xiaomi 14 Ultra',
+    brand: 'Xiaomi',
+    releaseDate: '2024-02-25',
+    price: 6499,
+    description: '小米影像旗舰，徕卡四摄，骁龙8 Gen 3',
+    processor: '骁龙8 Gen 3',
+    ram: 16,
+    storage: 512,
+    screenSize: 6.73,
+    resolution: '3200x1440',
+    refreshRate: 120,
+    batteryCapacity: 5300,
+    camera: '50MP+50MP+50MP+50MP',
+    os: 'Android',
+    support5G: true
+  },
+  {
+    id: 'phone-003',
+    model: 'Huawei Mate 60 Pro+',
+    brand: 'Huawei',
+    releaseDate: '2024-08-29',
+    price: 8999,
+    description: '华为旗舰，麒麟9000S芯片，卫星通话',
+    processor: '麒麟9000S',
+    ram: 12,
+    storage: 512,
+    screenSize: 6.82,
+    resolution: '2720x1260',
+    refreshRate: 120,
+    batteryCapacity: 5000,
+    camera: '50MP+48MP+40MP',
+    os: 'Android',
+    support5G: true
+  },
+  {
+    id: 'phone-004',
+    model: 'Samsung Galaxy S24 Ultra',
+    brand: 'Samsung',
+    releaseDate: '2024-01-31',
+    price: 9699,
+    description: '三星旗舰，骁龙8 Gen 3，S Pen手写笔',
+    processor: '骁龙8 Gen 3',
+    ram: 12,
+    storage: 512,
+    screenSize: 6.8,
+    resolution: '3120x1440',
+    refreshRate: 120,
+    batteryCapacity: 5000,
+    camera: '200MP+12MP+10MP+10MP',
+    os: 'Android',
+    support5G: true
+  },
+  {
+    id: 'phone-005',
+    model: 'OnePlus 12',
+    brand: '其他',
+    releaseDate: '2024-01-23',
+    price: 4299,
+    description: '一加旗舰，骁龙8 Gen 3，哈苏影像',
+    processor: '骁龙8 Gen 3',
+    ram: 16,
+    storage: 512,
+    screenSize: 6.82,
+    resolution: '3168x1440',
+    refreshRate: 120,
+    batteryCapacity: 5400,
+    camera: '50MP+48MP+64MP',
+    os: 'Android',
+    support5G: true
+  }
+]
+
 // 页面加载
 onLoad((options) => {
   queryParams.value = options || {}
@@ -388,7 +481,9 @@ const compareType = computed(() => {
 const compareItems = computed(() => {
   const items = compareType.value === 'cpu' 
     ? compareStore.cpuList 
-    : compareStore.gpuList
+    : compareType.value === 'gpu'
+    ? compareStore.gpuList
+    : compareStore.phoneList
   
   // 如果没有选择左侧硬件，默认选择第一个
   if (items.length >= 1 && !selectedLeftId.value) {
@@ -404,8 +499,8 @@ const compareItems = computed(() => {
 })
 
 // 根据ID从模拟数据中查找完整硬件信息
-const findHardwareById = (id: string, type: 'cpu' | 'gpu') => {
-  const dataSource = type === 'cpu' ? cpuMockData : gpuMockData
+const findHardwareById = (id: string, type: 'cpu' | 'gpu' | 'phone') => {
+  const dataSource = type === 'cpu' ? cpuMockData : type === 'gpu' ? gpuMockData : phoneMockData
   // 使用 for 循环替代 find 方法
   for (let i = 0; i < dataSource.length; i++) {
     if (dataSource[i].id === id) {
@@ -433,6 +528,10 @@ const getBrandClass = (brand: string) => {
     case 'Intel': return 'brand-intel'
     case 'AMD': return 'brand-amd'
     case 'NVIDIA': return 'brand-nvidia'
+    case 'Apple': return 'brand-apple'
+    case 'Xiaomi': return 'brand-xiaomi'
+    case 'Huawei': return 'brand-huawei'
+    case 'Samsung': return 'brand-samsung'
     default: return 'brand-other'
   }
 }
@@ -450,7 +549,7 @@ const rightParams = computed(() => {
 })
 
 // 获取硬件参数
-const getHardwareParams = (item: any, type: 'cpu' | 'gpu') => {
+const getHardwareParams = (item: any, type: 'cpu' | 'gpu' | 'phone') => {
   const params = []
   
   // 通用参数
@@ -484,6 +583,22 @@ const getHardwareParams = (item: any, type: 'cpu' | 'gpu') => {
       { label: '功耗', value: `${item.powerConsumption} W`, desc: '' },
       { label: '光线追踪', value: item.rayTracing ? '支持' : '不支持', desc: '' },
       { label: '超分辨率', value: item.upscalingTech, desc: '' }
+    )
+  }
+  
+  // 手机 特有参数
+  if (type === 'phone') {
+    params.push(
+      { label: '处理器', value: item.processor, desc: '' },
+      { label: '内存', value: `${item.ram} GB`, desc: '' },
+      { label: '存储', value: `${item.storage} GB`, desc: '' },
+      { label: '屏幕尺寸', value: `${item.screenSize} 英寸`, desc: '' },
+      { label: '分辨率', value: item.resolution, desc: '' },
+      { label: '刷新率', value: `${item.refreshRate} Hz`, desc: '' },
+      { label: '电池容量', value: `${item.batteryCapacity} mAh`, desc: '' },
+      { label: '摄像头', value: item.camera, desc: '' },
+      { label: '操作系统', value: item.os, desc: '' },
+      { label: '5G支持', value: item.support5G ? '支持' : '不支持', desc: '' }
     )
   }
   
@@ -610,6 +725,67 @@ const comparisonResults = computed(() => {
       leftPercent: leftGpu.powerConsumption < rightGpu.powerConsumption ? 100 : (leftGpu.powerConsumption / rightGpu.powerConsumption * 100),
       rightPercent: rightGpu.powerConsumption < leftGpu.powerConsumption ? 100 : (rightGpu.powerConsumption / leftGpu.powerConsumption * 100),
       winner: powerWinner
+    })
+  }
+  
+  // 手机 对比项
+  if (compareType.value === 'phone') {
+    const leftPhone = left as PhoneSpecs
+    const rightPhone = right as PhoneSpecs
+    
+    // 内存
+    const ramWinner = leftPhone.ram > rightPhone.ram ? 'left' : 'right'
+    results.push({
+      label: '内存',
+      leftValue: `${leftPhone.ram} GB`,
+      rightValue: `${rightPhone.ram} GB`,
+      leftPercent: (leftPhone.ram / Math.max(leftPhone.ram, rightPhone.ram)) * 100,
+      rightPercent: (rightPhone.ram / Math.max(leftPhone.ram, rightPhone.ram)) * 100,
+      winner: ramWinner
+    })
+    
+    // 存储
+    const storageWinner = leftPhone.storage > rightPhone.storage ? 'left' : 'right'
+    results.push({
+      label: '存储',
+      leftValue: `${leftPhone.storage} GB`,
+      rightValue: `${rightPhone.storage} GB`,
+      leftPercent: (leftPhone.storage / Math.max(leftPhone.storage, rightPhone.storage)) * 100,
+      rightPercent: (rightPhone.storage / Math.max(leftPhone.storage, rightPhone.storage)) * 100,
+      winner: storageWinner
+    })
+    
+    // 屏幕尺寸
+    const screenWinner = leftPhone.screenSize > rightPhone.screenSize ? 'left' : 'right'
+    results.push({
+      label: '屏幕尺寸',
+      leftValue: `${leftPhone.screenSize} 英寸`,
+      rightValue: `${rightPhone.screenSize} 英寸`,
+      leftPercent: (leftPhone.screenSize / Math.max(leftPhone.screenSize, rightPhone.screenSize)) * 100,
+      rightPercent: (rightPhone.screenSize / Math.max(leftPhone.screenSize, rightPhone.screenSize)) * 100,
+      winner: screenWinner
+    })
+    
+    // 电池容量
+    const batteryWinner = leftPhone.batteryCapacity > rightPhone.batteryCapacity ? 'left' : 'right'
+    results.push({
+      label: '电池容量',
+      leftValue: `${leftPhone.batteryCapacity} mAh`,
+      rightValue: `${rightPhone.batteryCapacity} mAh`,
+      leftPercent: (leftPhone.batteryCapacity / Math.max(leftPhone.batteryCapacity, rightPhone.batteryCapacity)) * 100,
+      rightPercent: (rightPhone.batteryCapacity / Math.max(leftPhone.batteryCapacity, rightPhone.batteryCapacity)) * 100,
+      winner: batteryWinner
+    })
+    
+    // 刷新率
+    const refreshWinner = leftPhone.refreshRate > rightPhone.refreshRate ? 'left' : 'right'
+    results.push({
+      label: '刷新率',
+      leftValue: `${leftPhone.refreshRate} Hz`,
+      rightValue: `${rightPhone.refreshRate} Hz`,
+      leftPercent: (leftPhone.refreshRate / Math.max(leftPhone.refreshRate, rightPhone.refreshRate)) * 100,
+      rightPercent: (rightPhone.refreshRate / Math.max(leftPhone.refreshRate, rightPhone.refreshRate)) * 100,
+      winner: refreshWinner
     })
   }
   
@@ -794,6 +970,22 @@ const handleClearAll = () => {
 
 .brand-nvidia {
   background: linear-gradient(135deg, #76b900, #a8e063);
+}
+
+.brand-apple {
+  background: linear-gradient(135deg, #000000, #333333);
+}
+
+.brand-xiaomi {
+  background: linear-gradient(135deg, #ff6900, #ffa726);
+}
+
+.brand-huawei {
+  background: linear-gradient(135deg, #ff0036, #ff6b9d);
+}
+
+.brand-samsung {
+  background: linear-gradient(135deg, #1428a0, #1a73e8);
 }
 
 .brand-other {
