@@ -212,81 +212,6 @@ const isCloudSupported = computed(() => {
     }
   }
 
-  /**
-   * 加载本地模拟数据（备用方案）
-   */
-  const loadLocalMockData = async (): Promise<LoadResult<T>> => {
-    console.log(`使用本地模拟数据: ${collectionName}`)
-    
-    try {
-      // 根据集合名称加载对应的本地数据
-      let mockData: any[] = []
-      
-      switch (collectionName) {
-        case 'cpu_collection':
-          const cpuModule = await import('../mock/cpu_data.json')
-          mockData = cpuModule.default || []
-          break
-        case 'gpu_collection':
-          const gpuModule = await import('../mock/gpu_data.json')
-          mockData = gpuModule.default || []
-          break
-        case 'phone_collection':
-          const phoneModule = await import('../mock/phone_data.json')
-          mockData = phoneModule.default || []
-          break
-        default:
-          console.warn(`未找到集合 ${collectionName} 的本地数据`)
-          mockData = []
-      }
-      
-      // 应用查询条件（简单过滤）
-      let filteredData = mockData
-      if (options.where && options.where.$or) {
-        const keyword = options.where.$or[0]?.model || options.where.$or[0]?.brand || ''
-        if (keyword) {
-          filteredData = mockData.filter(item => 
-            item.model?.includes(keyword) || 
-            item.brand?.includes(keyword) ||
-            item.description?.includes(keyword)
-          )
-        }
-      }
-      
-      // 应用排序
-      if (options.orderBy) {
-        filteredData.sort((a, b) => {
-          const aVal = a[options.orderBy!.field]
-          const bVal = b[options.orderBy!.field]
-          if (options.orderBy!.order === 'asc') {
-            return aVal > bVal ? 1 : -1
-          } else {
-            return aVal < bVal ? 1 : -1
-          }
-        })
-      }
-      
-      // 应用分页
-      const startIndex = skip.value
-      const endIndex = startIndex + pageSize.value
-      const pagedData = filteredData.slice(startIndex, endIndex)
-      
-      // 判断是否有更多数据
-      const hasMore = endIndex < filteredData.length
-      
-      return {
-        list: pagedData as T[],
-        hasMore,
-        total: filteredData.length
-      }
-    } catch (err) {
-      console.error('加载本地数据失败:', err)
-      return {
-        list: [],
-        hasMore: false
-      }
-    }
-  }
 
   /**
    * 加载数据
@@ -308,8 +233,8 @@ const isCloudSupported = computed(() => {
     try {
       // 检查云开发支持
       if (!isCloudSupported.value) {
-        console.warn('❌ 当前环境不支持微信云开发，使用本地数据')
-        return await loadLocalMockData()
+        console.warn('❌ 当前环境不支持微信云开发')
+        throw new Error('当前环境不支持微信云开发')
       }
 
       // 构建查询
@@ -325,6 +250,30 @@ const isCloudSupported = computed(() => {
       
       if (data.length > 0) {
         console.log('📝 第一条数据:', JSON.stringify(data[0]).substring(0, 100) + '...')
+      } else {
+        console.log(`⚠️ 集合 ${collectionName} 查询成功但返回空数据`)
+        console.log('可能的原因:')
+        console.log('1. 集合中没有数据')
+        console.log('2. orderBy字段不存在导致查询失败')
+        console.log('3. 查询条件过滤了所有数据')
+        
+        // 尝试不使用orderBy查询
+        if (options.orderBy) {
+          console.log(`🔄 尝试不使用orderBy查询集合 ${collectionName}`)
+          try {
+            const db = wx.cloud!.database()
+            const simpleQuery = db.collection(collectionName)
+              .skip(skip.value)
+              .limit(pageSize.value)
+            const simpleResult = await simpleQuery.get()
+            console.log(`简单查询结果: ${simpleResult.data.length} 条数据`)
+            if (simpleResult.data.length > 0) {
+              console.log('第一条数据字段:', Object.keys(simpleResult.data[0]))
+            }
+          } catch (simpleError) {
+            console.log('简单查询错误:', simpleError)
+          }
+        }
       }
 
       // 更新总数（如果需要）
@@ -353,30 +302,47 @@ const isCloudSupported = computed(() => {
                                errorLower.includes('权限')
       const isEnvError = errorLower.includes('环境') || 
                         errorLower.includes('env')
+      const isOrderByError = errorLower.includes('orderby') || 
+                            errorLower.includes('排序') ||
+                            errorLower.includes('index')
       
       if (isCollectionError || isPermissionError || isEnvError) {
-        console.warn(`⚠️ 云数据库访问失败 (${errorMessage})，使用本地数据作为备用`)
+        console.warn(`⚠️ 云数据库访问失败 (${errorMessage})`)
+        showError(`云数据库访问失败: ${errorMessage}`)
+        throw err
+      } else if (isOrderByError) {
+        console.warn(`⚠️ orderBy字段错误 (${errorMessage})，尝试不使用排序查询`)
         
-        // 使用本地数据
-        const localResult = await loadLocalMockData()
-        
-        // 显示提示信息
-        if (isRefresh) {
-          uni.showToast({
-            title: '使用本地演示数据',
-            icon: 'none',
-            duration: 2000
-          })
+        // 尝试不使用orderBy查询
+        try {
+          const db = wx.cloud!.database()
+          const query = db.collection(collectionName)
+            .skip(skip.value)
+            .limit(pageSize.value)
+          
+          const result = await query.get()
+          console.log(`✅ 无排序查询成功: 获取到 ${result.data.length} 条数据`)
+          
+          return {
+            list: result.data as T[],
+            hasMore: result.data.length === pageSize.value,
+            total: result.data.length
+          }
+        } catch (noOrderError) {
+          console.error('无排序查询也失败:', noOrderError)
+          // 显示警告但不抛出错误，让用户至少能看到数据
+          showError(`排序字段错误，已禁用排序功能`)
+          // 返回空列表，让前端可以显示错误或空状态
+          return {
+            list: [],
+            hasMore: false
+          }
         }
-        
-        return localResult
       } else {
         // 显示错误提示
         showError(`数据加载失败: ${errorMessage}`)
+        throw err
       }
-      
-      // 尝试使用本地数据作为最后的手段
-      return await loadLocalMockData()
     } finally {
       // 重置加载状态
       if (isRefresh) {
@@ -477,15 +443,8 @@ const search = async (
 
   // 检查是否支持云数据库
   if (!isCloudSupported.value) {
-    // 使用本地搜索
-    console.log('使用本地搜索:', keyword)
-    options.where = {
-      $or: searchFields.map(field => ({
-        [field]: keyword
-      }))
-    }
-    reset()
-    await refresh()
+    console.warn('❌ 当前环境不支持微信云开发，无法进行搜索')
+    showError('当前环境不支持微信云开发，无法进行搜索')
     return
   }
 

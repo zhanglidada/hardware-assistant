@@ -12,7 +12,7 @@
     </view>
 
     <!-- Tab 分类 -->
-    <wd-tabs v-model="activeTab" class="category-tabs">
+    <wd-tabs v-model="activeTab" class="category-tabs" @change="handleTabChange">
       <wd-tab title="CPU" name="cpu"></wd-tab>
       <wd-tab title="显卡" name="gpu"></wd-tab>
       <wd-tab title="手机" name="phone"></wd-tab>
@@ -187,6 +187,17 @@ const phoneListHook = useHardwareList<PhoneSpecs>('phone_collection', {
   withCount: true
 })
 
+const handleTabChange = ({ name }: { name: string }) => {
+  // 切换 Tab 时，如果该列表还没有数据，则执行刷新加载
+  if (name === 'cpu' && cpuListHook.list.value.length === 0) {
+    cpuListHook.refresh()
+  } else if (name === 'gpu' && gpuListHook.list.value.length === 0) {
+    gpuListHook.refresh()
+  } else if (name === 'phone' && phoneListHook.list.value.length === 0) {
+    phoneListHook.refresh()
+  }
+}
+
 // 页面加载时初始化数据
 onMounted(() => {
   // 初始加载数据
@@ -282,19 +293,20 @@ const currentTotal = computed(() => {
 
 // 过滤硬件数据
 const filteredHardware = computed(() => {
-  const keyword = searchKeyword.value.trim().toLowerCase()
-  const data = currentDataSource.value
+  // const keyword = searchKeyword.value.trim().toLowerCase()
+  // const data = currentDataSource.value
   
-  if (!keyword) {
-    return data
-  }
+  // if (!keyword) {
+  //   return data
+  // }
   
-  // 使用类型断言解决联合类型调用问题，使用 indexOf 替代 includes 避免 ES2015+ 方法兼容性问题
-  return (data as (CpuSpecs | GpuSpecs | PhoneSpecs)[]).filter((item: CpuSpecs | GpuSpecs | PhoneSpecs) => 
-    item.model.toLowerCase().indexOf(keyword) !== -1 ||
-    item.brand.toLowerCase().indexOf(keyword) !== -1 ||
-    (item.description && item.description.toLowerCase().indexOf(keyword) !== -1)
-  )
+  // // 使用类型断言解决联合类型调用问题，使用 indexOf 替代 includes 避免 ES2015+ 方法兼容性问题
+  // return (data as (CpuSpecs | GpuSpecs | PhoneSpecs)[]).filter((item: CpuSpecs | GpuSpecs | PhoneSpecs) => 
+  //   item.model.toLowerCase().indexOf(keyword) !== -1 ||
+  //   item.brand.toLowerCase().indexOf(keyword) !== -1 ||
+  //   (item.description && item.description.toLowerCase().indexOf(keyword) !== -1)
+  // )
+  return currentDataSource.value
 })
 
 // 获取品牌样式类
@@ -659,6 +671,14 @@ const handleAddCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
   color: #999999;
   background-color: #ffffff;
   margin-top: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.dev-tools {
+  margin-top: 10rpx;
 }
 
 /* 对比悬浮窗样式 */
