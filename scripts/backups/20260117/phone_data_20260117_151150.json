@@ -3,9 +3,7 @@
     "id": "phone-001",
     "model": "iPhone 15 Pro Max",
     "brand": "Apple",
-    "releaseDate": {
-      "$date": "2024-09-22T00:00:00.000Z"
-    },
+    "releaseDate": "2024-09-22",
     "price": 9999,
     "description": "苹果旗舰手机，A17 Pro芯片，钛金属边框",
     "processor": "A17 Pro",
@@ -17,16 +15,13 @@
     "batteryCapacity": 4422,
     "camera": "48MP+12MP+12MP",
     "os": "iOS",
-    "support5G": true,
-    "_id": "id_0000_333836e6ab38"
+    "support5G": true
   },
   {
     "id": "phone-002",
     "model": "Xiaomi 14 Ultra",
     "brand": "Xiaomi",
-    "releaseDate": {
-      "$date": "2024-02-25T00:00:00.000Z"
-    },
+    "releaseDate": "2024-02-25",
     "price": 6499,
     "description": "小米影像旗舰，徕卡四摄，骁龙8 Gen 3",
     "processor": "骁龙8 Gen 3",
@@ -38,16 +33,13 @@
     "batteryCapacity": 5300,
     "camera": "50MP+50MP+50MP+50MP",
     "os": "Android",
-    "support5G": true,
-    "_id": "id_0001_1405c65ec192"
+    "support5G": true
   },
   {
     "id": "phone-003",
     "model": "Huawei Mate 60 Pro+",
     "brand": "Huawei",
-    "releaseDate": {
-      "$date": "2024-08-29T00:00:00.000Z"
-    },
+    "releaseDate": "2024-08-29",
     "price": 8999,
     "description": "华为旗舰，麒麟9000S芯片，卫星通话",
     "processor": "麒麟9000S",
@@ -59,16 +51,13 @@
     "batteryCapacity": 5000,
     "camera": "50MP+48MP+40MP",
     "os": "Android",
-    "support5G": true,
-    "_id": "id_0002_ef8f222f01e6"
+    "support5G": true
   },
   {
     "id": "phone-004",
     "model": "Samsung Galaxy S24 Ultra",
     "brand": "Samsung",
-    "releaseDate": {
-      "$date": "2024-01-31T00:00:00.000Z"
-    },
+    "releaseDate": "2024-01-31",
     "price": 9699,
     "description": "三星旗舰，骁龙8 Gen 3，S Pen手写笔",
     "processor": "骁龙8 Gen 3",
@@ -80,16 +69,13 @@
     "batteryCapacity": 5000,
     "camera": "200MP+12MP+10MP+10MP",
     "os": "Android",
-    "support5G": true,
-    "_id": "id_0003_98c9e2f678ca"
+    "support5G": true
   },
   {
     "id": "phone-005",
     "model": "OnePlus 12",
     "brand": "其他",
-    "releaseDate": {
-      "$date": "2024-01-23T00:00:00.000Z"
-    },
+    "releaseDate": "2024-01-23",
     "price": 4299,
     "description": "一加旗舰，骁龙8 Gen 3，哈苏影像",
     "processor": "骁龙8 Gen 3",
@@ -101,7 +87,6 @@
     "batteryCapacity": 5400,
     "camera": "50MP+48MP+64MP",
     "os": "Android",
-    "support5G": true,
-    "_id": "id_0004_d8a4177b4dc8"
+    "support5G": true
   }
 ]

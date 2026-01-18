@@ -20,7 +20,19 @@
 
     <!-- 硬件列表 -->
     <view class="hardware-list">
-      <wd-cell-group v-if="filteredHardware.length > 0">
+      <!-- 加载状态 -->
+      <view v-if="currentLoading && filteredHardware.length === 0" class="loading-state">
+        <wd-loading text="加载中..." vertical />
+      </view>
+      
+      <!-- 错误状态 -->
+      <view v-else-if="currentError" class="error-state">
+        <text class="error-text">{{ currentError }}</text>
+        <wd-button type="primary" size="small" @click="loadInitialData">重试</wd-button>
+      </view>
+      
+      <!-- 数据列表 -->
+      <wd-cell-group v-else-if="filteredHardware.length > 0">
         <wd-cell
           v-for="item in filteredHardware"
           :key="item.id"
@@ -72,6 +84,16 @@
             </view>
           </template>
         </wd-cell>
+        
+        <!-- 加载更多提示 -->
+        <view v-if="currentLoading && filteredHardware.length > 0" class="load-more-tip">
+          <wd-loading text="加载更多..." />
+        </view>
+        
+        <!-- 没有更多数据提示 -->
+        <view v-else-if="currentFinished && filteredHardware.length > 0" class="no-more-tip">
+          <text class="no-more-text">没有更多数据了</text>
+        </view>
       </wd-cell-group>
 
       <!-- 空状态 -->
@@ -126,8 +148,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { onReachBottom } from '@dcloudio/uni-app'
 import { useCompareStore } from '../../stores/compare'
+import { useHardwareList } from '../../composables/useCloudData'
 import type { CpuSpecs, GpuSpecs, PhoneSpecs } from '../../types/hardware'
 import type { CompareItem } from '../../stores/compare'
 
@@ -138,276 +162,121 @@ const compareStore = useCompareStore()
 const searchKeyword = ref('')
 const activeTab = ref<'cpu' | 'gpu' | 'phone'>('cpu')
 
-// 加载数据
-const cpuList = ref<CpuSpecs[]>([])
-const gpuList = ref<GpuSpecs[]>([])
-const phoneList = ref<PhoneSpecs[]>([])
-
-onMounted(() => {
-  // 直接使用模拟数据，避免JSON导入问题
-  cpuList.value = [
-    {
-      id: 'cpu-001',
-      model: 'Intel Core i9-14900K',
-      brand: 'Intel',
-      releaseDate: '2024-01-01',
-      price: 4999,
-      description: 'Intel第14代酷睿旗舰处理器，性能核+能效核混合架构',
-      cores: '8P+16E',
-      baseClock: 3.2,
-      boostClock: 6.0,
-      socket: 'LGA1700',
-      tdp: 125,
-      integratedGraphics: true,
-      cache: 36
-    },
-    {
-      id: 'cpu-002',
-      model: 'AMD Ryzen 9 7950X3D',
-      brand: 'AMD',
-      releaseDate: '2024-02-15',
-      price: 5299,
-      description: 'AMD Zen4架构，3D V-Cache技术，游戏性能卓越',
-      cores: '16',
-      baseClock: 4.2,
-      boostClock: 5.7,
-      socket: 'AM5',
-      tdp: 120,
-      integratedGraphics: true,
-      cache: 144
-    },
-    {
-      id: 'cpu-003',
-      model: 'Intel Core i7-14700K',
-      brand: 'Intel',
-      releaseDate: '2024-01-01',
-      price: 3299,
-      description: '第14代酷睿i7，核心数量大幅增加，性价比高',
-      cores: '8P+12E',
-      baseClock: 3.4,
-      boostClock: 5.6,
-      socket: 'LGA1700',
-      tdp: 125,
-      integratedGraphics: true,
-      cache: 33
-    },
-    {
-      id: 'cpu-004',
-      model: 'AMD Ryzen 7 7800X3D',
-      brand: 'AMD',
-      releaseDate: '2024-03-10',
-      price: 2999,
-      description: '游戏神U，3D V-Cache技术带来超低延迟',
-      cores: '8',
-      baseClock: 4.2,
-      boostClock: 5.0,
-      socket: 'AM5',
-      tdp: 120,
-      integratedGraphics: true,
-      cache: 104
-    },
-    {
-      id: 'cpu-005',
-      model: 'Intel Core i5-14600K',
-      brand: 'Intel',
-      releaseDate: '2024-01-01',
-      price: 2299,
-      description: '主流级高性能处理器，适合游戏和创作',
-      cores: '6P+8E',
-      baseClock: 3.5,
-      boostClock: 5.3,
-      socket: 'LGA1700',
-      tdp: 125,
-      integratedGraphics: true,
-      cache: 24
-    }
-  ] as CpuSpecs[]
-  
-  gpuList.value = [
-    {
-      id: 'gpu-001',
-      model: 'NVIDIA GeForce RTX 4090',
-      brand: 'NVIDIA',
-      releaseDate: '2024-01-10',
-      price: 12999,
-      description: 'NVIDIA Ada Lovelace架构旗舰显卡，性能怪兽',
-      vram: 24,
-      busWidth: 384,
-      cudaCores: 16384,
-      coreClock: 2235,
-      memoryClock: 21000,
-      powerConsumption: 450,
-      rayTracing: true,
-      upscalingTech: 'DLSS'
-    },
-    {
-      id: 'gpu-002',
-      model: 'AMD Radeon RX 7900 XTX',
-      brand: 'AMD',
-      releaseDate: '2024-02-20',
-      price: 7999,
-      description: 'AMD RDNA3架构旗舰显卡，高性价比选择',
-      vram: 24,
-      busWidth: 384,
-      cudaCores: 6144,
-      coreClock: 2300,
-      memoryClock: 20000,
-      powerConsumption: 355,
-      rayTracing: true,
-      upscalingTech: 'FSR'
-    },
-    {
-      id: 'gpu-003',
-      model: 'NVIDIA GeForce RTX 4080 SUPER',
-      brand: 'NVIDIA',
-      releaseDate: '2024-03-15',
-      price: 8999,
-      description: 'RTX 4080升级版，性能接近RTX 4090',
-      vram: 16,
-      busWidth: 256,
-      cudaCores: 10240,
-      coreClock: 2295,
-      memoryClock: 23000,
-      powerConsumption: 320,
-      rayTracing: true,
-      upscalingTech: 'DLSS'
-    },
-    {
-      id: 'gpu-004',
-      model: 'AMD Radeon RX 7800 XT',
-      brand: 'AMD',
-      releaseDate: '2024-04-05',
-      price: 4599,
-      description: '中高端显卡，2K游戏利器',
-      vram: 16,
-      busWidth: 256,
-      cudaCores: 3840,
-      coreClock: 2124,
-      memoryClock: 19500,
-      powerConsumption: 263,
-      rayTracing: true,
-      upscalingTech: 'FSR'
-    },
-    {
-      id: 'gpu-005',
-      model: 'NVIDIA GeForce RTX 4070 Ti SUPER',
-      brand: 'NVIDIA',
-      releaseDate: '2024-05-12',
-      price: 6499,
-      description: '2K游戏甜点卡，DLSS3加持',
-      vram: 16,
-      busWidth: 256,
-      cudaCores: 8448,
-      coreClock: 2310,
-      memoryClock: 21000,
-      powerConsumption: 285,
-      rayTracing: true,
-      upscalingTech: 'DLSS'
-    }
-  ] as GpuSpecs[]
-  
-  phoneList.value = [
-    {
-      id: 'phone-001',
-      model: 'iPhone 15 Pro Max',
-      brand: 'Apple',
-      releaseDate: '2024-09-22',
-      price: 9999,
-      description: '苹果旗舰手机，A17 Pro芯片，钛金属边框',
-      processor: 'A17 Pro',
-      ram: 8,
-      storage: 256,
-      screenSize: 6.7,
-      resolution: '2796x1290',
-      refreshRate: 120,
-      batteryCapacity: 4422,
-      camera: '48MP+12MP+12MP',
-      os: 'iOS',
-      support5G: true
-    },
-    {
-      id: 'phone-002',
-      model: 'Xiaomi 14 Ultra',
-      brand: 'Xiaomi',
-      releaseDate: '2024-02-25',
-      price: 6499,
-      description: '小米影像旗舰，徕卡四摄，骁龙8 Gen 3',
-      processor: '骁龙8 Gen 3',
-      ram: 16,
-      storage: 512,
-      screenSize: 6.73,
-      resolution: '3200x1440',
-      refreshRate: 120,
-      batteryCapacity: 5300,
-      camera: '50MP+50MP+50MP+50MP',
-      os: 'Android',
-      support5G: true
-    },
-    {
-      id: 'phone-003',
-      model: 'Huawei Mate 60 Pro+',
-      brand: 'Huawei',
-      releaseDate: '2024-08-29',
-      price: 8999,
-      description: '华为旗舰，麒麟9000S芯片，卫星通话',
-      processor: '麒麟9000S',
-      ram: 12,
-      storage: 512,
-      screenSize: 6.82,
-      resolution: '2720x1260',
-      refreshRate: 120,
-      batteryCapacity: 5000,
-      camera: '50MP+48MP+40MP',
-      os: 'Android',
-      support5G: true
-    },
-    {
-      id: 'phone-004',
-      model: 'Samsung Galaxy S24 Ultra',
-      brand: 'Samsung',
-      releaseDate: '2024-01-31',
-      price: 9699,
-      description: '三星旗舰，骁龙8 Gen 3，S Pen手写笔',
-      processor: '骁龙8 Gen 3',
-      ram: 12,
-      storage: 512,
-      screenSize: 6.8,
-      resolution: '3120x1440',
-      refreshRate: 120,
-      batteryCapacity: 5000,
-      camera: '200MP+12MP+10MP+10MP',
-      os: 'Android',
-      support5G: true
-    },
-    {
-      id: 'phone-005',
-      model: 'OnePlus 12',
-      brand: '其他',
-      releaseDate: '2024-01-23',
-      price: 4299,
-      description: '一加旗舰，骁龙8 Gen 3，哈苏影像',
-      processor: '骁龙8 Gen 3',
-      ram: 16,
-      storage: 512,
-      screenSize: 6.82,
-      resolution: '3168x1440',
-      refreshRate: 120,
-      batteryCapacity: 5400,
-      camera: '50MP+48MP+64MP',
-      os: 'Android',
-      support5G: true
-    }
-  ] as PhoneSpecs[]
+// 使用云数据库 Hook 加载数据
+const cpuListHook = useHardwareList<CpuSpecs>('cpu_collection', {
+  orderBy: {
+    field: 'releaseDate',
+    order: 'desc'
+  },
+  withCount: true
 })
+
+const gpuListHook = useHardwareList<GpuSpecs>('gpu_collection', {
+  orderBy: {
+    field: 'releaseDate',
+    order: 'desc'
+  },
+  withCount: true
+})
+
+const phoneListHook = useHardwareList<PhoneSpecs>('phone_collection', {
+  orderBy: {
+    field: 'releaseDate',
+    order: 'desc'
+  },
+  withCount: true
+})
+
+// 页面加载时初始化数据
+onMounted(() => {
+  // 初始加载数据
+  loadInitialData()
+})
+
+// 页面卸载时清理
+onUnmounted(() => {
+  // 可以在这里添加清理逻辑
+})
+
+// 上拉触底加载更多
+onReachBottom(() => {
+  handleLoadMore()
+})
+
+// 加载初始数据
+const loadInitialData = () => {
+  if (activeTab.value === 'cpu') {
+    cpuListHook.refresh()
+  } else if (activeTab.value === 'gpu') {
+    gpuListHook.refresh()
+  } else {
+    phoneListHook.refresh()
+  }
+}
+
+// 加载更多数据
+const handleLoadMore = () => {
+  if (activeTab.value === 'cpu') {
+    cpuListHook.loadMore()
+  } else if (activeTab.value === 'gpu') {
+    gpuListHook.loadMore()
+  } else {
+    phoneListHook.loadMore()
+  }
+}
 
 // 根据当前Tab获取数据源
 const currentDataSource = computed(() => {
   if (activeTab.value === 'cpu') {
-    return cpuList.value
+    return cpuListHook.list.value
   } else if (activeTab.value === 'gpu') {
-    return gpuList.value
+    return gpuListHook.list.value
   } else {
-    return phoneList.value
+    return phoneListHook.list.value
+  }
+})
+
+// 获取当前加载状态
+const currentLoading = computed(() => {
+  if (activeTab.value === 'cpu') {
+    return cpuListHook.loading.value
+  } else if (activeTab.value === 'gpu') {
+    return gpuListHook.loading.value
+  } else {
+    return phoneListHook.loading.value
+  }
+})
+
+// 获取当前完成状态
+const currentFinished = computed(() => {
+  if (activeTab.value === 'cpu') {
+    return cpuListHook.finished.value
+  } else if (activeTab.value === 'gpu') {
+    return gpuListHook.finished.value
+  } else {
+    return phoneListHook.finished.value
+  }
+})
+
+// 获取当前错误状态
+const currentError = computed(() => {
+  if (activeTab.value === 'cpu') {
+    return cpuListHook.error.value
+  } else if (activeTab.value === 'gpu') {
+    return gpuListHook.error.value
+  } else {
+    return phoneListHook.error.value
+  }
+})
+
+// 获取当前总数
+const currentTotal = computed(() => {
+  if (activeTab.value === 'cpu') {
+    return cpuListHook.total.value
+  } else if (activeTab.value === 'gpu') {
+    return gpuListHook.total.value
+  } else {
+    return phoneListHook.total.value
   }
 })
 
@@ -458,12 +327,30 @@ const getBrandShortName = (brand: string) => {
 
 // 搜索处理
 const handleSearch = () => {
-  console.log('搜索关键词:', searchKeyword.value)
+  const keyword = searchKeyword.value.trim()
+  console.log('搜索关键词:', keyword)
+  
+  if (activeTab.value === 'cpu') {
+    cpuListHook.search(keyword)
+  } else if (activeTab.value === 'gpu') {
+    gpuListHook.search(keyword)
+  } else {
+    phoneListHook.search(keyword)
+  }
 }
 
 // 清空搜索
 const handleClear = () => {
   searchKeyword.value = ''
+  
+  // 清除搜索条件，重新加载数据
+  if (activeTab.value === 'cpu') {
+    cpuListHook.search('')
+  } else if (activeTab.value === 'gpu') {
+    gpuListHook.search('')
+  } else {
+    phoneListHook.search('')
+  }
 }
 
 // 卡片点击跳转
@@ -703,6 +590,46 @@ const handleAddCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
 
 .compare-action {
   align-self: flex-start;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+  text-align: center;
+}
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 30rpx;
+  text-align: center;
+  gap: 30rpx;
+}
+
+.error-text {
+  font-size: 28rpx;
+  color: #ff4444;
+  text-align: center;
+}
+
+.load-more-tip {
+  padding: 30rpx 0;
+  text-align: center;
+}
+
+.no-more-tip {
+  padding: 30rpx 0;
+  text-align: center;
+}
+
+.no-more-text {
+  font-size: 26rpx;
+  color: #999999;
 }
 
 .empty-state {

@@ -55,11 +55,22 @@
     </view>
 
     <!-- 加载状态 -->
-    <wd-loading v-if="loading" text="加载中..." vertical />
+    <view v-if="loading" class="loading-state">
+      <wd-loading text="加载中..." vertical />
+    </view>
     
     <!-- 错误状态 -->
-    <view v-else-if="!hardwareData && !loading" class="error-state">
-      <text class="error-text">未找到硬件信息</text>
+    <view v-else-if="error" class="error-state">
+      <text class="error-text">{{ error }}</text>
+      <view class="error-actions">
+        <wd-button type="default" @click="handleBack" plain>返回列表</wd-button>
+        <wd-button type="primary" @click="handleRetry">重试</wd-button>
+      </view>
+    </view>
+    
+    <!-- 数据为空状态 -->
+    <view v-else-if="!hardwareData && !loading" class="empty-state">
+      <text class="empty-text">未找到硬件信息</text>
       <wd-button type="default" @click="handleBack">返回列表</wd-button>
     </view>
   </view>
@@ -68,176 +79,15 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import type { CpuSpecs, GpuSpecs } from '../../types/hardware'
+import type { CpuSpecs, GpuSpecs, PhoneSpecs } from '../../types/hardware'
 
 // 路由参数
-const queryParams = ref<{ id?: string; type?: 'cpu' | 'gpu' }>({})
+const queryParams = ref<{ id?: string; type?: 'cpu' | 'gpu' | 'phone' }>({})
 
 // 响应式数据
 const loading = ref(true)
-const hardwareData = ref<CpuSpecs | GpuSpecs | null>(null)
-
-// 模拟数据
-const cpuMockData: CpuSpecs[] = [
-  {
-    id: 'cpu-001',
-    model: 'Intel Core i9-14900K',
-    brand: 'Intel',
-    releaseDate: '2024-01-01',
-    price: 4999,
-    description: 'Intel第14代酷睿旗舰处理器，性能核+能效核混合架构',
-    cores: '8P+16E',
-    baseClock: 3.2,
-    boostClock: 6.0,
-    socket: 'LGA1700',
-    tdp: 125,
-    integratedGraphics: true,
-    cache: 36
-  },
-  {
-    id: 'cpu-002',
-    model: 'AMD Ryzen 9 7950X3D',
-    brand: 'AMD',
-    releaseDate: '2024-02-15',
-    price: 5299,
-    description: 'AMD Zen4架构，3D V-Cache技术，游戏性能卓越',
-    cores: '16',
-    baseClock: 4.2,
-    boostClock: 5.7,
-    socket: 'AM5',
-    tdp: 120,
-    integratedGraphics: true,
-    cache: 144
-  },
-  {
-    id: 'cpu-003',
-    model: 'Intel Core i7-14700K',
-    brand: 'Intel',
-    releaseDate: '2024-01-01',
-    price: 3299,
-    description: '第14代酷睿i7，核心数量大幅增加，性价比高',
-    cores: '8P+12E',
-    baseClock: 3.4,
-    boostClock: 5.6,
-    socket: 'LGA1700',
-    tdp: 125,
-    integratedGraphics: true,
-    cache: 33
-  },
-  {
-    id: 'cpu-004',
-    model: 'AMD Ryzen 7 7800X3D',
-    brand: 'AMD',
-    releaseDate: '2024-03-10',
-    price: 2999,
-    description: '游戏神U，3D V-Cache技术带来超低延迟',
-    cores: '8',
-    baseClock: 4.2,
-    boostClock: 5.0,
-    socket: 'AM5',
-    tdp: 120,
-    integratedGraphics: true,
-    cache: 104
-  },
-  {
-    id: 'cpu-005',
-    model: 'Intel Core i5-14600K',
-    brand: 'Intel',
-    releaseDate: '2024-01-01',
-    price: 2299,
-    description: '主流级高性能处理器，适合游戏和创作',
-    cores: '6P+8E',
-    baseClock: 3.5,
-    boostClock: 5.3,
-    socket: 'LGA1700',
-    tdp: 125,
-    integratedGraphics: true,
-    cache: 24
-  }
-]
-
-const gpuMockData: GpuSpecs[] = [
-  {
-    id: 'gpu-001',
-    model: 'NVIDIA GeForce RTX 4090',
-    brand: 'NVIDIA',
-    releaseDate: '2024-01-10',
-    price: 12999,
-    description: 'NVIDIA Ada Lovelace架构旗舰显卡，性能怪兽',
-    vram: 24,
-    busWidth: 384,
-    cudaCores: 16384,
-    coreClock: 2235,
-    memoryClock: 21000,
-    powerConsumption: 450,
-    rayTracing: true,
-    upscalingTech: 'DLSS'
-  },
-  {
-    id: 'gpu-002',
-    model: 'AMD Radeon RX 7900 XTX',
-    brand: 'AMD',
-    releaseDate: '2024-02-20',
-    price: 7999,
-    description: 'AMD RDNA3架构旗舰显卡，高性价比选择',
-    vram: 24,
-    busWidth: 384,
-    cudaCores: 6144,
-    coreClock: 2300,
-    memoryClock: 20000,
-    powerConsumption: 355,
-    rayTracing: true,
-    upscalingTech: 'FSR'
-  },
-  {
-    id: 'gpu-003',
-    model: 'NVIDIA GeForce RTX 4080 SUPER',
-    brand: 'NVIDIA',
-    releaseDate: '2024-03-15',
-    price: 8999,
-    description: 'RTX 4080升级版，性能接近RTX 4090',
-    vram: 16,
-    busWidth: 256,
-    cudaCores: 10240,
-    coreClock: 2295,
-    memoryClock: 23000,
-    powerConsumption: 320,
-    rayTracing: true,
-    upscalingTech: 'DLSS'
-  },
-  {
-    id: 'gpu-004',
-    model: 'AMD Radeon RX 7800 XT',
-    brand: 'AMD',
-    releaseDate: '2024-04-05',
-    price: 4599,
-    description: '中高端显卡，2K游戏利器',
-    vram: 16,
-    busWidth: 256,
-    cudaCores: 3840,
-    coreClock: 2124,
-    memoryClock: 19500,
-    powerConsumption: 263,
-    rayTracing: true,
-    upscalingTech: 'FSR'
-  },
-  {
-    id: 'gpu-005',
-    model: 'NVIDIA GeForce RTX 4070 Ti SUPER',
-    brand: 'NVIDIA',
-    releaseDate: '2024-05-12',
-    price: 6499,
-    description: '2K游戏甜点卡，DLSS3加持',
-    vram: 16,
-    busWidth: 256,
-    cudaCores: 8448,
-    coreClock: 2310,
-    memoryClock: 21000,
-    powerConsumption: 285,
-    rayTracing: true,
-    upscalingTech: 'DLSS'
-  }
-]
+const error = ref<string | null>(null)
+const hardwareData = ref<CpuSpecs | GpuSpecs | PhoneSpecs | null>(null)
 
 // 页面加载
 onLoad((options) => {
@@ -245,32 +95,83 @@ onLoad((options) => {
   loadHardwareData()
 })
 
+// 检查是否支持微信云开发
+const isCloudSupported = computed(() => {
+  return typeof wx !== 'undefined' && wx.cloud
+})
+
+// 获取集合名称
+const getCollectionName = () => {
+  const type = queryParams.value.type
+  switch (type) {
+    case 'cpu':
+      return 'cpu_collection'
+    case 'gpu':
+      return 'gpu_collection'
+    case 'phone':
+      return 'phone_collection'
+    default:
+      return ''
+  }
+}
+
 // 加载硬件数据
-const loadHardwareData = () => {
-  loading.value = true
+const loadHardwareData = async () => {
+  const { id, type } = queryParams.value
   
-  setTimeout(() => {
-    const { id, type } = queryParams.value
-    
-    if (!id || !type) {
-      hardwareData.value = null
-      loading.value = false
-      return
-    }
-    
-    const dataSource = type === 'cpu' ? cpuMockData : gpuMockData
-    // 使用 for 循环替代 find 方法，避免 ES2015+ 方法兼容性问题
-    let found: CpuSpecs | GpuSpecs | undefined = undefined
-    for (let i = 0; i < dataSource.length; i++) {
-      if (dataSource[i].id === id) {
-        found = dataSource[i]
-        break
-      }
-    }
-    
-    hardwareData.value = found || null
+  // 验证参数
+  if (!id || !type) {
+    error.value = '缺少必要参数'
     loading.value = false
-  }, 300) // 模拟加载延迟
+    return
+  }
+  
+  // 检查云开发支持
+  if (!isCloudSupported.value) {
+    error.value = '当前环境不支持微信云开发'
+    loading.value = false
+    return
+  }
+  
+  const collectionName = getCollectionName()
+  if (!collectionName) {
+    error.value = '无效的硬件类型'
+    loading.value = false
+    return
+  }
+  
+  loading.value = true
+  error.value = null
+  
+  try {
+    // 使用微信云数据库API获取单个文档
+    const result = await wx.cloud!.database().collection(collectionName).doc(id).get()
+    
+    if (result.data) {
+      hardwareData.value = result.data as CpuSpecs | GpuSpecs | PhoneSpecs
+    } else {
+      error.value = '未找到硬件信息'
+      hardwareData.value = null
+    }
+  } catch (err: any) {
+    console.error('加载硬件数据失败:', err)
+    error.value = err.message || '数据加载失败'
+    hardwareData.value = null
+    
+    // 显示错误提示
+    uni.showToast({
+      title: '数据加载失败',
+      icon: 'error',
+      duration: 2000
+    })
+  } finally {
+    loading.value = false
+  }
+}
+
+// 重试加载
+const handleRetry = () => {
+  loadHardwareData()
 }
 
 // 获取品牌样式类
@@ -279,6 +180,10 @@ const getBrandClass = (brand: string) => {
     case 'Intel': return 'brand-intel'
     case 'AMD': return 'brand-amd'
     case 'NVIDIA': return 'brand-nvidia'
+    case 'Apple': return 'brand-apple'
+    case 'Xiaomi': return 'brand-xiaomi'
+    case 'Huawei': return 'brand-huawei'
+    case 'Samsung': return 'brand-samsung'
     default: return 'brand-other'
   }
 }
@@ -493,6 +398,22 @@ const handleBack = () => {
   background: linear-gradient(135deg, #76b900, #a8e063);
 }
 
+.brand-apple {
+  background: linear-gradient(135deg, #000000, #333333);
+}
+
+.brand-xiaomi {
+  background: linear-gradient(135deg, #ff6900, #ffa726);
+}
+
+.brand-huawei {
+  background: linear-gradient(135deg, #ff0036, #ff6b9d);
+}
+
+.brand-samsung {
+  background: linear-gradient(135deg, #1428a0, #1a73e8);
+}
+
 .brand-other {
   background: linear-gradient(135deg, #666666, #999999);
 }
@@ -502,6 +423,51 @@ const handleBack = () => {
   border-radius: 16rpx;
   overflow: hidden;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+  text-align: center;
+}
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 30rpx;
+  text-align: center;
+  gap: 30rpx;
+}
+
+.error-text {
+  font-size: 28rpx;
+  color: #ff4444;
+  text-align: center;
+}
+
+.error-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 30rpx;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #999999;
+  margin-bottom: 40rpx;
 }
 
 .chart-section {

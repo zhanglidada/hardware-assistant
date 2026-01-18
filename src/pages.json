@@ -18,6 +18,12 @@
 				"navigationBarTitleText": "硬件对比",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/debug/index",
+			"style": {
+				"navigationBarTitleText": "调试页面"
+			}
 		}
 	],
 	"globalStyle": {

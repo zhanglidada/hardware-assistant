@@ -1,0 +1,21 @@
+/**
+ * 修复 wot-design-uni 字体加载问题
+ * 微信小程序无法加载外部字体，这里禁用字体加载
+ */
+
+/* 禁用 wd-icon 的外部字体加载 */
+.wd-icon {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* 覆盖 @font-face 规则，防止加载外部字体 */
+@font-face {
+  font-family: 'wot-icon';
+  src: local('Arial'), local('Helvetica');
+  font-display: block;
+}
+
+/* 确保图标组件使用系统字体 */
+[class*="wot-icon-"] {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}

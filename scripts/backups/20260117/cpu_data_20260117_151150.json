@@ -3,9 +3,7 @@
     "id": "cpu-001",
     "model": "Intel Pentium 60",
     "brand": "Intel",
-    "releaseDate": {
-      "$date": "1993-03-22T00:00:00.000Z"
-    },
+    "releaseDate": "1993-03-22",
     "price": 878,
     "description": "Intel第一代Pentium处理器，60MHz主频，开创了x86处理器新时代",
     "cores": "1",
@@ -14,16 +12,13 @@
     "socket": "Socket 4",
     "tdp": 15,
     "integratedGraphics": false,
-    "cache": 0.016,
-    "_id": "id_0000_de05673e3cc9"
+    "cache": 0.016
   },
   {
     "id": "cpu-002",
     "model": "Intel Pentium 4 3.0GHz",
     "brand": "Intel",
-    "releaseDate": {
-      "$date": "2002-11-14T00:00:00.000Z"
-    },
+    "releaseDate": "2002-11-14",
     "price": 637,
     "description": "NetBurst架构，3.0GHz高主频，支持超线程技术",
     "cores": "1",
@@ -32,16 +27,13 @@
     "socket": "Socket 478",
     "tdp": 82,
     "integratedGraphics": false,
-    "cache": 0.512,
-    "_id": "id_0001_40a900e25380"
+    "cache": 0.512
   },
   {
     "id": "cpu-003",
     "model": "Intel Core 2 Duo E8400",
     "brand": "Intel",
-    "releaseDate": {
-      "$date": "2008-01-20T00:00:00.000Z"
-    },
+    "releaseDate": "2008-01-20",
     "price": 183,
     "description": "Core微架构，双核处理器，45nm工艺，性能功耗比优秀",
     "cores": "2",
@@ -50,16 +42,13 @@
     "socket": "LGA775",
     "tdp": 65,
     "integratedGraphics": false,
-    "cache": 6,
-    "_id": "id_0002_5f1d77c25314"
+    "cache": 6
   },
   {
     "id": "cpu-004",
     "model": "Intel Core i7-2600K",
     "brand": "Intel",
-    "releaseDate": {
-      "$date": "2011-01-09T00:00:00.000Z"
-    },
+    "releaseDate": "2011-01-09",
     "price": 317,
     "description": "Sandy Bridge架构，四核八线程，集成HD Graphics 3000",
     "cores": "4",
@@ -68,16 +57,13 @@
     "socket": "LGA1155",
     "tdp": 95,
     "integratedGraphics": true,
-    "cache": 8,
-    "_id": "id_0003_edd1b130cecb"
+    "cache": 8
   },
   {
     "id": "cpu-005",
     "model": "Intel Core i9-14900KS",
     "brand": "Intel",
-    "releaseDate": {
-      "$date": "2024-03-14T00:00:00.000Z"
-    },
+    "releaseDate": "2024-03-14",
     "price": 5999,
     "description": "Intel第14代酷睿旗舰特别版，6.2GHz睿频，性能怪兽",
     "cores": "8P+16E",
@@ -86,16 +72,13 @@
     "socket": "LGA1700",
     "tdp": 150,
     "integratedGraphics": true,
-    "cache": 36,
-    "_id": "id_0004_6994df54f20c"
+    "cache": 36
   },
   {
     "id": "cpu-006",
     "model": "Intel Core Ultra 9 285K",
     "brand": "Intel",
-    "releaseDate": {
-      "$date": "2024-10-16T00:00:00.000Z"
-    },
+    "releaseDate": "2024-10-16",
     "price": 5899,
     "description": "Intel全新Core Ultra系列，Lunar Lake架构，AI性能大幅提升",
     "cores": "8P+16E",
@@ -104,16 +87,13 @@
     "socket": "LGA1851",
     "tdp": 125,
     "integratedGraphics": true,
-    "cache": 36,
-    "_id": "id_0005_cae074b2d64b"
+    "cache": 36
   },
   {
     "id": "cpu-007",
     "model": "AMD K5 PR100",
     "brand": "AMD",
-    "releaseDate": {
-      "$date": "1996-03-27T00:00:00.000Z"
-    },
+    "releaseDate": "1996-03-27",
     "price": 75,
     "description": "AMD第一代K5处理器，100MHz主频，兼容Pentium指令集",
     "cores": "1",
@@ -122,16 +102,13 @@
     "socket": "Socket 5",
     "tdp": 16,
     "integratedGraphics": false,
-    "cache": 0.016,
-    "_id": "id_0006_79001088156f"
+    "cache": 0.016
   },
   {
     "id": "cpu-008",
     "model": "AMD Athlon 64 3000+",
     "brand": "AMD",
-    "releaseDate": {
-      "$date": "2003-09-23T00:00:00.000Z"
-    },
+    "releaseDate": "2003-09-23",
     "price": 218,
     "description": "AMD首款64位桌面处理器，K8架构，集成内存控制器",
     "cores": "1",
@@ -140,16 +117,13 @@
     "socket": "Socket 754",
     "tdp": 89,
     "integratedGraphics": false,
-    "cache": 0.512,
-    "_id": "id_0007_8145d1159348"
+    "cache": 0.512
   },
   {
     "id": "cpu-009",
     "model": "AMD Phenom II X4 965",
     "brand": "AMD",
-    "releaseDate": {
-      "$date": "2009-08-13T00:00:00.000Z"
-    },
+    "releaseDate": "2009-08-13",
     "price": 245,
     "description": "45nm工艺，四核处理器，黑盒版不锁倍频",
     "cores": "4",
@@ -158,16 +132,13 @@
     "socket": "AM3",
     "tdp": 125,
     "integratedGraphics": false,
-    "cache": 6,
-    "_id": "id_0008_9b2df341ca50"
+    "cache": 6
   },
   {
     "id": "cpu-010",
     "model": "AMD Ryzen 7 1800X",
     "brand": "AMD",
-    "releaseDate": {
-      "$date": "2017-03-02T00:00:00.000Z"
-    },
+    "releaseDate": "2017-03-02",
     "price": 499,
     "description": "Zen架构首代产品，八核十六线程，重返高性能市场",
     "cores": "8",
@@ -176,16 +147,13 @@
     "socket": "AM4",
     "tdp": 95,
     "integratedGraphics": false,
-    "cache": 16,
-    "_id": "id_0009_445c362776ba"
+    "cache": 16
   },
   {
     "id": "cpu-011",
     "model": "AMD Ryzen 9 7950X3D",
     "brand": "AMD",
-    "releaseDate": {
-      "$date": "2023-02-28T00:00:00.000Z"
-    },
+    "releaseDate": "2023-02-28",
     "price": 5299,
     "description": "Zen4架构，3D V-Cache技术，游戏性能卓越",
     "cores": "16",
@@ -194,16 +162,13 @@
     "socket": "AM5",
     "tdp": 120,
     "integratedGraphics": true,
-    "cache": 144,
-    "_id": "id_0010_9628b84a8438"
+    "cache": 144
   },
   {
     "id": "cpu-012",
     "model": "AMD Ryzen 9 9950X",
     "brand": "AMD",
-    "releaseDate": {
-      "$date": "2024-07-31T00:00:00.000Z"
-    },
+    "releaseDate": "2024-07-31",
     "price": 6999,
     "description": "Zen5架构旗舰，16核32线程，AI性能大幅提升",
     "cores": "16",
@@ -212,7 +177,6 @@
     "socket": "AM5",
     "tdp": 170,
     "integratedGraphics": true,
-    "cache": 80,
-    "_id": "id_0011_dae17ef8c791"
+    "cache": 80
   }
 ]
