@@ -197,9 +197,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { useCompareStore } from '../../stores/compare'
+import { useHardwareList } from '../../composables/useCloudData'
 import type { CpuSpecs, GpuSpecs, PhoneSpecs } from '../../types/hardware'
 
 // Pinia store
@@ -208,365 +209,127 @@ const compareStore = useCompareStore()
 // 路由参数
 const queryParams = ref<{ type?: 'cpu' | 'gpu' | 'phone' }>({})
 
-// 模拟数据
-const cpuMockData: CpuSpecs[] = [
-  {
-    id: 'cpu-001',
-    model: 'Intel Pentium 60',
-    brand: 'Intel',
-    releaseDate: '1993-03-22',
-    price: 878,
-    description: 'Intel第一代Pentium处理器，60MHz主频，开创了x86处理器新时代',
-    cores: '1',
-    baseClock: 0.06,
-    boostClock: 0.06,
-    socket: 'Socket 4',
-    tdp: 15,
-    integratedGraphics: false,
-    cache: 0.016
+// 使用云数据库 Hook 加载完整数据
+const cpuListHook = useHardwareList<CpuSpecs>('cpu_collection', {
+  orderBy: {
+    field: 'releaseDate',
+    order: 'desc'
   },
-  {
-    id: 'cpu-002',
-    model: 'Intel Pentium 4 3.0GHz',
-    brand: 'Intel',
-    releaseDate: '2002-11-14',
-    price: 637,
-    description: 'NetBurst架构，3.0GHz高主频，支持超线程技术',
-    cores: '1',
-    baseClock: 3.0,
-    boostClock: 3.0,
-    socket: 'Socket 478',
-    tdp: 82,
-    integratedGraphics: false,
-    cache: 0.512
-  },
-  {
-    id: 'cpu-003',
-    model: 'Intel Core 2 Duo E8400',
-    brand: 'Intel',
-    releaseDate: '2008-01-20',
-    price: 183,
-    description: 'Core微架构，双核处理器，45nm工艺，性能功耗比优秀',
-    cores: '2',
-    baseClock: 3.0,
-    boostClock: 3.0,
-    socket: 'LGA775',
-    tdp: 65,
-    integratedGraphics: false,
-    cache: 6
-  },
-  {
-    id: 'cpu-004',
-    model: 'Intel Core i7-2600K',
-    brand: 'Intel',
-    releaseDate: '2011-01-09',
-    price: 317,
-    description: 'Sandy Bridge架构，四核八线程，集成HD Graphics 3000',
-    cores: '4',
-    baseClock: 3.4,
-    boostClock: 3.8,
-    socket: 'LGA1155',
-    tdp: 95,
-    integratedGraphics: true,
-    cache: 8
-  },
-  {
-    id: 'cpu-005',
-    model: 'Intel Core i9-14900KS',
-    brand: 'Intel',
-    releaseDate: '2024-03-14',
-    price: 5999,
-    description: 'Intel第14代酷睿旗舰特别版，6.2GHz睿频，性能怪兽',
-    cores: '8P+16E',
-    baseClock: 3.2,
-    boostClock: 6.2,
-    socket: 'LGA1700',
-    tdp: 150,
-    integratedGraphics: true,
-    cache: 36
-  },
-  {
-    id: 'cpu-006',
-    model: 'Intel Core Ultra 9 285K',
-    brand: 'Intel',
-    releaseDate: '2024-10-16',
-    price: 5899,
-    description: 'Intel全新Core Ultra系列，Lunar Lake架构，AI性能大幅提升',
-    cores: '8P+16E',
-    baseClock: 3.5,
-    boostClock: 5.5,
-    socket: 'LGA1851',
-    tdp: 125,
-    integratedGraphics: true,
-    cache: 36
-  },
-  {
-    id: 'cpu-007',
-    model: 'AMD K5 PR100',
-    brand: 'AMD',
-    releaseDate: '1996-03-27',
-    price: 75,
-    description: 'AMD第一代K5处理器，100MHz主频，兼容Pentium指令集',
-    cores: '1',
-    baseClock: 0.1,
-    boostClock: 0.1,
-    socket: 'Socket 5',
-    tdp: 16,
-    integratedGraphics: false,
-    cache: 0.016
-  },
-  {
-    id: 'cpu-008',
-    model: 'AMD Athlon 64 3000+',
-    brand: 'AMD',
-    releaseDate: '2003-09-23',
-    price: 218,
-    description: 'AMD首款64位桌面处理器，K8架构，集成内存控制器',
-    cores: '1',
-    baseClock: 2.0,
-    boostClock: 2.0,
-    socket: 'Socket 754',
-    tdp: 89,
-    integratedGraphics: false,
-    cache: 0.512
-  },
-  {
-    id: 'cpu-009',
-    model: 'AMD Phenom II X4 965',
-    brand: 'AMD',
-    releaseDate: '2009-08-13',
-    price: 245,
-    description: '45nm工艺，四核处理器，黑盒版不锁倍频',
-    cores: '4',
-    baseClock: 3.4,
-    boostClock: 3.4,
-    socket: 'AM3',
-    tdp: 125,
-    integratedGraphics: false,
-    cache: 6
-  },
-  {
-    id: 'cpu-010',
-    model: 'AMD Ryzen 7 1800X',
-    brand: 'AMD',
-    releaseDate: '2017-03-02',
-    price: 499,
-    description: 'Zen架构首代产品，八核十六线程，重返高性能市场',
-    cores: '8',
-    baseClock: 3.6,
-    boostClock: 4.0,
-    socket: 'AM4',
-    tdp: 95,
-    integratedGraphics: false,
-    cache: 16
-  },
-  {
-    id: 'cpu-011',
-    model: 'AMD Ryzen 9 7950X3D',
-    brand: 'AMD',
-    releaseDate: '2023-02-28',
-    price: 5299,
-    description: 'Zen4架构，3D V-Cache技术，游戏性能卓越',
-    cores: '16',
-    baseClock: 4.2,
-    boostClock: 5.7,
-    socket: 'AM5',
-    tdp: 120,
-    integratedGraphics: true,
-    cache: 144
-  },
-  {
-    id: 'cpu-012',
-    model: 'AMD Ryzen 9 9950X',
-    brand: 'AMD',
-    releaseDate: '2024-07-31',
-    price: 6999,
-    description: 'Zen5架构旗舰，16核32线程，AI性能大幅提升',
-    cores: '16',
-    baseClock: 4.3,
-    boostClock: 5.7,
-    socket: 'AM5',
-    tdp: 170,
-    integratedGraphics: true,
-    cache: 80
-  }
-]
+  withCount: true
+})
 
-const gpuMockData: GpuSpecs[] = [
-  {
-    id: 'gpu-001',
-    model: 'NVIDIA GeForce RTX 4090',
-    brand: 'NVIDIA',
-    releaseDate: '2024-01-10',
-    price: 12999,
-    description: 'NVIDIA Ada Lovelace架构旗舰显卡，性能怪兽',
-    vram: 24,
-    busWidth: 384,
-    cudaCores: 16384,
-    coreClock: 2235,
-    memoryClock: 21000,
-    powerConsumption: 450,
-    rayTracing: true,
-    upscalingTech: 'DLSS'
+const gpuListHook = useHardwareList<GpuSpecs>('gpu_collection', {
+  orderBy: {
+    field: 'releaseDate',
+    order: 'desc'
   },
-  {
-    id: 'gpu-002',
-    model: 'AMD Radeon RX 7900 XTX',
-    brand: 'AMD',
-    releaseDate: '2024-02-20',
-    price: 7999,
-    description: 'AMD RDNA3架构旗舰显卡，高性价比选择',
-    vram: 24,
-    busWidth: 384,
-    cudaCores: 6144,
-    coreClock: 2300,
-    memoryClock: 20000,
-    powerConsumption: 355,
-    rayTracing: true,
-    upscalingTech: 'FSR'
-  },
-  {
-    id: 'gpu-003',
-    model: 'NVIDIA GeForce RTX 4080 SUPER',
-    brand: 'NVIDIA',
-    releaseDate: '2024-03-15',
-    price: 8999,
-    description: 'RTX 4080升级版，性能接近RTX 4090',
-    vram: 16,
-    busWidth: 256,
-    cudaCores: 10240,
-    coreClock: 2295,
-    memoryClock: 23000,
-    powerConsumption: 320,
-    rayTracing: true,
-    upscalingTech: 'DLSS'
-  },
-  {
-    id: 'gpu-004',
-    model: 'AMD Radeon RX 7800 XT',
-    brand: 'AMD',
-    releaseDate: '2024-04-05',
-    price: 4599,
-    description: '中高端显卡，2K游戏利器',
-    vram: 16,
-    busWidth: 256,
-    cudaCores: 3840,
-    coreClock: 2124,
-    memoryClock: 19500,
-    powerConsumption: 263,
-    rayTracing: true,
-    upscalingTech: 'FSR'
-  },
-  {
-    id: 'gpu-005',
-    model: 'NVIDIA GeForce RTX 4070 Ti SUPER',
-    brand: 'NVIDIA',
-    releaseDate: '2024-05-12',
-    price: 6499,
-    description: '2K游戏甜点卡，DLSS3加持',
-    vram: 16,
-    busWidth: 256,
-    cudaCores: 8448,
-    coreClock: 2310,
-    memoryClock: 21000,
-    powerConsumption: 285,
-    rayTracing: true,
-    upscalingTech: 'DLSS'
-  }
-]
+  withCount: true
+})
 
-const phoneMockData: PhoneSpecs[] = [
-  {
-    id: 'phone-001',
-    model: 'iPhone 15 Pro Max',
-    brand: 'Apple',
-    releaseDate: '2024-09-22',
-    price: 9999,
-    description: '苹果旗舰手机，A17 Pro芯片，钛金属边框',
-    processor: 'A17 Pro',
-    ram: 8,
-    storage: 256,
-    screenSize: 6.7,
-    resolution: '2796x1290',
-    refreshRate: 120,
-    batteryCapacity: 4422,
-    camera: '48MP+12MP+12MP',
-    os: 'iOS',
-    support5G: true
+const phoneListHook = useHardwareList<PhoneSpecs>('phone_collection', {
+  orderBy: {
+    field: 'releaseDate',
+    order: 'desc'
   },
-  {
-    id: 'phone-002',
-    model: 'Xiaomi 14 Ultra',
-    brand: 'Xiaomi',
-    releaseDate: '2024-02-25',
-    price: 6499,
-    description: '小米影像旗舰，徕卡四摄，骁龙8 Gen 3',
-    processor: '骁龙8 Gen 3',
-    ram: 16,
-    storage: 512,
-    screenSize: 6.73,
-    resolution: '3200x1440',
-    refreshRate: 120,
-    batteryCapacity: 5300,
-    camera: '50MP+50MP+50MP+50MP',
-    os: 'Android',
-    support5G: true
-  },
-  {
-    id: 'phone-003',
-    model: 'Huawei Mate 60 Pro+',
-    brand: 'Huawei',
-    releaseDate: '2024-08-29',
-    price: 8999,
-    description: '华为旗舰，麒麟9000S芯片，卫星通话',
-    processor: '麒麟9000S',
-    ram: 12,
-    storage: 512,
-    screenSize: 6.82,
-    resolution: '2720x1260',
-    refreshRate: 120,
-    batteryCapacity: 5000,
-    camera: '50MP+48MP+40MP',
-    os: 'Android',
-    support5G: true
-  },
-  {
-    id: 'phone-004',
-    model: 'Samsung Galaxy S24 Ultra',
-    brand: 'Samsung',
-    releaseDate: '2024-01-31',
-    price: 9699,
-    description: '三星旗舰，骁龙8 Gen 3，S Pen手写笔',
-    processor: '骁龙8 Gen 3',
-    ram: 12,
-    storage: 512,
-    screenSize: 6.8,
-    resolution: '3120x1440',
-    refreshRate: 120,
-    batteryCapacity: 5000,
-    camera: '200MP+12MP+10MP+10MP',
-    os: 'Android',
-    support5G: true
-  },
-  {
-    id: 'phone-005',
-    model: 'OnePlus 12',
-    brand: '其他',
-    releaseDate: '2024-01-23',
-    price: 4299,
-    description: '一加旗舰，骁龙8 Gen 3，哈苏影像',
-    processor: '骁龙8 Gen 3',
-    ram: 16,
-    storage: 512,
-    screenSize: 6.82,
-    resolution: '3168x1440',
-    refreshRate: 120,
-    batteryCapacity: 5400,
-    camera: '50MP+48MP+64MP',
-    os: 'Android',
-    support5G: true
+  withCount: true
+})
+
+// 页面加载时初始化数据
+onMounted(() => {
+  // 初始加载数据
+  if (compareType.value === 'cpu') {
+    cpuListHook.refresh()
+  } else if (compareType.value === 'gpu') {
+    gpuListHook.refresh()
+  } else {
+    phoneListHook.refresh()
   }
-]
+})
+
+// 安全解析工具函数
+const safeParse = {
+  // 解析CPU核心数，如 "8P+16E" -> 24
+  parseCores: (cores: string): number => {
+    if (!cores) return 0
+    try {
+      // 处理 "8P+16E" 格式
+      const parts = cores.split('+')
+      let total = 0
+      for (const part of parts) {
+        // 提取数字部分
+        const match = part.match(/\d+/)
+        if (match) {
+          total += parseInt(match[0], 10)
+        }
+      }
+      return total || 0
+    } catch {
+      return 0
+    }
+  },
+
+  // 解析频率，如 "5.2 GHz" -> 5.2
+  parseFrequency: (freq: string | number): number => {
+    if (typeof freq === 'number') return freq
+    if (!freq) return 0
+    try {
+      // 提取数字部分
+      const match = freq.toString().match(/(\d+(\.\d+)?)/)
+      return match ? parseFloat(match[1]) : 0
+    } catch {
+      return 0
+    }
+  },
+
+  // 解析存储，如 "256 GB" -> 256
+  parseStorage: (storage: string | number): number => {
+    if (typeof storage === 'number') return storage
+    if (!storage) return 0
+    try {
+      // 提取数字部分
+      const match = storage.toString().match(/(\d+(\.\d+)?)/)
+      return match ? parseFloat(match[1]) : 0
+    } catch {
+      return 0
+    }
+  },
+
+  // 安全数值比较，避免NaN
+  safeCompare: (a: any, b: any, isLowerBetter = false): { left: number; right: number; winner: 'left' | 'right' | null } => {
+    const leftNum = typeof a === 'number' ? a : parseFloat(a)
+    const rightNum = typeof b === 'number' ? b : parseFloat(b)
+    
+    // 处理NaN
+    const leftValid = !isNaN(leftNum) && isFinite(leftNum)
+    const rightValid = !isNaN(rightNum) && isFinite(rightNum)
+    
+    if (!leftValid && !rightValid) {
+      return { left: 50, right: 50, winner: null }
+    }
+    if (!leftValid) {
+      return { left: 0, right: 100, winner: 'right' }
+    }
+    if (!rightValid) {
+      return { left: 100, right: 0, winner: 'left' }
+    }
+    
+    const max = Math.max(leftNum, rightNum)
+    const min = Math.min(leftNum, rightNum)
+    
+    // 避免除以零
+    const leftPercent = max > 0 ? (leftNum / max) * 100 : 50
+    const rightPercent = max > 0 ? (rightNum / max) * 100 : 50
+    
+    let winner: 'left' | 'right' | null = null
+    if (isLowerBetter) {
+      winner = leftNum < rightNum ? 'left' : rightNum < leftNum ? 'right' : null
+    } else {
+      winner = leftNum > rightNum ? 'left' : rightNum > leftNum ? 'right' : null
+    }
+    
+    return { left: leftPercent, right: rightPercent, winner }
+  }
+}
 
 // 页面加载
 onLoad((options) => {
@@ -603,9 +366,15 @@ const compareItems = computed(() => {
   return items
 })
 
-// 根据ID从模拟数据中查找完整硬件信息
+// 根据ID从云数据库或本地数据中查找完整硬件信息
 const findHardwareById = (id: string, type: 'cpu' | 'gpu' | 'phone') => {
-  const dataSource = type === 'cpu' ? cpuMockData : type === 'gpu' ? gpuMockData : phoneMockData
+  // 获取对应的数据源
+  const dataSource = type === 'cpu' 
+    ? cpuListHook.list.value 
+    : type === 'gpu'
+    ? gpuListHook.list.value
+    : phoneListHook.list.value
+  
   // 使用 for 循环替代 find 方法
   for (let i = 0; i < dataSource.length; i++) {
     if (dataSource[i].id === id) {
@@ -653,7 +422,7 @@ const rightParams = computed(() => {
   return getHardwareParams(rightItem.value, compareType.value)
 })
 
-// 获取硬件参数
+// 获取硬件参数（与详情页面保持一致的逻辑）
 const getHardwareParams = (item: any, type: 'cpu' | 'gpu' | 'phone') => {
   const params = []
   
@@ -666,44 +435,47 @@ const getHardwareParams = (item: any, type: 'cpu' | 'gpu' | 'phone') => {
   )
   
   // CPU 特有参数
-  if (type === 'cpu') {
+  if (type === 'cpu' && 'cores' in item) {
+    const cpuData = item as CpuSpecs
     params.push(
-      { label: '核心配置', value: item.cores, desc: '性能核+能效核' },
-      { label: '频率范围', value: `${item.baseClock}-${item.boostClock} GHz`, desc: '基础-最大加速频率' },
-      { label: '接口', value: item.socket, desc: '' },
-      { label: '热设计功耗', value: `${item.tdp} W`, desc: '' },
-      { label: '缓存', value: `${item.cache} MB`, desc: '' },
-      { label: '集成显卡', value: item.integratedGraphics ? '是' : '否', desc: '' }
+      { label: '核心配置', value: cpuData.cores, desc: '性能核+能效核' },
+      { label: '频率范围', value: `${cpuData.baseClock}-${cpuData.boostClock} GHz`, desc: '基础-最大加速频率' },
+      { label: '接口', value: cpuData.socket, desc: '' },
+      { label: '热设计功耗', value: `${cpuData.tdp} W`, desc: '' },
+      { label: '缓存', value: `${cpuData.cache} MB`, desc: '' },
+      { label: '集成显卡', value: cpuData.integratedGraphics ? '是' : '否', desc: '' }
     )
   }
   
   // GPU 特有参数
-  if (type === 'gpu') {
+  if (type === 'gpu' && 'vram' in item) {
+    const gpuData = item as GpuSpecs
     params.push(
-      { label: '显存', value: `${item.vram} GB`, desc: '' },
-      { label: '位宽', value: `${item.busWidth} bit`, desc: '' },
-      { label: 'CUDA核心', value: item.cudaCores.toLocaleString(), desc: '流处理器数量' },
-      { label: '核心频率', value: `${item.coreClock} MHz`, desc: '' },
-      { label: '显存频率', value: `${item.memoryClock} MHz`, desc: '' },
-      { label: '功耗', value: `${item.powerConsumption} W`, desc: '' },
-      { label: '光线追踪', value: item.rayTracing ? '支持' : '不支持', desc: '' },
-      { label: '超分辨率', value: item.upscalingTech, desc: '' }
+      { label: '显存', value: `${gpuData.vram} GB`, desc: '' },
+      { label: '位宽', value: `${gpuData.busWidth} bit`, desc: '' },
+      { label: 'CUDA核心', value: gpuData.cudaCores.toLocaleString(), desc: '流处理器数量' },
+      { label: '核心频率', value: `${gpuData.coreClock} MHz`, desc: '' },
+      { label: '显存频率', value: `${gpuData.memoryClock} MHz`, desc: '' },
+      { label: '功耗', value: `${gpuData.powerConsumption} W`, desc: '' },
+      { label: '光线追踪', value: gpuData.rayTracing ? '支持' : '不支持', desc: '' },
+      { label: '超分辨率', value: gpuData.upscalingTech, desc: '' }
     )
   }
   
-  // 手机 特有参数
-  if (type === 'phone') {
+  // 手机 特有参数（详情页面没有手机参数，但对比页面需要）
+  if (type === 'phone' && 'ram' in item) {
+    const phoneData = item as PhoneSpecs
     params.push(
-      { label: '处理器', value: item.processor, desc: '' },
-      { label: '内存', value: `${item.ram} GB`, desc: '' },
-      { label: '存储', value: `${item.storage} GB`, desc: '' },
-      { label: '屏幕尺寸', value: `${item.screenSize} 英寸`, desc: '' },
-      { label: '分辨率', value: item.resolution, desc: '' },
-      { label: '刷新率', value: `${item.refreshRate} Hz`, desc: '' },
-      { label: '电池容量', value: `${item.batteryCapacity} mAh`, desc: '' },
-      { label: '摄像头', value: item.camera, desc: '' },
-      { label: '操作系统', value: item.os, desc: '' },
-      { label: '5G支持', value: item.support5G ? '支持' : '不支持', desc: '' }
+      { label: '处理器', value: phoneData.processor, desc: '' },
+      { label: '内存', value: `${phoneData.ram} GB`, desc: '' },
+      { label: '存储', value: `${phoneData.storage} GB`, desc: '' },
+      { label: '屏幕尺寸', value: `${phoneData.screenSize} 英寸`, desc: '' },
+      { label: '分辨率', value: phoneData.resolution, desc: '' },
+      { label: '刷新率', value: `${phoneData.refreshRate} Hz`, desc: '' },
+      { label: '电池容量', value: `${phoneData.batteryCapacity} mAh`, desc: '' },
+      { label: '摄像头', value: phoneData.camera, desc: '' },
+      { label: '操作系统', value: phoneData.os, desc: '' },
+      { label: '5G支持', value: phoneData.support5G ? '支持' : '不支持', desc: '' }
     )
   }
   
@@ -718,17 +490,15 @@ const comparisonResults = computed(() => {
   const right = rightItem.value
   const results = []
   
-  // 价格对比（越低越好）
-  const priceDiff = ((right.price - left.price) / left.price * 100).toFixed(1)
-  const priceWinner = left.price < right.price ? 'left' : 'right'
+  // 价格对比（越低越好）- 使用安全比较避免NaN
+  const priceComparison = safeParse.safeCompare(left.price, right.price, true)
   results.push({
     label: '价格',
     leftValue: `¥${left.price.toLocaleString()}`,
     rightValue: `¥${right.price.toLocaleString()}`,
-    leftPercent: left.price < right.price ? 100 : (left.price / right.price * 100),
-    rightPercent: right.price < left.price ? 100 : (right.price / left.price * 100),
-    winner: priceWinner,
-    diff: `${priceDiff}%`
+    leftPercent: priceComparison.left,
+    rightPercent: priceComparison.right,
+    winner: priceComparison.winner
   })
   
   // CPU 对比项
@@ -736,50 +506,52 @@ const comparisonResults = computed(() => {
     const leftCpu = left as CpuSpecs
     const rightCpu = right as CpuSpecs
     
-    // 核心数量
-    const leftCores = parseInt(leftCpu.cores.split('+')[0]) + (leftCpu.cores.indexOf('+') > -1 ? parseInt(leftCpu.cores.split('+')[1]) : 0)
-    const rightCores = parseInt(rightCpu.cores.split('+')[0]) + (rightCpu.cores.indexOf('+') > -1 ? parseInt(rightCpu.cores.split('+')[1]) : 0)
-    const coresWinner = leftCores > rightCores ? 'left' : 'right'
+    // 核心数量 - 使用安全解析
+    const leftCores = safeParse.parseCores(leftCpu.cores)
+    const rightCores = safeParse.parseCores(rightCpu.cores)
+    const coresComparison = safeParse.safeCompare(leftCores, rightCores)
     results.push({
       label: '核心总数',
       leftValue: `${leftCores}核`,
       rightValue: `${rightCores}核`,
-      leftPercent: (leftCores / Math.max(leftCores, rightCores)) * 100,
-      rightPercent: (rightCores / Math.max(leftCores, rightCores)) * 100,
-      winner: coresWinner
+      leftPercent: coresComparison.left,
+      rightPercent: coresComparison.right,
+      winner: coresComparison.winner
     })
     
-    // 最高频率
-    const freqWinner = leftCpu.boostClock > rightCpu.boostClock ? 'left' : 'right'
+    // 最高频率 - 使用安全解析
+    const leftBoost = safeParse.parseFrequency(leftCpu.boostClock)
+    const rightBoost = safeParse.parseFrequency(rightCpu.boostClock)
+    const freqComparison = safeParse.safeCompare(leftBoost, rightBoost)
     results.push({
       label: '最高频率',
       leftValue: `${leftCpu.boostClock} GHz`,
       rightValue: `${rightCpu.boostClock} GHz`,
-      leftPercent: (leftCpu.boostClock / Math.max(leftCpu.boostClock, rightCpu.boostClock)) * 100,
-      rightPercent: (rightCpu.boostClock / Math.max(leftCpu.boostClock, rightCpu.boostClock)) * 100,
-      winner: freqWinner
+      leftPercent: freqComparison.left,
+      rightPercent: freqComparison.right,
+      winner: freqComparison.winner
     })
     
     // 缓存大小
-    const cacheWinner = leftCpu.cache > rightCpu.cache ? 'left' : 'right'
+    const cacheComparison = safeParse.safeCompare(leftCpu.cache, rightCpu.cache)
     results.push({
       label: '缓存',
       leftValue: `${leftCpu.cache} MB`,
       rightValue: `${rightCpu.cache} MB`,
-      leftPercent: (leftCpu.cache / Math.max(leftCpu.cache, rightCpu.cache)) * 100,
-      rightPercent: (rightCpu.cache / Math.max(leftCpu.cache, rightCpu.cache)) * 100,
-      winner: cacheWinner
+      leftPercent: cacheComparison.left,
+      rightPercent: cacheComparison.right,
+      winner: cacheComparison.winner
     })
     
     // 功耗（越低越好）
-    const tdpWinner = leftCpu.tdp < rightCpu.tdp ? 'left' : 'right'
+    const tdpComparison = safeParse.safeCompare(leftCpu.tdp, rightCpu.tdp, true)
     results.push({
       label: '功耗',
       leftValue: `${leftCpu.tdp} W`,
       rightValue: `${rightCpu.tdp} W`,
-      leftPercent: leftCpu.tdp < rightCpu.tdp ? 100 : (leftCpu.tdp / rightCpu.tdp * 100),
-      rightPercent: rightCpu.tdp < leftCpu.tdp ? 100 : (rightCpu.tdp / leftCpu.tdp * 100),
-      winner: tdpWinner
+      leftPercent: tdpComparison.left,
+      rightPercent: tdpComparison.right,
+      winner: tdpComparison.winner
     })
   }
   
@@ -789,48 +561,63 @@ const comparisonResults = computed(() => {
     const rightGpu = right as GpuSpecs
     
     // 显存
-    const vramWinner = leftGpu.vram > rightGpu.vram ? 'left' : 'right'
+    const vramComparison = safeParse.safeCompare(leftGpu.vram, rightGpu.vram)
     results.push({
       label: '显存',
       leftValue: `${leftGpu.vram} GB`,
       rightValue: `${rightGpu.vram} GB`,
-      leftPercent: (leftGpu.vram / Math.max(leftGpu.vram, rightGpu.vram)) * 100,
-      rightPercent: (rightGpu.vram / Math.max(leftGpu.vram, rightGpu.vram)) * 100,
-      winner: vramWinner
+      leftPercent: vramComparison.left,
+      rightPercent: vramComparison.right,
+      winner: vramComparison.winner
     })
     
     // CUDA核心
-    const coresWinner = leftGpu.cudaCores > rightGpu.cudaCores ? 'left' : 'right'
+    const coresComparison = safeParse.safeCompare(leftGpu.cudaCores, rightGpu.cudaCores)
     results.push({
       label: 'CUDA核心',
       leftValue: leftGpu.cudaCores.toLocaleString(),
       rightValue: rightGpu.cudaCores.toLocaleString(),
-      leftPercent: (leftGpu.cudaCores / Math.max(leftGpu.cudaCores, rightGpu.cudaCores)) * 100,
-      rightPercent: (rightGpu.cudaCores / Math.max(leftGpu.cudaCores, rightGpu.cudaCores)) * 100,
-      winner: coresWinner
+      leftPercent: coresComparison.left,
+      rightPercent: coresComparison.right,
+      winner: coresComparison.winner
     })
     
     // 核心频率
-    const clockWinner = leftGpu.coreClock > rightGpu.coreClock ? 'left' : 'right'
+    const clockComparison = safeParse.safeCompare(leftGpu.coreClock, rightGpu.coreClock)
     results.push({
       label: '核心频率',
       leftValue: `${leftGpu.coreClock} MHz`,
       rightValue: `${rightGpu.coreClock} MHz`,
-      leftPercent: (leftGpu.coreClock / Math.max(leftGpu.coreClock, rightGpu.coreClock)) * 100,
-      rightPercent: (rightGpu.coreClock / Math.max(leftGpu.coreClock, rightGpu.coreClock)) * 100,
-      winner: clockWinner
+      leftPercent: clockComparison.left,
+      rightPercent: clockComparison.right,
+      winner: clockComparison.winner
     })
     
     // 功耗（越低越好）
-    const powerWinner = leftGpu.powerConsumption < rightGpu.powerConsumption ? 'left' : 'right'
+    const powerComparison = safeParse.safeCompare(leftGpu.powerConsumption, rightGpu.powerConsumption, true)
     results.push({
       label: '功耗',
       leftValue: `${leftGpu.powerConsumption} W`,
       rightValue: `${rightGpu.powerConsumption} W`,
-      leftPercent: leftGpu.powerConsumption < rightGpu.powerConsumption ? 100 : (leftGpu.powerConsumption / rightGpu.powerConsumption * 100),
-      rightPercent: rightGpu.powerConsumption < leftGpu.powerConsumption ? 100 : (rightGpu.powerConsumption / leftGpu.powerConsumption * 100),
-      winner: powerWinner
+      leftPercent: powerComparison.left,
+      rightPercent: powerComparison.right,
+      winner: powerComparison.winner
     })
+    
+    // 光线追踪 - 处理可能缺失的技术
+    if (leftGpu.rayTracing !== undefined && rightGpu.rayTracing !== undefined) {
+      const rtLeft = leftGpu.rayTracing ? 100 : 0
+      const rtRight = rightGpu.rayTracing ? 100 : 0
+      const rtComparison = safeParse.safeCompare(rtLeft, rtRight)
+      results.push({
+        label: '光线追踪',
+        leftValue: leftGpu.rayTracing ? '支持' : '不支持',
+        rightValue: rightGpu.rayTracing ? '支持' : '不支持',
+        leftPercent: rtComparison.left,
+        rightPercent: rtComparison.right,
+        winner: rtComparison.winner
+      })
+    }
   }
   
   // 手机 对比项
@@ -839,59 +626,74 @@ const comparisonResults = computed(() => {
     const rightPhone = right as PhoneSpecs
     
     // 内存
-    const ramWinner = leftPhone.ram > rightPhone.ram ? 'left' : 'right'
+    const ramComparison = safeParse.safeCompare(leftPhone.ram, rightPhone.ram)
     results.push({
       label: '内存',
       leftValue: `${leftPhone.ram} GB`,
       rightValue: `${rightPhone.ram} GB`,
-      leftPercent: (leftPhone.ram / Math.max(leftPhone.ram, rightPhone.ram)) * 100,
-      rightPercent: (rightPhone.ram / Math.max(leftPhone.ram, rightPhone.ram)) * 100,
-      winner: ramWinner
+      leftPercent: ramComparison.left,
+      rightPercent: ramComparison.right,
+      winner: ramComparison.winner
     })
     
     // 存储
-    const storageWinner = leftPhone.storage > rightPhone.storage ? 'left' : 'right'
+    const storageComparison = safeParse.safeCompare(leftPhone.storage, rightPhone.storage)
     results.push({
       label: '存储',
       leftValue: `${leftPhone.storage} GB`,
       rightValue: `${rightPhone.storage} GB`,
-      leftPercent: (leftPhone.storage / Math.max(leftPhone.storage, rightPhone.storage)) * 100,
-      rightPercent: (rightPhone.storage / Math.max(leftPhone.storage, rightPhone.storage)) * 100,
-      winner: storageWinner
+      leftPercent: storageComparison.left,
+      rightPercent: storageComparison.right,
+      winner: storageComparison.winner
     })
     
     // 屏幕尺寸
-    const screenWinner = leftPhone.screenSize > rightPhone.screenSize ? 'left' : 'right'
+    const screenComparison = safeParse.safeCompare(leftPhone.screenSize, rightPhone.screenSize)
     results.push({
       label: '屏幕尺寸',
       leftValue: `${leftPhone.screenSize} 英寸`,
       rightValue: `${rightPhone.screenSize} 英寸`,
-      leftPercent: (leftPhone.screenSize / Math.max(leftPhone.screenSize, rightPhone.screenSize)) * 100,
-      rightPercent: (rightPhone.screenSize / Math.max(leftPhone.screenSize, rightPhone.screenSize)) * 100,
-      winner: screenWinner
+      leftPercent: screenComparison.left,
+      rightPercent: screenComparison.right,
+      winner: screenComparison.winner
     })
     
     // 电池容量
-    const batteryWinner = leftPhone.batteryCapacity > rightPhone.batteryCapacity ? 'left' : 'right'
+    const batteryComparison = safeParse.safeCompare(leftPhone.batteryCapacity, rightPhone.batteryCapacity)
     results.push({
       label: '电池容量',
       leftValue: `${leftPhone.batteryCapacity} mAh`,
       rightValue: `${rightPhone.batteryCapacity} mAh`,
-      leftPercent: (leftPhone.batteryCapacity / Math.max(leftPhone.batteryCapacity, rightPhone.batteryCapacity)) * 100,
-      rightPercent: (rightPhone.batteryCapacity / Math.max(leftPhone.batteryCapacity, rightPhone.batteryCapacity)) * 100,
-      winner: batteryWinner
+      leftPercent: batteryComparison.left,
+      rightPercent: batteryComparison.right,
+      winner: batteryComparison.winner
     })
     
     // 刷新率
-    const refreshWinner = leftPhone.refreshRate > rightPhone.refreshRate ? 'left' : 'right'
+    const refreshComparison = safeParse.safeCompare(leftPhone.refreshRate, rightPhone.refreshRate)
     results.push({
       label: '刷新率',
       leftValue: `${leftPhone.refreshRate} Hz`,
       rightValue: `${rightPhone.refreshRate} Hz`,
-      leftPercent: (leftPhone.refreshRate / Math.max(leftPhone.refreshRate, rightPhone.refreshRate)) * 100,
-      rightPercent: (rightPhone.refreshRate / Math.max(leftPhone.refreshRate, rightPhone.refreshRate)) * 100,
-      winner: refreshWinner
+      leftPercent: refreshComparison.left,
+      rightPercent: refreshComparison.right,
+      winner: refreshComparison.winner
     })
+    
+    // 5G支持 - 处理可能缺失的技术
+    if (leftPhone.support5G !== undefined && rightPhone.support5G !== undefined) {
+      const g5Left = leftPhone.support5G ? 100 : 0
+      const g5Right = rightPhone.support5G ? 100 : 0
+      const g5Comparison = safeParse.safeCompare(g5Left, g5Right)
+      results.push({
+        label: '5G支持',
+        leftValue: leftPhone.support5G ? '支持' : '不支持',
+        rightValue: rightPhone.support5G ? '支持' : '不支持',
+        leftPercent: g5Comparison.left,
+        rightPercent: g5Comparison.right,
+        winner: g5Comparison.winner
+      })
+    }
   }
   
   return results
@@ -1036,10 +838,23 @@ const handleClearAll = () => {
   display: flex;
   gap: 30rpx;
   margin-bottom: 40rpx;
+  align-items: stretch; /* 确保列高度一致 */
 }
 
 .compare-column {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.hardware-card {
+  flex: 1; /* 确保卡片填充整个列高度 */
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body {
+  flex: 1; /* 确保内容区域填充剩余空间 */
 }
 
 .hardware-card {
@@ -1103,6 +918,10 @@ const handleClearAll = () => {
   color: #333333;
   margin-bottom: 12rpx;
   line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .price-tag {
@@ -1349,6 +1168,10 @@ const handleClearAll = () => {
   font-weight: bold;
   color: #333333;
   line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .selector-price {

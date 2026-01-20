@@ -144,14 +144,25 @@ const loadHardwareData = async () => {
   error.value = null
   
   try {
-    // 使用微信云数据库API获取单个文档
-    const result = await wx.cloud!.database().collection(collectionName).doc(id).get()
+    // 使用查询条件而不是文档ID，因为云数据库中的_id可能不是我们的id字段
+    const result = await wx.cloud!.database()
+      .collection(collectionName)
+      .where({ id: id })  // 使用id字段查询，而不是文档_id
+      .limit(1)
+      .get()
     
-    if (result.data) {
-      hardwareData.value = result.data as CpuSpecs | GpuSpecs | PhoneSpecs
+    if (result.data && result.data.length > 0) {
+      hardwareData.value = result.data[0] as CpuSpecs | GpuSpecs | PhoneSpecs
     } else {
       error.value = '未找到硬件信息'
       hardwareData.value = null
+      
+      // 显示错误提示
+      uni.showToast({
+        title: '未找到硬件信息',
+        icon: 'error',
+        duration: 2000
+      })
     }
   } catch (err: any) {
     console.error('加载硬件数据失败:', err)

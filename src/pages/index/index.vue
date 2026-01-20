@@ -20,9 +20,17 @@
 
     <!-- 硬件列表 -->
     <view class="hardware-list">
-      <!-- 加载状态 -->
-      <view v-if="currentLoading && filteredHardware.length === 0" class="loading-state">
-        <wd-loading text="加载中..." vertical />
+      <!-- 骨架屏加载状态 -->
+      <view v-if="currentLoading && filteredHardware.length === 0" class="skeleton-container">
+        <wd-skeleton
+          v-for="i in 3"
+          :key="i"
+          class="skeleton-card"
+          :row="3"
+          :row-width="['60%', '80%', '40%']"
+          :title="true"
+          title-width="70%"
+        />
       </view>
       
       <!-- 错误状态 -->
@@ -32,43 +40,76 @@
       </view>
       
       <!-- 数据列表 -->
-      <wd-cell-group v-else-if="filteredHardware.length > 0">
-        <wd-cell
+      <view v-else-if="filteredHardware.length > 0" class="hardware-grid">
+        <view
           v-for="item in filteredHardware"
           :key="item.id"
           class="hardware-card"
           @click="handleCardClick(item)"
         >
-          <template #title>
-            <view class="card-content">
-              <!-- 左侧品牌标识 -->
+          <!-- 品牌背景装饰 -->
+          <view class="brand-bg" :class="getBrandClass(item.brand)"></view>
+          
+          <!-- 卡片内容 -->
+          <view class="card-content">
+            <!-- 左侧品牌标识 -->
+            <view class="brand-logo-container">
               <view class="brand-logo" :class="getBrandClass(item.brand)">
                 {{ getBrandShortName(item.brand) }}
               </view>
+              <!-- 新品标签 -->
+              <view v-if="isNewRelease(item)" class="new-badge">
+                <wd-icon name="fire" size="14" color="#ff6b00"></wd-icon>
+                <text class="new-text">新品</text>
+              </view>
+            </view>
+            
+            <!-- 右侧信息 -->
+            <view class="hardware-info">
+              <view class="model-row">
+                <text class="model">{{ item.model }}</text>
+              </view>
               
-              <!-- 右侧信息 -->
-              <view class="hardware-info">
-                <view class="model">{{ item.model }}</view>
-                <view class="specs">
-                  <text v-if="activeTab === 'cpu'">
-                    {{ (item as CpuSpecs).cores }} 核心 · 
-                    {{ (item as CpuSpecs).baseClock }}-{{ (item as CpuSpecs).boostClock }}GHz · 
-                    {{ (item as CpuSpecs).tdp }}W
-                  </text>
-                  <text v-else-if="activeTab === 'gpu'">
-                    {{ (item as GpuSpecs).vram }}GB · 
-                    {{ (item as GpuSpecs).busWidth }}bit · 
-                    {{ (item as GpuSpecs).cudaCores }}核心
-                  </text>
-                  <text v-else>
-                    {{ (item as PhoneSpecs).ram }}GB RAM · 
-                    {{ (item as PhoneSpecs).storage }}GB 存储 · 
-                    {{ (item as PhoneSpecs).screenSize }}英寸
-                  </text>
-                </view>
-                <view class="price">¥{{ item.price.toLocaleString() }}</view>
-                
-                <!-- 对比按钮 -->
+              <!-- 规格标签 -->
+              <view class="specs-tags">
+                <template v-if="activeTab === 'cpu'">
+                  <view class="spec-tag" :class="getBrandClass(item.brand)">
+                    <text class="spec-value">{{ (item as CpuSpecs).cores }} 核心</text>
+                  </view>
+                  <view class="spec-tag" :class="getBrandClass(item.brand)">
+                    <text class="spec-value">{{ (item as CpuSpecs).baseClock }}-{{ (item as CpuSpecs).boostClock }}GHz</text>
+                  </view>
+                  <view class="spec-tag" :class="getBrandClass(item.brand)">
+                    <text class="spec-value">{{ (item as CpuSpecs).tdp }}W</text>
+                  </view>
+                </template>
+                <template v-else-if="activeTab === 'gpu'">
+                  <view class="spec-tag" :class="getBrandClass(item.brand)">
+                    <text class="spec-value">{{ (item as GpuSpecs).vram }}GB</text>
+                  </view>
+                  <view class="spec-tag" :class="getBrandClass(item.brand)">
+                    <text class="spec-value">{{ (item as GpuSpecs).busWidth }}bit</text>
+                  </view>
+                  <view class="spec-tag" :class="getBrandClass(item.brand)">
+                    <text class="spec-value">{{ (item as GpuSpecs).cudaCores }}核心</text>
+                  </view>
+                </template>
+                <template v-else>
+                  <view class="spec-tag" :class="getBrandClass(item.brand)">
+                    <text class="spec-value">{{ (item as PhoneSpecs).ram }}GB RAM</text>
+                  </view>
+                  <view class="spec-tag" :class="getBrandClass(item.brand)">
+                    <text class="spec-value">{{ (item as PhoneSpecs).storage }}GB</text>
+                  </view>
+                  <view class="spec-tag" :class="getBrandClass(item.brand)">
+                    <text class="spec-value">{{ (item as PhoneSpecs).screenSize }}英寸</text>
+                  </view>
+                </template>
+              </view>
+              
+              <!-- 价格和操作 -->
+              <view class="price-action-row">
+                <text class="price">¥{{ item.price.toLocaleString() }}</text>
                 <view class="compare-action">
                   <wd-button 
                     type="primary" 
@@ -76,14 +117,15 @@
                     @click.stop="handleAddCompare(item)"
                     :disabled="isItemInCompare(item)"
                     plain
+                    round
                   >
                     {{ isItemInCompare(item) ? '已添加' : '对比' }}
                   </wd-button>
                 </view>
               </view>
             </view>
-          </template>
-        </wd-cell>
+          </view>
+        </view>
         
         <!-- 加载更多提示 -->
         <view v-if="currentLoading && filteredHardware.length > 0" class="load-more-tip">
@@ -94,12 +136,23 @@
         <view v-else-if="currentFinished && filteredHardware.length > 0" class="no-more-tip">
           <text class="no-more-text">没有更多数据了</text>
         </view>
-      </wd-cell-group>
+      </view>
 
       <!-- 空状态 -->
       <view v-else class="empty-state">
+        <view class="empty-illustration">
+          <wd-icon name="search" size="80" color="#cccccc"></wd-icon>
+        </view>
         <text class="empty-text">暂无相关硬件</text>
         <text class="empty-hint">尝试调整搜索关键词或切换分类</text>
+        <wd-button 
+          type="default" 
+          size="small" 
+          @click="handleClear"
+          class="clear-filter-btn"
+        >
+          清除筛选条件
+        </wd-button>
       </view>
     </view>
 
@@ -109,7 +162,7 @@
     </view>
 
     <!-- 对比悬浮窗 -->
-    <view v-if="compareStore.totalCount > 0" class="compare-float">
+    <view v-if="compareStore.totalCount > 0" class="compare-float" :class="{ 'bounce-animation': showBounce }">
       <view class="float-content">
         <view class="selected-items">
           <view 
@@ -130,6 +183,7 @@
             size="small" 
             @click="handleClearCompare"
             plain
+            round
           >
             清空
           </wd-button>
@@ -138,6 +192,7 @@
             size="small" 
             @click="handleStartPK"
             :disabled="!compareStore.canStartPK"
+            round
           >
             开始PK ({{ compareStore.totalCount }})
           </wd-button>
@@ -161,6 +216,7 @@ const compareStore = useCompareStore()
 // 响应式数据
 const searchKeyword = ref('')
 const activeTab = ref<'cpu' | 'gpu' | 'phone'>('cpu')
+const showBounce = ref(false)
 
 // 使用云数据库 Hook 加载数据
 const cpuListHook = useHardwareList<CpuSpecs>('cpu_collection', {
@@ -470,10 +526,30 @@ const isItemInCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
   return compareList.some(compareItem => compareItem.id === item.id)
 }
 
+// 检查是否为新品发布
+const isNewRelease = (item: CpuSpecs | GpuSpecs | PhoneSpecs): boolean => {
+  // 假设6个月内发布的为新品
+  const sixMonthsAgo = new Date()
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
+  
+  try {
+    const releaseDate = new Date(item.releaseDate)
+    return releaseDate > sixMonthsAgo
+  } catch {
+    return false
+  }
+}
+
 // 添加对比项
 const handleAddCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
   const result = compareStore.toggleCompare(item)
   if (result.added) {
+    // 触发弹跳动画
+    showBounce.value = true
+    setTimeout(() => {
+      showBounce.value = false
+    }, 500)
+    
     uni.showToast({
       title: result.message,
       icon: 'success'
@@ -489,87 +565,195 @@ const handleAddCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
 </script>
 
 <style scoped lang="scss">
+/* CSS 变量定义 */
+:root {
+  --brand-intel: #0071c5;
+  --brand-amd: #ed1c24;
+  --brand-nvidia: #76b900;
+  --brand-apple: #000000;
+  --brand-xiaomi: #ff6900;
+  --brand-huawei: #ff0036;
+  --brand-samsung: #1428a0;
+  --brand-other: #666666;
+  
+  --brand-intel-light: rgba(0, 113, 197, 0.1);
+  --brand-amd-light: rgba(237, 28, 36, 0.1);
+  --brand-nvidia-light: rgba(118, 185, 0, 0.1);
+  --brand-apple-light: rgba(0, 0, 0, 0.1);
+  --brand-xiaomi-light: rgba(255, 105, 0, 0.1);
+  --brand-huawei-light: rgba(255, 0, 54, 0.1);
+  --brand-samsung-light: rgba(20, 40, 160, 0.1);
+  --brand-other-light: rgba(102, 102, 102, 0.1);
+}
+
 .page-container {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
 }
 
 .search-container {
-  padding: 20rpx 30rpx;
+  padding: 24rpx 32rpx;
   background-color: #ffffff;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
 }
 
 .category-tabs {
   background-color: #ffffff;
-  margin-bottom: 20rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  
+  :deep(.wd-tabs__nav) {
+    padding: 0 32rpx;
+  }
 }
 
 .hardware-list {
-  padding: 0 30rpx;
+  padding: 0 32rpx;
+}
+
+/* 骨架屏样式 */
+.skeleton-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  padding: 24rpx 0;
+}
+
+.skeleton-card {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 硬件卡片样式 */
+.hardware-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  padding: 24rpx 0;
 }
 
 .hardware-card {
-  margin-bottom: 20rpx;
-  border-radius: 16rpx;
+  position: relative;
+  background: #ffffff;
+  border-radius: 20rpx;
   overflow: hidden;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
   
-  :deep(.wd-cell__title) {
-    width: 100%;
+  &:active {
+    transform: translateY(-2rpx);
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+  }
+}
+
+.brand-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120rpx;
+  height: 120rpx;
+  opacity: 0.05;
+  filter: blur(20rpx);
+  border-radius: 0 0 0 100rpx;
+  
+  &.brand-intel {
+    background: var(--brand-intel);
+  }
+  &.brand-amd {
+    background: var(--brand-amd);
+  }
+  &.brand-nvidia {
+    background: var(--brand-nvidia);
+  }
+  &.brand-apple {
+    background: var(--brand-apple);
+  }
+  &.brand-xiaomi {
+    background: var(--brand-xiaomi);
+  }
+  &.brand-huawei {
+    background: var(--brand-huawei);
+  }
+  &.brand-samsung {
+    background: var(--brand-samsung);
+  }
+  &.brand-other {
+    background: var(--brand-other);
   }
 }
 
 .card-content {
   display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 20rpx 0;
+  align-items: flex-start;
+  padding: 32rpx;
+  position: relative;
+  z-index: 1;
 }
 
-.brand-logo {
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 12rpx;
+.brand-logo-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: 24rpx;
-  font-weight: bold;
-  color: #ffffff;
   margin-right: 24rpx;
   flex-shrink: 0;
 }
 
-.brand-intel {
-  background: linear-gradient(135deg, #0071c5, #00a9ff);
+.brand-logo {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20rpx;
+  font-weight: 900;
+  color: #ffffff;
+  font-family: 'DIN Alternate', 'Helvetica Neue', Arial, sans-serif;
+  
+  &.brand-intel {
+    background: linear-gradient(135deg, var(--brand-intel), #00a9ff);
+  }
+  &.brand-amd {
+    background: linear-gradient(135deg, var(--brand-amd), #ff6b6b);
+  }
+  &.brand-nvidia {
+    background: linear-gradient(135deg, var(--brand-nvidia), #a8e063);
+  }
+  &.brand-apple {
+    background: linear-gradient(135deg, var(--brand-apple), #333333);
+  }
+  &.brand-xiaomi {
+    background: linear-gradient(135deg, var(--brand-xiaomi), #ffa726);
+  }
+  &.brand-huawei {
+    background: linear-gradient(135deg, var(--brand-huawei), #ff6b9d);
+  }
+  &.brand-samsung {
+    background: linear-gradient(135deg, var(--brand-samsung), #1a73e8);
+  }
+  &.brand-other {
+    background: linear-gradient(135deg, var(--brand-other), #999999);
+  }
 }
 
-.brand-amd {
-  background: linear-gradient(135deg, #ed1c24, #ff6b6b);
-}
-
-.brand-nvidia {
-  background: linear-gradient(135deg, #76b900, #a8e063);
-}
-
-.brand-apple {
-  background: linear-gradient(135deg, #000000, #333333);
-}
-
-.brand-xiaomi {
-  background: linear-gradient(135deg, #ff6900, #ffa726);
-}
-
-.brand-huawei {
-  background: linear-gradient(135deg, #ff0036, #ff6b9d);
-}
-
-.brand-samsung {
-  background: linear-gradient(135deg, #1428a0, #1a73e8);
-}
-
-.brand-other {
-  background: linear-gradient(135deg, #666666, #999999);
+.new-badge {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  margin-top: 8rpx;
+  padding: 4rpx 8rpx;
+  background: linear-gradient(135deg, #ff6b00, #ffa726);
+  border-radius: 12rpx;
+  font-size: 20rpx;
+  color: #ffffff;
+  font-weight: bold;
+  
+  .new-text {
+    font-size: 20rpx;
+    font-weight: bold;
+  }
 }
 
 .hardware-info {
@@ -578,149 +762,246 @@ const handleAddCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
   flex-direction: column;
 }
 
-.model {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333333;
-  margin-bottom: 8rpx;
-  line-height: 1.4;
+.model-row {
+  margin-bottom: 16rpx;
 }
 
-.specs {
-  font-size: 26rpx;
-  color: #666666;
-  margin-bottom: 12rpx;
+.model {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1a1a1a;
   line-height: 1.4;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.specs-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-bottom: 20rpx;
+}
+
+.spec-tag {
+  padding: 6rpx 12rpx;
+  border-radius: 16rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  
+  &.brand-intel {
+    background: var(--brand-intel-light);
+    color: var(--brand-intel);
+  }
+  &.brand-amd {
+    background: var(--brand-amd-light);
+    color: var(--brand-amd);
+  }
+  &.brand-nvidia {
+    background: var(--brand-nvidia-light);
+    color: var(--brand-nvidia);
+  }
+  &.brand-apple {
+    background: var(--brand-apple-light);
+    color: var(--brand-apple);
+  }
+  &.brand-xiaomi {
+    background: var(--brand-xiaomi-light);
+    color: var(--brand-xiaomi);
+  }
+  &.brand-huawei {
+    background: var(--brand-huawei-light);
+    color: var(--brand-huawei);
+  }
+  &.brand-samsung {
+    background: var(--brand-samsung-light);
+    color: var(--brand-samsung);
+  }
+  &.brand-other {
+    background: var(--brand-other-light);
+    color: var(--brand-other);
+  }
+}
+
+.spec-value {
+  font-family: 'DIN Alternate', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 600;
+}
+
+.price-action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .price {
-  font-size: 28rpx;
-  font-weight: bold;
+  font-size: 32rpx;
+  font-weight: 900;
   color: #ff6b00;
-  margin-bottom: 12rpx;
+  font-family: 'DIN Alternate', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .compare-action {
-  align-self: flex-start;
+  :deep(.wd-button) {
+    min-width: 100rpx;
+  }
 }
 
-.loading-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 100rpx 0;
-  text-align: center;
-}
-
+/* 错误状态 */
 .error-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80rpx 30rpx;
+  padding: 120rpx 32rpx;
   text-align: center;
-  gap: 30rpx;
+  gap: 32rpx;
 }
 
 .error-text {
   font-size: 28rpx;
   color: #ff4444;
   text-align: center;
+  font-weight: 500;
 }
 
 .load-more-tip {
-  padding: 30rpx 0;
+  padding: 40rpx 0;
   text-align: center;
 }
 
 .no-more-tip {
-  padding: 30rpx 0;
+  padding: 40rpx 0;
   text-align: center;
 }
 
 .no-more-text {
   font-size: 26rpx;
   color: #999999;
+  font-weight: 500;
 }
 
+/* 空状态 */
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 100rpx 0;
+  padding: 120rpx 32rpx;
   text-align: center;
+  gap: 24rpx;
+}
+
+.empty-illustration {
+  margin-bottom: 16rpx;
 }
 
 .empty-text {
   font-size: 32rpx;
-  color: #999999;
-  margin-bottom: 20rpx;
+  color: #666666;
+  font-weight: 600;
 }
 
 .empty-hint {
-  font-size: 28rpx;
-  color: #cccccc;
+  font-size: 26rpx;
+  color: #999999;
+  margin-bottom: 8rpx;
 }
 
+.clear-filter-btn {
+  margin-top: 16rpx;
+}
+
+/* 底部提示 */
 .footer-tip {
-  padding: 30rpx;
+  padding: 32rpx;
   text-align: center;
   font-size: 26rpx;
   color: #999999;
   background-color: #ffffff;
-  margin-top: 20rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20rpx;
-}
-
-.dev-tools {
-  margin-top: 10rpx;
+  margin-top: 24rpx;
+  font-weight: 500;
 }
 
 /* 对比悬浮窗样式 */
 .compare-float {
   position: fixed;
   bottom: 40rpx;
-  left: 30rpx;
-  right: 30rpx;
+  left: 32rpx;
+  right: 32rpx;
   z-index: 1000;
+  
+  &.bounce-animation {
+    animation: bounce 0.5s ease;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10rpx);
+  }
 }
 
 .float-content {
-  background-color: #ffffff;
-  border-radius: 20rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24rpx;
   padding: 24rpx;
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   gap: 20rpx;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
 }
 
 .selected-items {
   display: flex;
   flex-wrap: wrap;
-  gap: 16rpx;
+  gap: 12rpx;
 }
 
 .item-tag {
   display: flex;
   align-items: center;
-  gap: 8rpx;
-  padding: 12rpx 20rpx;
+  gap: 6rpx;
+  padding: 10rpx 16rpx;
   border-radius: 40rpx;
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #ffffff;
   cursor: pointer;
   transition: all 0.2s;
-}
-
-.item-tag:hover {
-  opacity: 0.9;
-  transform: translateY(-2rpx);
+  
+  &.brand-intel {
+    background: linear-gradient(135deg, var(--brand-intel), #00a9ff);
+  }
+  &.brand-amd {
+    background: linear-gradient(135deg, var(--brand-amd), #ff6b6b);
+  }
+  &.brand-nvidia {
+    background: linear-gradient(135deg, var(--brand-nvidia), #a8e063);
+  }
+  &.brand-apple {
+    background: linear-gradient(135deg, var(--brand-apple), #333333);
+  }
+  &.brand-xiaomi {
+    background: linear-gradient(135deg, var(--brand-xiaomi), #ffa726);
+  }
+  &.brand-huawei {
+    background: linear-gradient(135deg, var(--brand-huawei), #ff6b9d);
+  }
+  &.brand-samsung {
+    background: linear-gradient(135deg, var(--brand-samsung), #1a73e8);
+  }
+  &.brand-other {
+    background: linear-gradient(135deg, var(--brand-other), #999999);
+  }
+  
+  &:active {
+    opacity: 0.9;
+    transform: translateY(-2rpx);
+  }
 }
 
 .item-model {
@@ -729,10 +1010,11 @@ const handleAddCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-family: 'DIN Alternate', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .item-remove {
-  font-size: 28rpx;
+  font-size: 24rpx;
   font-weight: bold;
   margin-left: 4rpx;
 }
