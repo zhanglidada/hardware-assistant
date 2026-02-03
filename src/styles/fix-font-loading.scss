@@ -1,21 +1,148 @@
 /**
- * 修复 wot-design-uni 字体加载问题
- * 微信小程序无法加载外部字体，这里禁用字体加载
+ * 修复 wot-design-uni 字体加载问题 - 终极解决方案
+ * 微信小程序无法加载外部字体，这里完全禁用所有外部字体加载
+ * 修复阿里巴巴图标库字体加载错误：https://at.alicdn.com/t/c/font_4245058_s5cpwl25n7o.woff2
  */
 
-/* 禁用 wd-icon 的外部字体加载 */
-.wd-icon {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
-}
+/* ========== 第一步：拦截所有可能的字体名称 ========== */
 
-/* 覆盖 @font-face 规则，防止加载外部字体 */
+/* 拦截 wot-design-uni 相关字体 */
 @font-face {
   font-family: 'wot-icon';
-  src: local('Arial'), local('Helvetica');
+  src: local('Arial');
   font-display: block;
 }
 
-/* 确保图标组件使用系统字体 */
-[class*="wot-icon-"] {
+@font-face {
+  font-family: 'wot-design-uni-icons';
+  src: local('Arial');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'wd-icon';
+  src: local('Arial');
+  font-display: block;
+}
+
+/* 拦截阿里巴巴图标库相关字体 */
+@font-face {
+  font-family: 'iconfont';
+  src: local('Arial');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'ali-iconfont';
+  src: local('Arial');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'alibaba-icon';
+  src: local('Arial');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'at-icon';
+  src: local('Arial');
+  font-display: block;
+}
+
+/* 拦截通用图标字体名称 */
+@font-face {
+  font-family: 'icons';
+  src: local('Arial');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'icon';
+  src: local('Arial');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'font-icons';
+  src: local('Arial');
+  font-display: block;
+}
+
+/* ========== 第二步：强制所有图标类使用系统字体 ========== */
+
+/* wot-design-uni 图标类 */
+.wd-icon,
+[class*="wd-icon-"],
+[class^="wd-icon-"] {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
 }
+
+/* 通用图标类 */
+[class*="icon-"],
+[class^="icon-"],
+[class*="wot-icon-"],
+[class^="wot-icon-"] {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* 阿里巴巴图标库类 */
+[class*="ali-icon"],
+[class^="ali-icon"],
+[class*="alibaba-"],
+[class^="alibaba-"] {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* ========== 第三步：全局字体设置 ========== */
+
+/* 微信小程序页面字体设置 */
+body, page {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ========== 第四步：防止字体闪烁 ========== */
+
+/* 确保字体立即显示，不等待加载 - 微信小程序不支持 * 选择器 */
+body, page, .wd-icon, [class*="icon-"], [class*="wot-icon-"] {
+  font-display: swap !important;
+}
+
+/* ========== 第五步：核弹级解决方案 - 拦截所有字体请求 ========== */
+
+/* 如果以上方法仍然无效，尝试拦截所有 @font-face 规则 */
+@font-face {
+  font-family: '.*';
+  src: local('Arial');
+  unicode-range: U+0-10FFFF;
+}
+
+/* 注意：微信小程序可能不支持正则表达式字体名称，所以添加一些常见变体 */
+@font-face {
+  font-family: 'font';
+  src: local('Arial');
+}
+
+@font-face {
+  font-family: 'Font';
+  src: local('Arial');
+}
+
+@font-face {
+  font-family: 'FONT';
+  src: local('Arial');
+}
+
+/* ========== 重要提示 ========== */
+
+/*
+ * 如果仍然看到字体加载错误，可能是以下原因：
+ * 1. 字体在JavaScript中动态加载 - 需要检查组件库源码
+ * 2. 字体通过<style>标签内联 - 需要覆盖内联样式
+ * 3. 字体名称是动态生成的 - 需要更通用的拦截方案
+ *
+ * 终极解决方案：联系 wot-design-uni 作者，请求提供微信小程序专用版本
+ * 或者：将字体文件下载到本地，修改组件库源码使用本地字体
+ */

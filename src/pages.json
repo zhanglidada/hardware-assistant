@@ -20,9 +20,9 @@
 			}
 		},
 		{
-			"path": "pages/debug/index",
+			"path": "pages/ranking/index",
 			"style": {
-				"navigationBarTitleText": "调试页面"
+				"navigationBarTitleText": "性能排行"
 			}
 		}
 	],
@@ -37,5 +37,31 @@
 		"custom": {
 			"^wd-(.*)": "wot-design-uni/components/wd-$1/wd-$1.vue"
 		}
+	},
+	"tabBar": {
+		"color": "#999999",
+		"selectedColor": "#0071c5",
+		"borderStyle": "white",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/tabbar/home.png",
+				"selectedIconPath": "static/tabbar/home-active.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/ranking/index",
+				"iconPath": "static/tabbar/ranking.png",
+				"selectedIconPath": "static/tabbar/ranking-active.png",
+				"text": "性能排行"
+			},
+			{
+				"pagePath": "pages/compare/index",
+				"iconPath": "static/tabbar/compare.png",
+				"selectedIconPath": "static/tabbar/compare-active.png",
+				"text": "性能对比"
+			}
+		]
 	}
 }

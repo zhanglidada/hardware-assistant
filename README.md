@@ -111,154 +111,115 @@ graph TB
 - **Git Hooks**: 提交前检查和格式化
 - **VS Code配置**: 统一的开发环境
 
-## 📁 项目结构
+## 📁 项目结构概览
 
 ```
 hardware-assistant/
-├── .clinerules                    # 项目编码规范（架构标准）
-├── package.json                   # 依赖管理和脚本
+├── .clinerules                    # 项目编码规范和架构标准
+├── package.json                   # 依赖管理和脚本配置
 ├── vite.config.ts                 # Vite构建配置
-├── tsconfig.json                  # TypeScript配置
+├── tsconfig.json                  # TypeScript编译配置
+├── README.md                      # 项目主文档
+├── PROJECT_ARCHITECTURE_ANALYSIS.md # 详细架构分析文档
 │
-├── scripts/                       # 数据管道脚本
+├── scripts/                       # 数据管道脚本（Python）
 │   ├── scrapers/                  # 数据采集器
-│   │   ├── cpu.py                 # CPU数据采集
-│   │   ├── gpu.py                 # GPU数据采集
-│   │   └── phone.py               # 手机数据采集
-│   ├── convert_to_jsonl.py        # JSON转JSONL格式
+│   │   ├── web_scraper.py         # 通用爬虫基类
+│   │   ├── cpu.py                 # CPU数据采集器
+│   │   ├── gpu.py                 # GPU数据采集器
+│   │   └── phone.py               # 手机数据采集器
+│   ├── update_db.py               # 数据库更新主控制器
+│   ├── convert_to_jsonl.py        # JSON转JSONL格式转换
 │   ├── fix_json_for_cloud.py      # 云数据库格式修复
-│   ├── update_db.py               # 数据库更新脚本
-│   └── debug_cloud_db.js          # 云数据库调试工具
+│   └── backups/                   # 数据备份目录
 │
-├── src/                           # 源代码
-│   ├── types/                     # TypeScript类型定义
-│   │   └── hardware.ts            # 硬件数据结构定义
+├── src/                           # 前端源代码
+│   ├── types/                     # TypeScript类型定义层
+│   │   └── hardware.ts            # 硬件数据结构定义（核心契约）
 │   │
-│   ├── composables/               # 组合式函数（业务逻辑）
-│   │   └── useCloudData.ts        # 云数据访问Hook
+│   ├── composables/               # 业务逻辑层
+│   │   └── useCloudData.ts        # 云数据访问Hook（核心数据层）
 │   │
-│   ├── stores/                    # 状态管理
-│   │   └── compare.ts             # 硬件对比状态
+│   ├── stores/                    # 状态管理层
+│   │   └── compare.ts             # 硬件对比状态管理
 │   │
-│   ├── pages/                     # 页面组件
-│   │   ├── index/                 # 首页（硬件列表）
-│   │   ├── detail/                # 详情页
-│   │   ├── compare/               # 对比页
-│   │   └── debug/                 # 调试页面
+│   ├── pages/                     # 页面组件层
+│   │   ├── index/                 # 首页（硬件列表和搜索）
+│   │   ├── detail/                # 详情页（规格展示）
+│   │   ├── compare/               # 对比页（横向对比）
+│   │   ├── ranking/               # 性能排行页
+│   │   └── debug/                 # 调试页面（云数据库诊断）
 │   │
-│   ├── mock/                      # 本地模拟数据
-│   │   ├── cpu_data.json          # CPU数据（12条）
-│   │   ├── gpu_data.json          # GPU数据（5条）
-│   │   └── phone_data.json        # 手机数据（5条）
+│   ├── mock/                      # 本地模拟数据（降级数据源）
+│   │   ├── cpu_data.json          # CPU数据（30条）
+│   │   ├── gpu_data.json          # GPU数据（25条）
+│   │   └── phone_data.json        # 手机数据（25条）
 │   │
 │   ├── styles/                    # 样式文件
-│   │   ├── wot-design-uni.scss    # UI组件样式覆盖
+│   │   ├── wot-design-uni.scss    # UI组件库样式覆盖
 │   │   └── fix-font-loading.scss  # 字体加载修复
 │   │
 │   ├── utils/                     # 工具函数
-│   └── static/                    # 静态资源
+│   ├── static/                    # 静态资源
+│   │   └── tabbar/                # 底部导航栏图标
+│   └── App.vue                    # 应用根组件
+│
+├── skills/                        # 项目技能和架构文档
+│   ├── ARCHITECTURE.md            # 详细系统架构文档
+│   ├── SKILLS.md                  # 技术能力清单
+│   ├── SCRAPER_SYSTEM_REFACTOR.md # 爬虫系统重构总结
+│   └── references/                # 参考文档
 │
 └── dist/                          # 构建输出目录
 ```
 
-## 📋 文件功能详细说明
+### 目录职责说明
 
-### 核心架构文件
+1. **`scripts/`** - 数据管道层：负责数据采集、清洗、转换和导入
+2. **`src/types/`** - 类型定义层：定义全局数据契约，确保类型安全
+3. **`src/composables/`** - 业务逻辑层：封装可复用的业务逻辑
+4. **`src/stores/`** - 状态管理层：管理应用全局状态
+5. **`src/pages/`** - 页面展示层：负责UI渲染和用户交互
+6. **`src/mock/`** - 数据降级层：提供本地数据作为降级方案
+7. **`skills/`** - 文档和知识库：包含项目技术文档和架构说明
 
-#### Data Schema
-- **`src/types/hardware.ts`**: 硬件数据类型定义
-  - 定义CPU/GPU/手机数据结构
-  - 类型安全保证
-  - 接口契约定义
+> **详细架构分析**：请查看 [PROJECT_ARCHITECTURE_ANALYSIS.md](PROJECT_ARCHITECTURE_ANALYSIS.md) 获取完整的项目架构分析报告
 
-#### Data Access Layer
-- **`src/composables/useCloudData.ts`**: 云数据库数据访问Hook
-  - 统一数据获取接口
-  - 分页加载实现
-  - 错误处理和降级
+## 🎯 核心功能模块
 
-#### State Management
-- **`src/stores/compare.ts`**: 硬件对比状态管理
-  - 对比项状态管理
-  - 对比逻辑实现
-  - 状态持久化
+### 1. 硬件列表模块 (`src/pages/index/index.vue`)
+- **功能**：硬件浏览和搜索，支持CPU/显卡/手机分类展示
+- **特点**：智能搜索、分页加载、对比功能、骨架屏优化
 
-#### Project Configuration
-- **`package.json`**: 项目依赖和脚本配置
-- **`.clinerules`**: 项目编码规范和架构标准
+### 2. 性能排行模块 (`src/pages/ranking/index.vue`)
+- **功能**：硬件性能排行榜，综合评分算法
+- **特点**：金银铜牌标识、类型切换、点击跳转详情
 
-### 数据管道文件
+### 3. 硬件对比模块 (`src/pages/compare/index.vue`)
+- **功能**：专业级硬件参数对比，可视化差异展示
+- **特点**：左右分栏对比、参数差异可视化、智能参数解析
 
-#### Data Scraper
-- **`scripts/scrapers/cpu.py`**: CPU数据采集脚本
-- **`scripts/scrapers/gpu.py`**: GPU数据采集脚本
-- **`scripts/scrapers/phone.py`**: 手机数据采集脚本
+### 4. 硬件详情模块 (`src/pages/detail/index.vue`)
+- **功能**：展示硬件完整规格参数
+- **特点**：品牌主题色设计、完整参数列表、对比添加功能
 
-#### Data Transformer
-- **`scripts/convert_to_jsonl.py`**: 数据格式转换脚本
-- **`scripts/convert_json.js`**: JSON转换工具
+### 5. 调试诊断模块 (`src/pages/debug/index.vue`)
+- **功能**：云数据库诊断工具
+- **特点**：环境状态检查、集合验证、数据加载测试
 
-#### Data Cleaner
-- **`scripts/fix_json_for_cloud.py`**: JSON数据修复脚本
-- **`scripts/fix_original_json.py`**: 原始JSON修复脚本
+### 6. 数据访问模块 (`src/composables/useCloudData.ts`)
+- **功能**：统一数据访问接口，智能降级机制
+- **特点**：Read-Through缓存策略、分页搜索排序一体化、错误处理
 
-#### Database Manager
-- **`scripts/update_db.py`**: 数据库更新脚本
+### 7. 状态管理模块 (`src/stores/compare.ts`)
+- **功能**：管理硬件对比状态，跨页面同步
+- **特点**：Pinia状态管理、业务规则约束、状态持久化
 
-#### Mock Data
-- **`src/mock/cpu_data.json`**: CPU硬件模拟数据
-- **`src/mock/gpu_data.json`**: GPU硬件模拟数据
-- **`src/mock/phone_data.json`**: 手机硬件模拟数据
+### 8. 数据管道模块 (`scripts/`目录)
+- **功能**：自动化数据采集、清洗和更新
+- **特点**：模块化爬虫设计、优雅降级机制、完整数据验证
 
-### 页面组件文件
-
-#### Page Component
-- **`src/pages/index/index.vue`**: 首页（硬件列表）
-- **`src/pages/detail/index.vue`**: 详情页
-- **`src/pages/compare/index.vue`**: 对比页
-
-#### Application Component
-- **`src/App.vue`**: 应用组件（初始化和配置）
-
-#### Debug Component
-- **`src/pages/debug/index.vue`**: 调试页面组件
-
-### 工具和配置文件
-
-#### Debug Tool
-- **`scripts/debug_cloud_db.js`**: 云数据库调试工具
-- **`scripts/quick_diagnosis.js`**: 快速诊断工具
-
-#### CSS Fix
-- **`src/styles/fix-font-loading.scss`**: 字体加载修复样式
-
-#### UI Framework
-- **`src/styles/wot-design-uni.scss`**: UI组件库样式配置
-
-#### Framework Styles
-- **`src/uni.scss`**: Uni-app框架样式变量
-
-#### Routing Configuration
-- **`src/pages.json`**: 页面路由配置
-
-#### App Configuration
-- **`src/manifest.json`**: 应用清单配置
-
-#### Build Configuration
-- **`vite.config.ts`**: Vite构建工具配置
-- **`tsconfig.json`**: TypeScript编译配置
-
-#### Version Control
-- **`.gitignore`**: Git忽略规则配置
-
-#### Entry Point
-- **`index.html`**: 应用HTML入口文件
-
-#### Type Declarations
-- **`src/env.d.ts`**: 环境类型声明
-- **`shims-uni.d.ts`**: 类型声明补充文件
-
-> 完整详细的文件功能说明请查看 [FILE_ANALYSIS.md](FILE_ANALYSIS.md)
+> **详细模块说明**：请查看 [PROJECT_ARCHITECTURE_ANALYSIS.md#五主要功能模块](PROJECT_ARCHITECTURE_ANALYSIS.md#五主要功能模块) 获取完整的功能模块分析
 
 ## 📊 数据管道
 

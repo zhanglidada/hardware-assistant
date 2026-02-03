@@ -754,7 +754,26 @@ const removeHardware = (id: string) => {
 
 // 返回列表
 const handleBack = () => {
-  uni.navigateBack()
+  // 获取页面栈信息
+  const pages = getCurrentPages()
+  
+  // 如果页面栈长度大于1，说明有上一页，可以返回
+  if (pages.length > 1) {
+    uni.navigateBack()
+  } else {
+    // 如果页面栈长度等于1，说明是第一个页面（可能是通过tabbar直接进入）
+    // 切换到首页tab
+    uni.switchTab({
+      url: '/pages/index/index',
+      fail: (err) => {
+        console.error('切换tab失败:', err)
+        // 如果切换tab失败，尝试跳转到首页
+        uni.navigateTo({
+          url: '/pages/index/index'
+        })
+      }
+    })
+  }
 }
 
 // 清空对比
@@ -770,7 +789,26 @@ const handleClearAll = () => {
           icon: 'success'
         })
         setTimeout(() => {
-          uni.navigateBack()
+          // 获取页面栈信息
+          const pages = getCurrentPages()
+          
+          // 如果页面栈长度大于1，说明有上一页，可以返回
+          if (pages.length > 1) {
+            uni.navigateBack()
+          } else {
+            // 如果页面栈长度等于1，说明是第一个页面（可能是通过tabbar直接进入）
+            // 切换到首页tab
+            uni.switchTab({
+              url: '/pages/index/index',
+              fail: (err) => {
+                console.error('切换tab失败:', err)
+                // 如果切换tab失败，尝试跳转到首页
+                uni.navigateTo({
+                  url: '/pages/index/index'
+                })
+              }
+            })
+          }
         }, 1500)
       }
     }

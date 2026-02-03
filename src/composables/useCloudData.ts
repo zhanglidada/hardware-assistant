@@ -48,7 +48,7 @@ export interface LoadResult<T> {
  */
 export interface CloudQueryOptions {
   /** 查询条件 */
-  where?: any
+  where?: Record<string, any>
   /** 排序字段 */
   orderBy?: {
     field: string
@@ -151,6 +151,47 @@ const isCloudSupported = computed(() => {
   }
 
   /**
+   * 本地Mock数据降级
+   */
+  const loadLocalMockData = async (reason: string): Promise<LoadResult<T>> => {
+    console.warn(`⚠️ 云数据不可用，已切换到本地数据: ${reason}`)
+    try {
+      let data: T[] = []
+      
+      // 动态导入本地Mock数据
+      switch (collectionName) {
+        case 'cpu_collection':
+          const cpuModule = await import('../mock/cpu_data.json')
+          data = (cpuModule.default || cpuModule) as T[]
+          break
+        case 'gpu_collection':
+          const gpuModule = await import('../mock/gpu_data.json')
+          data = (gpuModule.default || gpuModule) as T[]
+          break
+        case 'phone_collection':
+          const phoneModule = await import('../mock/phone_data.json')
+          data = (phoneModule.default || phoneModule) as T[]
+          break
+        default:
+          console.warn(`⚠️ 未找到对应集合的Mock数据: ${collectionName}`)
+          data = []
+      }
+
+      return {
+        list: data,
+        hasMore: false,
+        total: data.length
+      }
+    } catch (localError: any) {
+      console.error('❌ 本地数据加载失败:', localError)
+      return {
+        list: [],
+        hasMore: false
+      }
+    }
+  }
+
+  /**
    * 构建查询条件
    */
   const buildQuery = () => {
@@ -234,7 +275,7 @@ const isCloudSupported = computed(() => {
       // 检查云开发支持
       if (!isCloudSupported.value) {
         console.warn('❌ 当前环境不支持微信云开发')
-        throw new Error('当前环境不支持微信云开发')
+        return await loadLocalMockData('当前环境不支持微信云开发')
       }
 
       // 构建查询
@@ -308,8 +349,7 @@ const isCloudSupported = computed(() => {
       
       if (isCollectionError || isPermissionError || isEnvError) {
         console.warn(`⚠️ 云数据库访问失败 (${errorMessage})`)
-        showError(`云数据库访问失败: ${errorMessage}`)
-        throw err
+        return await loadLocalMockData(errorMessage)
       } else if (isOrderByError) {
         console.warn(`⚠️ orderBy字段错误 (${errorMessage})，尝试不使用排序查询`)
         

@@ -1,0 +1,562 @@
+# 硬件助手 - 数据管道系统
+
+> 自动化数据采集、清洗、转换和导入的完整 ETL 流程
+
+## 概述
+
+这是一个模块化的数据管道系统，用于维护硬件助手应用中的硬件数据。系统采用 ETL（Extract, Transform, Load）架构，支持 CPU、GPU 和手机三种硬件类型的数据处理。
+
+## 目录结构
+
+> ✨ **已优化**: 删除 9 个冗余脚本，保留 3 个核心文件，代码库更简洁
+
+```
+scripts/
+├── 📄 README.md                  # 本文档
+├── 📄 update_db.py               # 主控制器脚本（ETL 编排）
+├── 📄 test_scraper.py            # 测试脚本（数据验证）
+├── 📁 scrapers/                  # 数据采集模块（可配置化）
+│   ├── cpu.py                   # CPU 数据采集器（30 项）
+│   ├── gpu.py                   # GPU 数据采集器（25 项）
+│   └── phone.py                 # 手机数据采集器（25 项）
+└── 📁 backups/                   # 备份目录（自动按日期组织）
+    └── YYYYMMDD/                # 日期目录
+        ├── cpu_data_*.json      # CPU 数据备份
+        ├── gpu_data_*.json      # GPU 数据备份
+        └── phone_data_*.json    # 手机数据备份
+```
+
+## ETL 流程
+
+### 1. Extract（数据采集）
+
+**采集器模块** (`scrapers/`)：
+**采集器模块** (`scrapers/`) - 配置化数据源架构：
+- `cpu.py` - 采集 CPU 硬件数据（30 项，Intel/AMD）
+- `gpu.py` - 采集 GPU 硬件数据（25 项，NVIDIA/AMD）
+- `phone.py` - 采集手机硬件数据（25 项，5 大品牌）
+
+**统一接口**：
+```python
+# 数据源配置
+DATA_SOURCE_CONFIG = {
+    "type": "static",           # 数据源类型: static/api
+    "cache_enabled": True,      # 是否启用缓存
+    "api_endpoint": None        # API 端点（可扩展）
+}
+
+def get_*_data_from_source() -> List[Dict[str, Any]]:
+    """从数据源获取数据"""
+    pass
+
+def validate_*_data(data: List[Dict[str, Any]]) -> bool:
+    """验证数据完整性"""
+    pass
+
+def run() -> List[Dict[str, Any]]:
+    """返回标准化的硬件数据列表（带统计信息）"""
+    pass
+```
+
+**核心特性**：
+- ✅ 配置化数据源，支持静态/API 切换
+- ✅ 数据验证机制，确保字段完整性
+- ✅ 详细统计输出（品牌占比、价格分析等）
+- ✅ 模块化设计，易于扩展
+- ✅ 错误处理与日志记录
+
+### 2. Transform（数据转换）
+
+**数据清洗**（内置于采集器）：
+- 字段标准化与类型校验
+- 去重处理
+- 唯一 ID 生成
+- 数据完整性验证
+
+**数据统计**：
+- 品牌/类型分布百分比
+- 价格统计（平均值、区间）
+- 特性统计（如 5G 支持率、光追支持率）
+
+### 3. Load（数据加载）
+
+**本地存储**：
+- 更新 `src/mock/` 目录下的 JSON 文件
+- 作为本地降级数据源（Read-Through Cache）
+
+**数据输出**：
+- CPU: 30 项数据 (Intel/AMD 各 15 项)
+- GPU: 25 项数据 (NVIDIA 14 项, AMD 11 项)
+- Phone: 25 项数据 (5 大品牌)
+
+## 快速开始
+
+### 1. 更新所有数据
+
+```bash
+# 运行主控制器（推荐）
+python scripts/update_db.py
+```
+
+**执行流程**：
+1. 📦 备份现有数据到 `backups/YYYYMMDD/`
+2. 🔍 运行数据采集器（CPU/GPU/Phone）
+3. ✅ 数据验证和完整性检查
+4. 💾 更新本地 JSON 文件（`src/mock/`）
+5. 📊 显示详细统计信息
+
+**输出示例**：
+```
+📦 正在备份现有数据...
+✅ 备份完成: backups/20260117/
+
+🔄 开始更新CPU数据...
+✅ CPU数据采集完成，共30个CPU
+   Intel: 15 个 (50.0%)
+   AMD: 15 个 (50.0%)
+   平均价格: ¥2504
+   价格区间: ¥75-¥6999
+
+🔄 开始更新GPU数据...
+✅ GPU数据采集完成，共25个显卡
+   NVIDIA: 14 个 (56.0%)
+   AMD: 11 个 (44.0%)
+   支持光追: 21 个 (84.0%)
+
+🔄 开始更新Phone数据...
+✅ 手机数据采集完成，共25个手机
+
+🎉 所有数据更新成功！
+```
+
+### 2. 测试数据采集
+
+```bash
+# 测试采集器模块（不更新文件）
+python scripts/test_scraper.py
+```
+
+用途：验证采集器功能和数据格式，不会修改任何文件。
+
+### 3. 查看备份
+
+```bash
+# 列出所有备份
+ls -la scripts/backups/
+
+# 查看特定日期的备份
+ls -la scripts/backups/20260117/
+```
+
+## 功能特性
+
+### ✅ 配置化数据源
+- 支持静态/API 数据源切换（通过 `DATA_SOURCE_CONFIG`）
+- 可扩展的缓存机制
+- 灵活的数据源配置
+
+### ✅ 数据验证
+- 必需字段完整性检查
+- 数据类型验证
+- ID 唯一性保证
+- 详细的验证报告
+
+### ✅ 数据安全
+- 自动备份机制（按日期组织）
+- 更新失败时保留原数据
+- 备份可追溯性
+
+### ✅ 详细统计
+- 品牌/类型分布百分比
+- 价格分析（平均值、区间）
+- 特性统计（5G、光追等）
+- 数据量监控
+
+### ✅ 错误处理
+- 模块导入失败降级到模拟数据
+- 详细的错误日志
+- 优雅降级机制
+
+## 数据格式规范
+
+### 必需字段
+
+所有硬件数据必须包含：
+```typescript
+{
+  id: string           // 唯一标识符
+  model: string        // 型号名称
+  brand: string        // 品牌
+  releaseDate: string  // 发布日期（YYYY-MM-DD）
+  price: number        // 参考价格（人民币）
+  description?: string // 描述信息（可选）
+}
+```
+
+### CPU 特有字段
+
+```typescript
+{
+  cores: string              // 核心配置（如 '8P+16E'）
+  baseClock: number          // 基础频率（GHz）
+  boostClock: number         // 最大加速频率（GHz）
+  socket: string             // 接口类型（如 LGA1700）
+  tdp: number                // 热设计功耗（W）
+  integratedGraphics: boolean // 是否集成显卡
+  cache: number              // 缓存大小（MB）
+}
+```
+
+### GPU 特有字段
+
+```typescript
+{
+  vram: number               // 显存大小（GB）
+  busWidth: number           // 显存位宽（bit）
+  cudaCores: number          // CUDA 核心数
+  coreClock: number          // 核心频率（MHz）
+  memoryClock: number        // 显存频率（MHz）
+  powerConsumption: number   // 功耗（W）
+  rayTracing: boolean        // 是否支持光线追踪
+  upscalingTech: string      // 超分辨率技术
+}
+```
+
+### 手机特有字段
+
+```typescript
+{
+  processor: string          // 处理器型号
+  ram: number                // 内存（GB）
+  storage: number            // 存储（GB）
+  screenSize: number         // 屏幕尺寸（英寸）
+  resolution: string         // 分辨率
+  refreshRate: number        // 刷新率（Hz）
+  batteryCapacity: number    // 电池容量（mAh）
+  camera: string             // 摄像头配置
+  os: string                 // 操作系统
+  support5G: boolean         // 是否支持 5G
+}
+```
+
+## 开发新采集器
+
+### 1. 创建采集器模块
+
+在 `scrapers/` 目录下创建新文件（如 `motherboard.py`）：
+
+```python
+#!/usr/bin/env python3
+"""
+主板数据采集模块
+"""
+import json
+from typing import List, Dict, Any
+
+# 配置数据源
+DATA_SOURCE_CONFIG = {
+    "type": "static",         # static | api
+    "cache_enabled": True,
+    "api_endpoint": None      # 可扩展 API 端点
+}
+
+def get_motherboard_data_from_source() -> List[Dict[str, Any]]:
+    """从数据源获取主板数据"""
+    data = [
+        {
+            "id": "mb_001",
+            "model": "ROG Maximus Z790 Hero",
+            "brand": "ASUS",
+            # ... 其他字段
+        }
+    ]
+    return data
+
+def validate_motherboard_data(data: List[Dict[str, Any]]) -> bool:
+    """验证数据完整性"""
+    required_fields = ['id', 'model', 'brand', 'price']
+    
+    for item in data:
+        for field in required_fields:
+            if field not in item:
+                print(f"⚠️  数据项 {item.get('id')} 缺少字段: {field}")
+                return False
+    return True
+
+def run() -> List[Dict[str, Any]]:
+    """运行主板数据采集"""
+    print("🔍 开始采集主板数据...")
+    print(f"📊 数据源类型: {DATA_SOURCE_CONFIG['type']}")
+    
+    # 获取数据
+    data = get_motherboard_data_from_source()
+    
+    # 验证数据
+    if not validate_motherboard_data(data):
+        print("⚠️  数据验证失败，但仍返回数据")
+    
+    # 统计信息
+    print(f"✅ 主板数据采集完成，共{len(data)}个主板")
+    
+    return data
+
+if __name__ == "__main__":
+    result = run()
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+```
+```
+
+### 2. 注册到主控制器
+
+在 `update_db.py` 中添加配置：
+
+```python
+# 模块配置
+SCRAPER_MODULES = {
+    "cpu": "scrapers.cpu",
+    "gpu": "scrapers.gpu",
+    "phone": "scrapers.phone",
+    "motherboard": "scrapers.motherboard"  # 新增
+}
+
+# 目标文件配置
+TARGET_FILES = {
+    "cpu": "../src/mock/cpu_data.json",
+    "gpu": "../src/mock/gpu_data.json",
+    "phone": "../src/mock/phone_data.json",
+    "motherboard": "../src/mock/motherboard_data.json"  # 新增
+}
+```
+
+### 3. 测试新采集器
+
+```bash
+# 测试单个模块
+python -m scrapers.motherboard
+
+# 或使用测试脚本
+python test_scraper.py
+```
+
+## 最佳实践
+
+### ✅ 数据质量
+- 确保所有必需字段都有值
+- 价格使用整数（人民币分）
+- 日期统一使用 `YYYY-MM-DD` 格式
+- ID 保证唯一性（建议格式：`type_序号`）
+
+### ✅ 代码风格
+- 遵循 Python PEP 8 规范
+- 使用类型注解 (`typing`)
+- 添加详细的文档字符串
+- 保持函数职责单一
+
+### ✅ 错误处理
+- 数据验证失败时给出清晰提示
+- 使用 `try-except` 处理异常
+- 记录详细的日志信息
+
+### ✅ 性能优化
+- 避免重复数据采集
+- 合理使用缓存机制
+- 大数据集使用生成器
+
+## 故障排除
+
+### 问题：采集器返回空列表
+
+**可能原因**：
+1. 数据源不可用
+2. 网络连接问题（API 类型）
+3. 数据格式错误
+
+**解决方案**：
+```bash
+# 1. 检查数据源配置
+grep -n "DATA_SOURCE_CONFIG" scrapers/*.py
+
+# 2. 测试单个采集器
+python -m scrapers.cpu
+
+# 3. 查看详细日志
+python update_db.py --verbose
+```
+
+### 问题：数据验证失败
+
+**可能原因**：
+1. 缺少必需字段
+2. 字段类型不匹配
+3. ID 重复
+
+**解决方案**：
+```bash
+# 检查数据格式
+python test_scraper.py
+
+# 查看具体错误信息（会打印缺少的字段）
+```
+
+### 问题：备份失败
+
+**可能原因**：
+1. 磁盘空间不足
+2. 权限问题
+3. 备份目录不存在
+
+**解决方案**：
+```bash
+# 检查磁盘空间
+df -h
+
+# 创建备份目录
+mkdir -p scripts/backups
+
+# 检查权限
+ls -la scripts/
+```
+
+## 数据更新记录
+
+| 日期 | 操作 | 数据量 | 备注 |
+|------|------|--------|------|
+| 2026-01-17 | 初始化 | CPU:12, GPU:5, Phone:5 | 基础数据 |
+| 2026-01-17 | 扩展数据 | CPU:30, GPU:25, Phone:25 | 263% 增长 |
+| 2026-01-17 | 优化脚本 | - | 删除 9 个冗余脚本 |
+| 2026-01-17 | 架构升级 | - | 配置化 + 验证机制 |
+
+## 技术栈
+
+- **Python 3.7+**: 数据采集和处理
+- **JSON**: 数据存储格式
+- **TypeScript**: 类型定义
+- **微信云数据库**: 云端数据存储
+
+## 相关文档
+
+- [项目架构说明](../ARCHITECTURE.md)
+- [技能清单](../SKILLS.md)
+- [项目状态](../references/PROJECT_STATUS.md)
+- [数据更新成功报告](../DATA_UPDATE_SUCCESS.md)
+
+## 维护者
+
+如有问题或建议，请联系项目维护团队。
+    "cpu": MOCK_DIR / "cpu_data.json",
+    "gpu": MOCK_DIR / "gpu_data.json",
+    "phone": MOCK_DIR / "phone_data.json",
+    "new_type": MOCK_DIR / "new_type_data.json"  # 新增
+}
+```
+
+### 3. 测试新模块
+
+```bash
+python scripts/test_scraper.py
+```
+
+## 调试工具
+
+### 云数据库调试
+
+```bash
+# 运行云数据库调试工具
+node scripts/debug_cloud_db.js
+
+# 诊断集合
+node scripts/diagnose_collections.js
+
+# 快速诊断
+node scripts/quick_diagnosis.js
+```
+
+### 日志查看
+
+主控制器会输出详细日志：
+```
+🔍 开始采集 CPU 数据...
+✅ CPU 数据采集完成，共 100 条
+📊 更新统计:
+  - 新增: 5 条
+  - 删除: 2 条
+  - 更新: 3 条
+  - 未变: 90 条
+```
+
+## 错误排查
+
+### 问题1：模块导入失败
+
+**错误**：`ModuleNotFoundError: No module named 'scripts.scrapers.xxx'`
+
+**解决方案**：
+1. 检查文件路径是否正确
+2. 确认模块文件存在
+3. 检查 Python 路径配置
+
+### 问题2：数据验证失败
+
+**错误**：`❌ 数据项 xxx 缺少必需字段: id`
+
+**解决方案**：
+1. 检查必需字段是否完整
+2. 确认字段名称拼写正确
+3. 验证数据类型
+
+### 问题3：ID 重复
+
+**错误**：`❌ 发现重复ID: xxx`
+
+**解决方案**：
+1. 检查数据源
+2. 修改 ID 生成逻辑
+3. 手动去重
+
+## 最佳实践
+
+### 1. 定期更新
+- 建议每周运行一次数据更新
+- 关注更新统计信息
+- 监控数据质量
+
+### 2. 备份管理
+- 定期清理旧备份（保留最近 30 天）
+- 验证备份文件完整性
+- 重要更新前手动备份
+
+### 3. 数据验证
+- 更新后检查数据完整性
+- 验证关键字段准确性
+- 测试应用功能
+
+### 4. 版本控制
+- 将数据文件纳入版本控制
+- 排除 `backups/` 目录
+- 记录重要更新日志
+
+## 扩展建议
+
+### 功能增强
+- [ ] API 集成 - 连接实际硬件数据库 API
+- [ ] 定时任务 - 使用 cron 自动更新
+- [ ] Web 界面 - 可视化数据管理
+- [ ] 数据导出 - 支持 CSV、Excel 等格式
+- [ ] 数据分析 - 趋势分析和可视化
+
+### 性能优化
+- [ ] 并发采集 - 多线程/多进程提速
+- [ ] 增量更新 - 只更新变化的数据
+- [ ] 缓存机制 - 减少重复请求
+
+## 相关文档
+
+- [系统架构](../ARCHITECTURE.md) - 整体架构设计
+- [云数据库指南](../references/CLOUD_DATABASE_GUIDE.md) - 云数据库配置
+- [项目状态](../references/PROJECT_STATUS.md) - 功能完成情况
+
+---
+
+**维护状态**: ✅ 活跃维护  
+**Python 版本**: 3.7+  
+**依赖**: 无外部依赖（核心功能）

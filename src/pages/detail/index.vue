@@ -79,10 +79,14 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
+import { useCompareStore } from '../../stores/compare'
 import type { CpuSpecs, GpuSpecs, PhoneSpecs } from '../../types/hardware'
 
 // 路由参数
 const queryParams = ref<{ id?: string; type?: 'cpu' | 'gpu' | 'phone' }>({})
+
+// Pinia store
+const compareStore = useCompareStore()
 
 // 响应式数据
 const loading = ref(true)
@@ -115,6 +119,26 @@ const getCollectionName = () => {
   }
 }
 
+// 从本地 Mock 数据加载
+const loadLocalHardwareData = async (id: string, type: 'cpu' | 'gpu' | 'phone') => {
+  try {
+    let module: any
+    if (type === 'cpu') {
+      module = await import('../../mock/cpu_data.json')
+    } else if (type === 'gpu') {
+      module = await import('../../mock/gpu_data.json')
+    } else {
+      module = await import('../../mock/phone_data.json')
+    }
+
+    const data = (module.default || module) as (CpuSpecs | GpuSpecs | PhoneSpecs)[]
+    return data.find(item => item.id === id) || null
+  } catch (localError) {
+    console.error('本地数据加载失败:', localError)
+    return null
+  }
+}
+
 // 加载硬件数据
 const loadHardwareData = async () => {
   const { id, type } = queryParams.value
@@ -126,8 +150,14 @@ const loadHardwareData = async () => {
     return
   }
   
-  // 检查云开发支持
+  // 检查云开发支持，失败则降级本地数据
   if (!isCloudSupported.value) {
+    const localData = await loadLocalHardwareData(id, type)
+    if (localData) {
+      hardwareData.value = localData
+      loading.value = false
+      return
+    }
     error.value = '当前环境不支持微信云开发'
     loading.value = false
     return
@@ -154,27 +184,39 @@ const loadHardwareData = async () => {
     if (result.data && result.data.length > 0) {
       hardwareData.value = result.data[0] as CpuSpecs | GpuSpecs | PhoneSpecs
     } else {
-      error.value = '未找到硬件信息'
+      // 云数据为空时尝试本地降级
+      const localData = await loadLocalHardwareData(id, type)
+      if (localData) {
+        hardwareData.value = localData
+      } else {
+        error.value = '未找到硬件信息'
+        hardwareData.value = null
+        
+        // 显示错误提示
+        uni.showToast({
+          title: '未找到硬件信息',
+          icon: 'error',
+          duration: 2000
+        })
+      }
+    }
+  } catch (err: any) {
+    console.error('加载硬件数据失败:', err)
+    const localData = await loadLocalHardwareData(id, type)
+    if (localData) {
+      hardwareData.value = localData
+      error.value = null
+    } else {
+      error.value = err.message || '数据加载失败'
       hardwareData.value = null
       
       // 显示错误提示
       uni.showToast({
-        title: '未找到硬件信息',
+        title: '数据加载失败',
         icon: 'error',
         duration: 2000
       })
     }
-  } catch (err: any) {
-    console.error('加载硬件数据失败:', err)
-    error.value = err.message || '数据加载失败'
-    hardwareData.value = null
-    
-    // 显示错误提示
-    uni.showToast({
-      title: '数据加载失败',
-      icon: 'error',
-      duration: 2000
-    })
   } finally {
     loading.value = false
   }
@@ -347,16 +389,43 @@ const chartOptions = {
 
 // 加入对比
 const handleAddToCompare = () => {
-  console.log('加入对比:', hardwareData.value)
+  if (!hardwareData.value) {
+    uni.showToast({
+      title: '暂无可加入的数据',
+      icon: 'none'
+    })
+    return
+  }
+
+  const result = compareStore.toggleCompare(hardwareData.value)
   uni.showToast({
-    title: '已加入对比',
-    icon: 'success'
+    title: result.message,
+    icon: result.added ? 'success' : 'none'
   })
 }
 
 // 返回列表
 const handleBack = () => {
-  uni.navigateBack()
+  // 获取页面栈信息
+  const pages = getCurrentPages()
+  
+  // 如果页面栈长度大于1，说明有上一页，可以返回
+  if (pages.length > 1) {
+    uni.navigateBack()
+  } else {
+    // 如果页面栈长度等于1，说明是第一个页面（可能是通过特殊方式进入）
+    // 跳转到首页
+    uni.navigateTo({
+      url: '/pages/index/index',
+      fail: (err) => {
+        console.error('跳转失败:', err)
+        // 如果跳转失败，尝试切换到首页tab
+        uni.switchTab({
+          url: '/pages/index/index'
+        })
+      }
+    })
+  }
 }
 </script>
 

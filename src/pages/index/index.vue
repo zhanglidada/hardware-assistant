@@ -66,8 +66,15 @@
             
             <!-- 右侧信息 -->
             <view class="hardware-info">
-              <view class="model-row">
+              <view class="model-favorite-row">
                 <text class="model">{{ item.model }}</text>
+                <view class="favorite-action" @click.stop="handleToggleFavorite(item)">
+                  <image 
+                    :src="isItemFavorited(item) ? '/static/tabbar/collect-active.png' : '/static/tabbar/collect.png'" 
+                    class="favorite-icon"
+                    mode="aspectFit"
+                  />
+                </view>
               </view>
               
               <!-- 规格标签 -->
@@ -106,23 +113,6 @@
                   </view>
                 </template>
               </view>
-              
-              <!-- 价格和操作 -->
-              <view class="price-action-row">
-                <text class="price">¥{{ item.price.toLocaleString() }}</text>
-                <view class="compare-action">
-                  <wd-button 
-                    type="primary" 
-                    size="mini" 
-                    @click.stop="handleAddCompare(item)"
-                    :disabled="isItemInCompare(item)"
-                    plain
-                    round
-                  >
-                    {{ isItemInCompare(item) ? '已添加' : '对比' }}
-                  </wd-button>
-                </view>
-              </view>
             </view>
           </view>
         </view>
@@ -160,6 +150,7 @@
     <view class="footer-tip">
       <text>共 {{ filteredHardware.length }} 个硬件</text>
     </view>
+
 
     <!-- 对比悬浮窗 -->
     <view v-if="compareStore.totalCount > 0" class="compare-float" :class="{ 'bounce-animation': showBounce }">
@@ -217,6 +208,10 @@ const compareStore = useCompareStore()
 const searchKeyword = ref('')
 const activeTab = ref<'cpu' | 'gpu' | 'phone'>('cpu')
 const showBounce = ref(false)
+const activeNav = ref<'home' | 'ranking' | 'compare' | 'mine'>('home')
+
+// 收藏状态管理
+const favoriteItems = ref<Set<string>>(new Set())
 
 // 使用云数据库 Hook 加载数据
 const cpuListHook = useHardwareList<CpuSpecs>('cpu_collection', {
@@ -506,13 +501,17 @@ const handleStartPK = () => {
     return
   }
   
-  // 跳转到PK页面
-  uni.navigateTo({
-    url: `/pages/compare/index?type=${compareType}`,
+  // 跳转到PK页面 - 使用 switchTab 因为 compare 是 tabBar 页面
+  uni.switchTab({
+    url: '/pages/compare/index',
+    success: () => {
+      // 成功跳转后，可以在对比页面中通过 onShow 或 onLoad 获取对比类型
+      console.log('成功跳转到对比页面，对比类型:', compareType)
+    },
     fail: (err) => {
       console.error('跳转失败:', err)
       uni.showToast({
-        title: 'PK页面未找到',
+        title: '跳转失败，请重试',
         icon: 'error'
       })
     }
@@ -561,6 +560,77 @@ const handleAddCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
       icon: 'none'
     })
   }
+}
+
+// 导航点击处理
+const handleNavClick = (nav: 'home' | 'ranking' | 'compare' | 'mine') => {
+  activeNav.value = nav
+  
+  switch (nav) {
+    case 'home':
+      // 已经在首页，不需要跳转
+      uni.showToast({
+        title: '当前页面',
+        icon: 'none'
+      })
+      break
+    case 'ranking':
+      uni.showToast({
+        title: '性能排行功能开发中',
+        icon: 'none'
+      })
+      break
+    case 'compare':
+      // 跳转到对比页面
+      uni.navigateTo({
+        url: '/pages/compare/index',
+        fail: (err) => {
+          console.error('跳转失败:', err)
+          uni.showToast({
+            title: '对比页面未找到',
+            icon: 'error'
+          })
+        }
+      })
+      break
+    case 'mine':
+      uni.showToast({
+        title: '我的页面开发中',
+        icon: 'none'
+      })
+      break
+  }
+}
+
+// 收藏功能方法
+// 检查项目是否已收藏
+const isItemFavorited = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
+  return favoriteItems.value.has(item.id)
+}
+
+// 切换收藏状态
+const handleToggleFavorite = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
+  const itemId = item.id
+  const isFavorited = favoriteItems.value.has(itemId)
+  
+  if (isFavorited) {
+    // 取消收藏
+    favoriteItems.value.delete(itemId)
+    uni.showToast({
+      title: '已取消收藏',
+      icon: 'success'
+    })
+  } else {
+    // 添加收藏
+    favoriteItems.value.add(itemId)
+    uni.showToast({
+      title: '已收藏',
+      icon: 'success'
+    })
+  }
+  
+  // 更新收藏状态
+  favoriteItems.value = new Set(favoriteItems.value)
 }
 </script>
 
@@ -762,29 +832,57 @@ const handleAddCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
   flex-direction: column;
 }
 
-.model-row {
-  margin-bottom: 16rpx;
+.model-favorite-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
 }
 
 .model {
-  font-size: 32rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: #1a1a1a;
   line-height: 1.4;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  flex: 1;
+  margin-right: 16rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.favorite-action {
+  flex-shrink: 0;
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  
+  &:active {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.favorite-icon {
+  width: 64rpx;
+  height: 64rpx;
 }
 
 .specs-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8rpx;
-  margin-bottom: 20rpx;
+  margin-bottom: 8rpx;
 }
 
 .spec-tag {
-  padding: 6rpx 12rpx;
-  border-radius: 16rpx;
-  font-size: 22rpx;
+  padding: 4rpx 10rpx;
+  border-radius: 12rpx;
+  font-size: 20rpx;
   font-weight: 500;
   
   &.brand-intel {
@@ -824,25 +922,7 @@ const handleAddCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
 .spec-value {
   font-family: 'DIN Alternate', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 600;
-}
-
-.price-action-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.price {
-  font-size: 32rpx;
-  font-weight: 900;
-  color: #ff6b00;
-  font-family: 'DIN Alternate', 'Helvetica Neue', Arial, sans-serif;
-}
-
-.compare-action {
-  :deep(.wd-button) {
-    min-width: 100rpx;
-  }
+  font-size: 20rpx;
 }
 
 /* 错误状态 */
@@ -1029,4 +1109,5 @@ const handleAddCompare = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
 .float-actions .wd-button {
   flex: 1;
 }
+
 </style>
