@@ -44,14 +44,24 @@
 
     <!-- 底部动作栏 -->
     <view class="action-bar">
-      <wd-button
-        type="primary"
-        block
-        size="large"
-        @click="handleAddToCompare"
-      >
-        加入对比
-      </wd-button>
+      <view class="action-buttons">
+        <wd-button
+          type="default"
+          size="large"
+          @click="handleToggleFavorite"
+          :custom-class="isFavorited ? 'favorited' : ''"
+        >
+          <text class="favorite-icon">{{ isFavorited ? '★' : '☆' }}</text>
+          {{ isFavorited ? '已收藏' : '收藏' }}
+        </wd-button>
+        <wd-button
+          type="primary"
+          size="large"
+          @click="handleAddToCompare"
+        >
+          加入对比
+        </wd-button>
+      </view>
     </view>
 
     <!-- 加载状态 -->
@@ -80,6 +90,7 @@
 import { ref, computed } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { useCompareStore } from '../../stores/compare'
+import { useFavoritesStore } from '../../stores/favorites'
 import type { CpuSpecs, GpuSpecs, PhoneSpecs } from '../../types/hardware'
 
 // 路由参数
@@ -87,6 +98,7 @@ const queryParams = ref<{ id?: string; type?: 'cpu' | 'gpu' | 'phone' }>({})
 
 // Pinia store
 const compareStore = useCompareStore()
+const favoritesStore = useFavoritesStore()
 
 // 响应式数据
 const loading = ref(true)
@@ -396,11 +408,33 @@ const handleAddToCompare = () => {
     })
     return
   }
-
   const result = compareStore.toggleCompare(hardwareData.value)
   uni.showToast({
     title: result.message,
     icon: result.added ? 'success' : 'none'
+  })
+}
+
+// 收藏状态
+const isFavorited = computed(() => {
+  if (!hardwareData.value) return false
+  return favoritesStore.isFavorite(hardwareData.value.id)
+})
+
+// 切换收藏状态
+const handleToggleFavorite = () => {
+  if (!hardwareData.value || !queryParams.value.type) {
+    uni.showToast({
+      title: '暂无可收藏的数据',
+      icon: 'none'
+    })
+    return
+  }
+  
+  const result = favoritesStore.toggleFavorite(hardwareData.value, queryParams.value.type)
+  uni.showToast({
+    title: result ? '已收藏' : '已取消收藏',
+    icon: result ? 'success' : 'none'
   })
 }
 
@@ -605,6 +639,26 @@ const handleBack = () => {
   background-color: #ffffff;
   box-shadow: 0 -4rpx 12rpx rgba(0, 0, 0, 0.08);
   z-index: 100;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-buttons .wd-button {
+  flex: 1;
+}
+
+.favorite-icon {
+  font-size: 32rpx;
+  margin-right: 8rpx;
+}
+
+.favorited {
+  background-color: #ff6700 !important;
+  border-color: #ff6700 !important;
+  color: #ffffff !important;
 }
 
 .error-state {
