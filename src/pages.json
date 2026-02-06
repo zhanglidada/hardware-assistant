@@ -13,16 +13,15 @@
 			}
 		},
 		{
-			"path": "pages/compare/index",
+			"path": "pages/ranking/index",
 			"style": {
-				"navigationBarTitleText": "硬件对比",
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "硬件助手"
 			}
 		},
 		{
-			"path": "pages/ranking/index",
+			"path": "pages/compare/index",
 			"style": {
-				"navigationBarTitleText": "性能排行"
+				"navigationBarTitleText": "硬件助手"
 			}
 		},
 		{
@@ -35,6 +34,12 @@
 			"path": "pages/favorites/index",
 			"style": {
 				"navigationBarTitleText": "我的收藏"
+			}
+		},
+		{
+			"path": "pages/update-detail/index",
+			"style": {
+				"navigationBarTitleText": "更新详情"
 			}
 		}
 	],

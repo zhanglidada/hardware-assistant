@@ -25,7 +25,7 @@
       >
         <!-- 卡片头部 -->
         <view class="card-header">
-          <view class="brand-badge" :class="item.brand.toLowerCase()">
+          <view class="brand-badge" :class="item.brand.toLowerCase() === '其他' ? 'other' : item.brand.toLowerCase()">
             {{ item.brand }}
           </view>
           <view class="remove-btn" @click.stop="handleRemove(item.id)">
@@ -228,7 +228,7 @@ const goToHome = () => {
   background: linear-gradient(135deg, #1428a0 0%, #3d5afe 100%);
 }
 
-.brand-badge.其他 {
+.brand-badge.other {
   background: linear-gradient(135deg, #999999 0%, #cccccc 100%);
 }
 

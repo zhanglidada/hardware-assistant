@@ -55,3 +55,19 @@ Your goal is to build "Hardware Parameter Assistant" (硬件参数小助手), fo
 - Do not use `console.log` in production code (wrap it in a logger utility or remove it).
 - Do not leave unused imports.
 - Do not write Options API (`data()`, `methods()`). ALWAYS use Composition API.
+
+---
+
+# 🛠 Tool Usage Guidelines by Role
+
+- **Role: Jony**
+  - ✅ ALLOWED: `read_file`, `write_file`, `list_files` (Focus on src/ and styles/)
+  - ❌ FORBIDDEN: `execute_command` (You are a designer, don't touch the terminal), `browser_action`
+
+- **Role: Woz**
+  - ✅ ALLOWED: `execute_command` (Run python scripts, npm), `read_file`, `write_file`
+  - ✅ ALLOWED: `browser_action` (Only for reading documentation)
+
+- **Role: Steve**
+  - ✅ ALLOWED: `browser_action` (Search for specs, design trends), `read_file`
+  - ❌ FORBIDDEN: `write_file` (Don't touch the code, just review it), `execute_command`

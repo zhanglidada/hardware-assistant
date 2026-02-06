@@ -1,27 +1,12 @@
 <template>
   <view class="compare-page">
-    <!-- 头部 -->
+    <!-- 头部标题 -->
     <view class="compare-header">
-      <view class="header-title">
-        <text class="title-text">硬件PK对比</text>
-        <text class="title-sub">左右分栏，直观对比</text>
-      </view>
-      <view class="header-actions">
-        <wd-button 
-          type="default" 
-          size="small" 
-          @click="handleBack"
-          plain
-        >
-          返回
-        </wd-button>
-        <wd-button 
-          type="primary" 
-          size="small" 
-          @click="handleClearAll"
-        >
-          清空对比
-        </wd-button>
+      <view class="header-content">
+        <view class="header-title">
+          <text class="title-text">硬件PK对比</text>
+          <text class="title-sub">左右分栏，直观对比</text>
+        </view>
       </view>
     </view>
 
@@ -31,6 +16,7 @@
         :type="compareType === 'cpu' ? 'primary' : compareType === 'gpu' ? 'success' : 'warning'"
         size="large"
         round
+        :customStyle="{ borderRadius: '48rpx', paddingHorizontal: '32rpx', paddingVertical: '16rpx', fontSize: '30rpx', fontWeight: '600' }"
       >
         {{ compareType === 'cpu' ? 'CPU 对比' : compareType === 'gpu' ? '显卡 对比' : '手机 对比' }}
       </wd-tag>
@@ -73,6 +59,8 @@
                   size="mini" 
                   @click="swapHardware"
                   plain
+                  :customStyle="{ borderRadius: '32rpx', paddingHorizontal: '20rpx', paddingVertical: '8rpx', fontSize: '24rpx' }"
+                  class="action-button"
                 >
                   交换位置
                 </wd-button>
@@ -117,6 +105,8 @@
                   size="mini" 
                   @click="removeHardware(rightItem.id)"
                   plain
+                  :customStyle="{ borderRadius: '32rpx', paddingHorizontal: '20rpx', paddingVertical: '8rpx', fontSize: '24rpx' }"
+                  class="action-button"
                 >
                   移除
                 </wd-button>
@@ -189,6 +179,8 @@
         type="primary" 
         @click="handleBack"
         style="margin-top: 40rpx;"
+        :customStyle="{ borderRadius: '48rpx', paddingHorizontal: '48rpx', paddingVertical: '16rpx', fontSize: '32rpx', fontWeight: '600' }"
+        class="primary-button"
       >
         返回列表
       </wd-button>
@@ -776,64 +768,31 @@ const handleBack = () => {
   }
 }
 
-// 清空对比
-const handleClearAll = () => {
-  uni.showModal({
-    title: '提示',
-    content: '确定要清空所有对比项吗？',
-    success: (res) => {
-      if (res.confirm) {
-        compareStore.clearCompare(compareType.value)
-        uni.showToast({
-          title: '已清空',
-          icon: 'success'
-        })
-        setTimeout(() => {
-          // 获取页面栈信息
-          const pages = getCurrentPages()
-          
-          // 如果页面栈长度大于1，说明有上一页，可以返回
-          if (pages.length > 1) {
-            uni.navigateBack()
-          } else {
-            // 如果页面栈长度等于1，说明是第一个页面（可能是通过tabbar直接进入）
-            // 切换到首页tab
-            uni.switchTab({
-              url: '/pages/index/index',
-              fail: (err) => {
-                console.error('切换tab失败:', err)
-                // 如果切换tab失败，尝试跳转到首页
-                uni.navigateTo({
-                  url: '/pages/index/index'
-                })
-              }
-            })
-          }
-        }, 1500)
-      }
-    }
-  })
-}
 </script>
 
 <style scoped lang="scss">
+
+
 .compare-page {
   min-height: 100vh;
-  background-color: #f5f5f5;
-  padding-bottom: 40rpx;
+  background-color: #F2F2F7; /* iOS系统灰 */
 }
 
+/* 头部标题 */
 .compare-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   padding: 40rpx 30rpx 30rpx;
   color: #ffffff;
+}
+
+.header-content {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 24rpx;
 }
 
 .header-title {
-  flex: 1;
+  text-align: center;
 }
 
 .title-text {
@@ -849,32 +808,212 @@ const handleClearAll = () => {
   opacity: 0.9;
 }
 
-.header-actions {
-  display: flex;
-  gap: 20rpx;
+
+
+/* 确保兼容性 */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .compare-page {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* 操作按钮样式 */
+.action-button {
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 3rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.action-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 主要按钮样式 */
+.primary-button {
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 6rpx 16rpx rgba(0, 122, 255, 0.3);
+}
+
+.primary-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 3rpx 8rpx rgba(0, 122, 255, 0.2);
+}
+
+/* 响应式布局设计 */
+@media (max-width: 750rpx) {
+  .compare-header {
+    padding: 36rpx 28rpx;
+  }
+  
+  .title-text {
+    font-size: 38rpx;
+  }
+  
+  .title-sub {
+    font-size: 24rpx;
+  }
+  
+  .compare-columns {
+    flex-direction: column;
+  }
+  
+  .compare-column {
+    width: 100%;
+  }
+  
+  .compare-divider {
+    flex-direction: row;
+    width: 100%;
+    height: 64rpx;
+  }
+  
+  .divider-line {
+    flex: 1;
+    height: 2rpx;
+  }
+}
+
+@media (max-width: 480rpx) {
+  .compare-header {
+    padding: 28rpx 24rpx;
+  }
+  
+  .header-content {
+    gap: 16rpx;
+  }
+  
+  .title-text {
+    font-size: 34rpx;
+  }
+  
+  .title-sub {
+    font-size: 22rpx;
+  }
+  
+
 }
 
 .compare-type {
-  padding: 30rpx;
+  padding: 24rpx 32rpx;
   display: flex;
   align-items: center;
-  gap: 20rpx;
-  background-color: #ffffff;
-  margin-bottom: 20rpx;
+  gap: 24rpx;
+  background-color: #FFFFFF;
+  margin: 0 24rpx 24rpx;
+  border-radius: 24rpx;
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .compare-count {
   font-size: 28rpx;
-  color: #666666;
+  color: #8E8E93;
+  font-weight: 500;
+}
+
+/* 硬件选择器 */
+.hardware-selector {
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin: 0 24rpx 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.selector-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 24rpx;
+  text-align: center;
+  letter-spacing: -0.5rpx;
+}
+
+.selector-items {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.selector-item {
+  padding: 24rpx;
+  border: 2rpx solid #E5E5EA;
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  cursor: pointer;
+}
+
+.selector-item:active {
+  transform: scale(0.98);
+}
+
+.selector-item.selected {
+  border-color: #007AFF;
+  background-color: rgba(0, 122, 255, 0.05);
+  transform: translateY(-4rpx);
+  box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.2);
+}
+
+.selector-brand {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  border-radius: 36rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #ffffff;
+  align-self: flex-start;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+}
+
+.selector-model {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #000000;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  letter-spacing: -0.3rpx;
+}
+
+.selector-price {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #FF6B00;
+  background-color: rgba(255, 107, 0, 0.1);
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  align-self: flex-start;
+  box-shadow: 0 2rpx 8rpx rgba(255, 107, 0, 0.15);
+}
+
+.selector-position {
+  position: absolute;
+  top: 24rpx;
+  right: 24rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #007AFF;
+  background-color: rgba(0, 122, 255, 0.1);
+  padding: 6rpx 16rpx;
+  border-radius: 36rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 122, 255, 0.15);
 }
 
 .compare-content {
-  padding: 0 30rpx;
+  padding: 0 24rpx;
 }
 
 .compare-columns {
   display: flex;
-  gap: 30rpx;
+  gap: 24rpx;
   margin-bottom: 40rpx;
   align-items: stretch; /* 确保列高度一致 */
 }
@@ -889,33 +1028,190 @@ const handleClearAll = () => {
   flex: 1; /* 确保卡片填充整个列高度 */
   display: flex;
   flex-direction: column;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.hardware-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+/* 对比结果 */
+.compare-result {
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.1);
+  margin-top: 40rpx;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.result-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 32rpx;
+  text-align: center;
+  letter-spacing: -0.5rpx;
+}
+
+.result-items {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+.result-item {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.result-label {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #000000;
+}
+
+.result-bars {
+  display: flex;
+  gap: 20rpx;
+  height: 68rpx;
+}
+
+.bar-container {
+  flex: 1;
+  background-color: #F2F2F7;
+  border-radius: 34rpx;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.bar {
+  height: 100%;
+  border-radius: 34rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 24rpx;
+  transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+}
+
+.left-bar {
+  background: linear-gradient(90deg, #007AFF, #0056b3);
+}
+
+.right-bar {
+  background: linear-gradient(90deg, #FF6B00, #FF9E00);
+}
+
+.bar-winner {
+  opacity: 1;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+}
+
+.bar-loser {
+  opacity: 0.6;
+}
+
+.bar-value {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
+}
+
+.result-winner {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #FF6B00;
+  background-color: rgba(255, 107, 0, 0.1);
+  padding: 12rpx;
+  border-radius: 24rpx;
+  margin-top: 8rpx;
+  box-shadow: 0 2rpx 8rpx rgba(255, 107, 0, 0.15);
+  text-align: center;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 24rpx;
+  text-align: center;
+  min-height: 600rpx;
+}
+
+.empty-icon {
+  font-size: 96rpx;
+  margin-bottom: 40rpx;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.empty-text {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 24rpx;
+  line-height: 1.3;
+}
+
+.empty-hint {
+  font-size: 30rpx;
+  color: #8E8E93;
+  line-height: 1.4;
+  margin-bottom: 40rpx;
+}
+
+.empty-state button {
+  border-radius: 48rpx;
+  font-size: 32rpx;
+  padding: 24rpx 48rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.empty-state button:active {
+  transform: scale(0.95);
+  box-shadow: 0 4rpx 12rpx rgba(0, 122, 255, 0.2);
 }
 
 .card-body {
   flex: 1; /* 确保内容区域填充剩余空间 */
 }
 
-.hardware-card {
-  background-color: #ffffff;
-  border-radius: 20rpx;
-  overflow: hidden;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
-}
-
 .card-header {
-  padding: 30rpx;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  border-bottom: 1rpx solid #f0f0f0;
+  padding: 32rpx;
+  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+  border-bottom: 1rpx solid #F0F0F0;
 }
 
 .brand-tag {
   display: inline-block;
-  padding: 8rpx 20rpx;
-  border-radius: 40rpx;
-  font-size: 24rpx;
-  font-weight: bold;
+  padding: 10rpx 24rpx;
+  border-radius: 48rpx;
+  font-size: 26rpx;
+  font-weight: 600;
   color: #ffffff;
-  margin-bottom: 16rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
 }
 
 .brand-intel {
@@ -951,40 +1247,43 @@ const handleClearAll = () => {
 }
 
 .model-name {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333333;
-  margin-bottom: 12rpx;
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 16rpx;
   line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
+  letter-spacing: -0.5rpx;
 }
 
 .price-tag {
-  font-size: 28rpx;
-  font-weight: bold;
+  font-size: 30rpx;
+  font-weight: 700;
   color: #ff6b00;
   background-color: rgba(255, 107, 0, 0.1);
-  padding: 8rpx 16rpx;
-  border-radius: 20rpx;
+  padding: 10rpx 20rpx;
+  border-radius: 24rpx;
   display: inline-block;
+  box-shadow: 0 2rpx 8rpx rgba(255, 107, 0, 0.15);
 }
 
 .card-body {
-  padding: 30rpx;
+  padding: 32rpx;
 }
 
 .param-list {
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
+  gap: 24rpx;
 }
 
 .param-item {
-  border-bottom: 1rpx solid #f0f0f0;
-  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #F0F0F0;
+  padding-bottom: 24rpx;
+  transition: all 0.2s ease;
 }
 
 .param-item:last-child {
@@ -992,21 +1291,24 @@ const handleClearAll = () => {
 }
 
 .param-label {
-  font-size: 26rpx;
-  color: #666666;
-  margin-bottom: 8rpx;
+  font-size: 28rpx;
+  color: #8E8E93;
+  margin-bottom: 10rpx;
+  font-weight: 500;
 }
 
 .param-value {
-  font-size: 28rpx;
-  font-weight: bold;
-  color: #333333;
-  margin-bottom: 4rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 6rpx;
+  letter-spacing: -0.3rpx;
 }
 
 .param-desc {
-  font-size: 24rpx;
-  color: #999999;
+  font-size: 26rpx;
+  color: #C7C7CC;
+  line-height: 1.4;
 }
 
 .compare-divider {
@@ -1014,93 +1316,99 @@ const handleClearAll = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 60rpx;
+  width: 64rpx;
 }
 
 .divider-line {
   flex: 1;
   width: 2rpx;
-  background-color: #e0e0e0;
+  background-color: #E5E5EA;
 }
 
 .divider-text {
-  padding: 16rpx;
-  font-size: 28rpx;
-  font-weight: bold;
-  color: #ff6b00;
-  background-color: #ffffff;
+  padding: 20rpx;
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #FF6B00;
+  background-color: #FFFFFF;
   border-radius: 50%;
-  border: 2rpx solid #ff6b00;
+  border: 3rpx solid #FF6B00;
+  box-shadow: 0 6rpx 16rpx rgba(255, 107, 0, 0.2);
 }
 
 .compare-result {
-  background-color: #ffffff;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.1);
   margin-top: 40rpx;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .result-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333333;
-  margin-bottom: 30rpx;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 32rpx;
   text-align: center;
+  letter-spacing: -0.5rpx;
 }
 
 .result-items {
   display: flex;
   flex-direction: column;
-  gap: 30rpx;
+  gap: 32rpx;
 }
 
 .result-item {
   display: flex;
   flex-direction: column;
-  gap: 16rpx;
+  gap: 18rpx;
 }
 
 .result-label {
-  font-size: 28rpx;
-  font-weight: bold;
-  color: #333333;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #000000;
 }
 
 .result-bars {
   display: flex;
   gap: 20rpx;
-  height: 60rpx;
+  height: 68rpx;
 }
 
 .bar-container {
   flex: 1;
-  background-color: #f0f0f0;
-  border-radius: 30rpx;
+  background-color: #F2F2F7;
+  border-radius: 34rpx;
   overflow: hidden;
   position: relative;
+  box-shadow: inset 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
 }
 
 .bar {
   height: 100%;
-  border-radius: 30rpx;
+  border-radius: 34rpx;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 20rpx;
-  transition: width 0.5s ease;
+  padding-right: 24rpx;
+  transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
 }
 
 .left-bar {
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: linear-gradient(90deg, #007AFF, #0056b3);
 }
 
 .right-bar {
-  background: linear-gradient(90deg, #ff6b00, #ff9e00);
+  background: linear-gradient(90deg, #FF6B00, #FF9E00);
 }
 
 .bar-winner {
   opacity: 1;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
 }
 
 .bar-loser {
@@ -1108,20 +1416,22 @@ const handleClearAll = () => {
 }
 
 .bar-value {
-  font-size: 24rpx;
-  font-weight: bold;
+  font-size: 26rpx;
+  font-weight: 700;
   color: #ffffff;
-  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
 }
 
 .result-winner {
-  font-size: 26rpx;
-  font-weight: bold;
-  color: #ff6b00;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #FF6B00;
   text-align: center;
-  padding: 8rpx;
+  padding: 12rpx;
   background-color: rgba(255, 107, 0, 0.1);
-  border-radius: 20rpx;
+  border-radius: 24rpx;
+  margin-top: 8rpx;
+  box-shadow: 0 2rpx 8rpx rgba(255, 107, 0, 0.15);
 }
 
 .empty-state {
@@ -1129,115 +1439,139 @@ const handleClearAll = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 100rpx 30rpx;
+  padding: 120rpx 24rpx;
   text-align: center;
+  min-height: 600rpx;
 }
 
 .empty-icon {
-  font-size: 80rpx;
-  margin-bottom: 30rpx;
+  font-size: 96rpx;
+  margin-bottom: 40rpx;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 .empty-text {
-  font-size: 32rpx;
-  color: #333333;
-  margin-bottom: 20rpx;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 24rpx;
+  line-height: 1.3;
 }
 
 .empty-hint {
-  font-size: 28rpx;
-  color: #666666;
+  font-size: 30rpx;
+  color: #8E8E93;
+  line-height: 1.4;
 }
 
 /* 硬件选择器样式 */
 .hardware-selector {
-  background-color: #ffffff;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  margin: 0 30rpx 30rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin: 0 24rpx 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .selector-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333333;
-  margin-bottom: 20rpx;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 24rpx;
   text-align: center;
+  letter-spacing: -0.5rpx;
 }
 
 .selector-items {
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
+  gap: 24rpx;
 }
 
 .selector-item {
-  padding: 20rpx;
-  border: 2rpx solid #e0e0e0;
-  border-radius: 16rpx;
+  padding: 24rpx;
+  border: 2rpx solid #E5E5EA;
+  border-radius: 20rpx;
   display: flex;
   flex-direction: column;
-  gap: 12rpx;
-  transition: all 0.3s ease;
+  gap: 16rpx;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   position: relative;
   cursor: pointer;
 }
 
+.selector-item:active {
+  transform: scale(0.98);
+}
+
 .selector-item.selected {
-  border-color: #667eea;
-  background-color: rgba(102, 126, 234, 0.05);
-  transform: translateY(-2rpx);
-  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.2);
+  border-color: #007AFF;
+  background-color: rgba(0, 122, 255, 0.05);
+  transform: translateY(-4rpx);
+  box-shadow: 0 8rpx 24rpx rgba(0, 122, 255, 0.2);
 }
 
 .selector-brand {
   display: inline-block;
-  padding: 6rpx 16rpx;
-  border-radius: 30rpx;
-  font-size: 22rpx;
-  font-weight: bold;
+  padding: 8rpx 20rpx;
+  border-radius: 36rpx;
+  font-size: 24rpx;
+  font-weight: 600;
   color: #ffffff;
   align-self: flex-start;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
 }
 
 .selector-model {
-  font-size: 28rpx;
-  font-weight: bold;
-  color: #333333;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #000000;
   line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
+  letter-spacing: -0.3rpx;
 }
 
 .selector-price {
-  font-size: 26rpx;
-  font-weight: bold;
-  color: #ff6b00;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #FF6B00;
   background-color: rgba(255, 107, 0, 0.1);
-  padding: 6rpx 12rpx;
-  border-radius: 16rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
   align-self: flex-start;
+  box-shadow: 0 2rpx 8rpx rgba(255, 107, 0, 0.15);
 }
 
 .selector-position {
   position: absolute;
-  top: 20rpx;
-  right: 20rpx;
-  font-size: 22rpx;
-  font-weight: bold;
-  color: #667eea;
-  background-color: rgba(102, 126, 234, 0.1);
-  padding: 4rpx 12rpx;
-  border-radius: 30rpx;
+  top: 24rpx;
+  right: 24rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #007AFF;
+  background-color: rgba(0, 122, 255, 0.1);
+  padding: 6rpx 16rpx;
+  border-radius: 36rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 122, 255, 0.15);
 }
 
 .card-header-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 16rpx;
+  margin-bottom: 20rpx;
 }
 </style>

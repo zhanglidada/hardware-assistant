@@ -11,6 +11,22 @@
       />
     </view>
 
+    <!-- 数据更新通知标签栏 -->
+    <view v-if="showNotification" class="notification-bar" :class="{ 'show': showNotification, 'hide': !showNotification }">
+      <view class="notification-content" @click="handleNotificationClick">
+        <view class="notification-icon">
+          <wd-icon name="bell" size="32rpx" color="#007AFF"></wd-icon>
+        </view>
+        <view class="notification-text">
+          <text class="notification-title">{{ notification.title }}</text>
+          <text class="notification-desc">{{ notification.description }}</text>
+        </view>
+        <view class="notification-arrow">
+          <wd-icon name="chevron-right" size="28rpx" color="#8E8E93"></wd-icon>
+        </view>
+      </view>
+    </view>
+
     <!-- Tab 分类 -->
     <wd-tabs v-model="activeTab" class="category-tabs" @change="handleTabChange">
       <wd-tab title="CPU" name="cpu"></wd-tab>
@@ -210,6 +226,16 @@ const activeTab = ref<'cpu' | 'gpu' | 'phone'>('cpu')
 const showBounce = ref(false)
 const activeNav = ref<'home' | 'ranking' | 'compare' | 'mine'>('home')
 
+// 数据更新通知相关数据
+const showNotification = ref(true)
+const notification = ref({
+  title: '数据更新通知',
+  description: '最新硬件数据已更新，包括Intel和AMD的最新CPU型号',
+  time: '刚刚',
+  id: '1',
+  type: 'data_update'
+})
+
 // 收藏状态管理
 const favoriteItems = ref<Set<string>>(new Set())
 
@@ -257,7 +283,7 @@ onMounted(() => {
 
 // 页面卸载时清理
 onUnmounted(() => {
-  // 可以在这里添加清理逻辑
+  // 清理相关资源
 })
 
 // 上拉触底加载更多
@@ -632,6 +658,29 @@ const handleToggleFavorite = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
   // 更新收藏状态
   favoriteItems.value = new Set(favoriteItems.value)
 }
+
+// 数据更新通知点击处理
+const handleNotificationClick = () => {
+  console.log('点击通知:', notification.value)
+  // 根据通知类型跳转到相应页面
+  if (notification.value.type === 'data_update') {
+    // 跳转到更新详情页面
+    uni.navigateTo({
+      url: '/pages/update-detail/index',
+      fail: (err) => {
+        console.error('跳转失败:', err)
+        uni.showToast({
+          title: '跳转失败，请重试',
+          icon: 'error'
+        })
+      }
+    })
+  }
+}
+
+const handleCloseNotification = () => {
+  showNotification.value = false
+}
 </script>
 
 <style scoped lang="scss">
@@ -665,6 +714,108 @@ const handleToggleFavorite = (item: CpuSpecs | GpuSpecs | PhoneSpecs) => {
   padding: 24rpx 32rpx;
   background-color: #ffffff;
   box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+/* 数据更新通知标签栏样式 */
+.notification-bar {
+  margin: 0 32rpx 24rpx;
+  border-radius: 32rpx;
+  overflow: hidden;
+  background-color: #ffffff;
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: translateY(0);
+  opacity: 1;
+  position: relative;
+  z-index: 10;
+  
+  &.hide {
+    transform: translateY(-20rpx);
+    opacity: 0;
+    height: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+  }
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 32rpx;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  
+  &:active {
+    background-color: rgba(0, 122, 255, 0.05);
+    transform: scale(0.98);
+  }
+  
+  &:hover {
+    background-color: rgba(0, 122, 255, 0.02);
+  }
+}
+
+.notification-icon {
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 122, 255, 0.1);
+  border-radius: 20rpx;
+  transition: all 0.3s ease;
+}
+
+.notification-text {
+  flex: 1;
+  min-width: 0;
+  margin-right: 20rpx;
+}
+
+.notification-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 4rpx;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.2;
+}
+
+.notification-desc {
+  display: block;
+  font-size: 24rpx;
+  color: #8E8E93;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.notification-arrow {
+  flex-shrink: 0;
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  background-color: rgba(0, 0, 0, 0.02);
+  
+  &:active {
+    background-color: rgba(0, 0, 0, 0.08);
+    transform: scale(0.9);
+  }
+  
+  .wd-icon {
+    transition: all 0.3s ease;
+  }
+}
+
+.notification-content:hover .notification-arrow .wd-icon {
+  transform: translateX(4rpx);
 }
 
 .category-tabs {

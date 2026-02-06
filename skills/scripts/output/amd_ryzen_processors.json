@@ -1,0 +1,2237 @@
+{
+  "total_cpus": 116,
+  "categories": {
+    "Desktop processors - Ryzen 1000 series": [
+      {
+        "id": "amd-8c5341d0",
+        "series": "Desktop processors - Ryzen 1000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "coreconfig[i]": "4.1",
+        "thermal_solution": "16 MB"
+      },
+      {
+        "id": "amd-da4534fd",
+        "series": "Desktop processors - Ryzen 1000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "coreconfig[i]": "4.1",
+        "thermal_solution": "95 W"
+      },
+      {
+        "id": "amd-73288ee8",
+        "series": "Desktop processors - Ryzen 1000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "coreconfig[i]": "3.9",
+        "thermal_solution": "July 27, 2017"
+      },
+      {
+        "id": "amd-5f509981",
+        "series": "Desktop processors - Ryzen 1000 series",
+        "source": "Wikipedia",
+        "model": "RyzenThreadripper",
+        "chiplets": "4.2",
+        "coreconfig[i]": "32 MB"
+      }
+    ],
+    "Desktop processors - Ryzen 2000 series": [
+      {
+        "id": "amd-6285e317",
+        "series": "Desktop processors - Ryzen 2000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "2400G[6][b]",
+        "gpu": "4 (8)",
+        "release_date": "3.9"
+      },
+      {
+        "id": "amd-1b9254ff",
+        "series": "Desktop processors - Ryzen 2000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "2200G[6][b]",
+        "gpu": "4 (4)",
+        "release_date": "3.7"
+      },
+      {
+        "id": "amd-d0b17307",
+        "series": "Desktop processors - Ryzen 2000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "coreconfig[i]": "16 MB",
+        "thermal_solution": "105 W"
+      },
+      {
+        "id": "amd-6285e317",
+        "series": "Desktop processors - Ryzen 2000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "coreconfig[i]": "95 W",
+        "thermal_solution": "2 × 3"
+      },
+      {
+        "id": "amd-1b9254ff",
+        "series": "Desktop processors - Ryzen 2000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3"
+      },
+      {
+        "id": "amd-54da523c",
+        "series": "Desktop processors - Ryzen 2000 series",
+        "source": "Wikipedia",
+        "model": "RyzenThreadripper",
+        "chiplets": "64 MB",
+        "coreconfig[i]": "250 W"
+      }
+    ],
+    "Desktop processors - Ryzen 3000 series": [
+      {
+        "id": "amd-34c616ea",
+        "series": "Desktop processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "PRO 3400G",
+        "gpu": "4 (8)",
+        "release_date": "4.2",
+        "msrp": "4 MB"
+      },
+      {
+        "id": "amd-f281dc19",
+        "series": "Desktop processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "PRO 3200G",
+        "gpu": "3.6",
+        "msrp": "1.25"
+      },
+      {
+        "id": "amd-991600d6",
+        "series": "Desktop processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "chiplets[i]": "64 MB",
+        "coreconfig[ii]": "105 W[iii]",
+        "thermal_solution": "2 × CCD1 × I/OD",
+        "msrp": "—N/a"
+      },
+      {
+        "id": "amd-ca39464f",
+        "series": "Desktop processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "chiplets[i]": "32 MB",
+        "coreconfig[ii]": "105 W",
+        "thermal_solution": "1 × CCD1 × I/OD",
+        "msrp": "—N/a"
+      },
+      {
+        "id": "amd-34c616ea",
+        "series": "Desktop processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "chiplets[i]": "95 W",
+        "coreconfig[ii]": "2 × 3",
+        "thermal_solution": "—N/a",
+        "release_date": "Jul 7, 2020",
+        "msrp": "US $249"
+      },
+      {
+        "id": "amd-f281dc19",
+        "series": "Desktop processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "chiplets[i]": "1 × 4",
+        "coreconfig[ii]": "Wraith Stealth",
+        "thermal_solution": "Apr 21, 2020",
+        "release_date": "US $119"
+      },
+      {
+        "id": "amd-0511e852",
+        "series": "Desktop processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "RyzenThreadripperPRO",
+        "chiplets": "256 MB",
+        "coreconfig[i]": "280 W[ii]",
+        "release_date": "8 × CCD1 × I/OD",
+        "msrp": "16 × 4"
+      },
+      {
+        "id": "amd-e0f0fc19",
+        "series": "Desktop processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "RyzenThreadripper",
+        "chiplets": "8 × CCD  1 × I/OD",
+        "coreconfig[i]": "16 × 4",
+        "release_date": "Feb 7, 2020",
+        "msrp": "US $3990"
+      }
+    ],
+    "Desktop processors - Ryzen 4000 series": [
+      {
+        "id": "amd-abd10869",
+        "series": "Desktop processors - Ryzen 4000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "coreconfig[i]": "2 × 3",
+        "release_date": "Apr 4, 2022",
+        "msrp": "US $129"
+      },
+      {
+        "id": "amd-db970ea1",
+        "series": "Desktop processors - Ryzen 4000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "coreconfig[i]": "4 MB",
+        "msrp": "US $99"
+      },
+      {
+        "id": "amd-18c74d65",
+        "series": "Desktop processors - Ryzen 4000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "4700G[a]",
+        "gpu": "8 (16)",
+        "release_date": "4.4"
+      },
+      {
+        "id": "amd-abd10869",
+        "series": "Desktop processors - Ryzen 4000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "4600G[a][30]",
+        "gpu": "6 (12)",
+        "release_date": "4.2"
+      },
+      {
+        "id": "amd-db970ea1",
+        "series": "Desktop processors - Ryzen 4000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "4300G[a]",
+        "gpu": "4 (8)",
+        "release_date": "4.0"
+      }
+    ],
+    "Desktop processors - Ryzen 5000 series": [
+      {
+        "id": "amd-4fd09415",
+        "series": "Desktop processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "chiplets": "64 MB",
+        "coreconfig[i]": "105 W",
+        "thermalsolution": "2 × CCD1 × I/OD",
+        "msrp": "—N/a"
+      },
+      {
+        "id": "amd-8a202e4e",
+        "series": "Desktop processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "chiplets": "96 MB",
+        "coreconfig[i]": "105 W",
+        "thermalsolution": "1 × CCD1 × I/OD",
+        "msrp": "Apr 20, 2022"
+      },
+      {
+        "id": "amd-673a2937",
+        "series": "Desktop processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "chiplets": "96 MB",
+        "coreconfig[i]": "105 W",
+        "thermalsolution": "1 × 6",
+        "release_date": "Jul 7, 2023",
+        "msrp": "US $229[41]US Only[42]"
+      },
+      {
+        "id": "amd-c8396fdf",
+        "series": "Desktop processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "thermalsolution": "8 (16)",
+        "coreconfig[i]": "16 MB",
+        "msrpusd": "1 × 8"
+      },
+      {
+        "id": "amd-8b26263b",
+        "series": "Desktop processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "thermalsolution": "6 (12)",
+        "coreconfig[i]": "Apr 4, 2022"
+      },
+      {
+        "id": "amd-04aa44e0",
+        "series": "Desktop processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "thermalsolution": "4 (8)",
+        "coreconfig[i]": "1 × 4",
+        "release_date": "2023",
+        "msrpusd": "OEM"
+      },
+      {
+        "id": "amd-8a202e4e",
+        "series": "Desktop processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "5705G",
+        "gpu": "8 (16)",
+        "thermalsolution": "3.8",
+        "msrp": "1 × 8"
+      },
+      {
+        "id": "amd-673a2937",
+        "series": "Desktop processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "5600GT",
+        "gpu": "6 (12)",
+        "thermalsolution": "3.6",
+        "release_date": "1900",
+        "msrp": "448:28:87 CU"
+      },
+      {
+        "id": "amd-97099d34",
+        "series": "Desktop processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "5305G",
+        "gpu": "4 (8)",
+        "thermalsolution": "4.0",
+        "msrp": "1 × 4"
+      },
+      {
+        "id": "amd-d0c0fd5e",
+        "series": "Desktop processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "RyzenThreadripperPRO",
+        "chiplets": "256 MB",
+        "coreconfig[i]": "280 W",
+        "release_date": "8 × CCD1 × I/OD",
+        "msrp": "8 × 8"
+      }
+    ],
+    "Desktop processors - Ryzen 7000 series": [
+      {
+        "id": "amd-c2f2d663",
+        "series": "Desktop processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "chiplets": "5.7",
+        "coreconfig[ii]": "128 MB[iii]",
+        "thermalsolution": "2 × 8",
+        "release_date": "120 W",
+        "msrp": "—N/a"
+      },
+      {
+        "id": "amd-a93c5e55",
+        "series": "Desktop processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "chiplets": "5.0",
+        "coreconfig[ii]": "96 MB",
+        "thermalsolution": "1 × 8",
+        "release_date": "120 W",
+        "msrp": "—N/a"
+      },
+      {
+        "id": "amd-97c3fc45",
+        "series": "Desktop processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "chiplets": "4.7",
+        "coreconfig[ii]": "96 MB",
+        "thermalsolution": "—N/a",
+        "release_date": "Aug 31, 2024[v]",
+        "msrp": "US $299"
+      },
+      {
+        "id": "amd-1e7fc3f3",
+        "series": "Desktop processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "RyzenThreadripperPRO",
+        "chiplets": "384 MB",
+        "coreconfig[i]": "350 W",
+        "release_date": "12 × CCD1 × I/OD",
+        "msrp": "12 × 8"
+      },
+      {
+        "id": "amd-7b63883e",
+        "series": "Desktop processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "RyzenThreadripper",
+        "chiplets": "256 MB",
+        "coreconfig[i]": "8 × CCD1 × I/OD",
+        "msrp": "US $4999"
+      }
+    ],
+    "Desktop processors - Ryzen 8000 series": [
+      {
+        "id": "amd-81f9dfe1",
+        "series": "Desktop processors - Ryzen 8000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "npu": "5.0",
+        "coreconfig[a]": "Partial[b]",
+        "thermalsolution": "65 WE",
+        "msrp": "Wraith Stealth"
+      },
+      {
+        "id": "amd-4b198e53",
+        "series": "Desktop processors - Ryzen 8000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "npu": "4.7",
+        "coreconfig[a]": "1 × 6"
+      },
+      {
+        "id": "amd-81f9dfe1",
+        "series": "Desktop processors - Ryzen 8000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "8700G[d]",
+        "gpu": "8 (16)",
+        "npu": "8 (16)",
+        "thermalsolution": "4.2",
+        "release_date": "5.1",
+        "msrp": "16 MB"
+      },
+      {
+        "id": "amd-4b198e53",
+        "series": "Desktop processors - Ryzen 8000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "8600G[d]",
+        "gpu": "6 (12)",
+        "npu": "6 (12)",
+        "thermalsolution": "5.0",
+        "msrp": "760M"
+      },
+      {
+        "id": "amd-4e1dbfb0",
+        "series": "Desktop processors - Ryzen 8000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "8300G[d]",
+        "gpu": "4 (8)",
+        "npu": "1 (2)",
+        "thermalsolution": "4.0 / 3.2[e]",
+        "release_date": "4.9 / 3.6[f]",
+        "msrp": "8 MB"
+      }
+    ],
+    "Desktop processors - Ryzen 9000 series": [
+      {
+        "id": "amd-358fe046",
+        "series": "Desktop processors - Ryzen 9000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "chiplets": "128 MB[ii]",
+        "coreconfig[i]": "170 W",
+        "thermalsolution": "2 × CCD1 × I/OD",
+        "launch_msrp": "—N/a"
+      },
+      {
+        "id": "amd-70e8a74f",
+        "series": "Desktop processors - Ryzen 9000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "chiplets": "96 MB",
+        "coreconfig[i]": "1 × CCD1 × I/OD",
+        "thermalsolution": "1 × 8",
+        "release_date": "January 29, 2026",
+        "launch_msrp": "US $499"
+      },
+      {
+        "id": "amd-0e65fa21",
+        "series": "Desktop processors - Ryzen 9000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "chiplets": "65 W[iii]",
+        "coreconfig[i]": "1 × 6",
+        "thermalsolution": "August 8, 2024"
+      },
+      {
+        "id": "amd-89c23a43",
+        "series": "Desktop processors - Ryzen 9000 series",
+        "source": "Wikipedia",
+        "model": "RyzenThreadripperPRO",
+        "chiplets": "384 MB",
+        "coreconfig[i]": "350 W",
+        "release_date": "12 × CCD1 × I/OD",
+        "msrp": "12 × 8"
+      },
+      {
+        "id": "amd-f3665d19",
+        "series": "Desktop processors - Ryzen 9000 series",
+        "source": "Wikipedia",
+        "model": "RyzenThreadripper",
+        "chiplets": "8 × CCD1 × I/OD",
+        "coreconfig[i]": "8 × 8"
+      }
+    ],
+    "Mobile processors - Ryzen 2000 series": [
+      {
+        "id": "amd-8eb431da",
+        "series": "Mobile processors - Ryzen 2000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "2800H",
+        "gpu": "4 (8)",
+        "release_date": "3.8"
+      },
+      {
+        "id": "amd-82211dee",
+        "series": "Mobile processors - Ryzen 2000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "2600H",
+        "gpu": "3.2"
+      },
+      {
+        "id": "amd-05a8bb14",
+        "series": "Mobile processors - Ryzen 2000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "2300U[b]",
+        "gpu": "4 (4)"
+      }
+    ],
+    "Mobile processors - Ryzen 3000 series": [
+      {
+        "id": "amd-d60124f2",
+        "series": "Mobile processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "3250U",
+        "gpu": "2 (4)",
+        "release_date": "3.5"
+      },
+      {
+        "id": "amd-5caedf59",
+        "series": "Mobile processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "3780U[94]",
+        "gpu": "4 (8)",
+        "release_date": "4.0"
+      },
+      {
+        "id": "amd-618af9db",
+        "series": "Mobile processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "3580U[99]",
+        "gpu": "2.1"
+      },
+      {
+        "id": "amd-d60124f2",
+        "series": "Mobile processors - Ryzen 3000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "3350U[105]",
+        "gpu": "4 (4)"
+      }
+    ],
+    "Mobile processors - Ryzen 4000 series": [
+      {
+        "id": "amd-026fe3e3",
+        "series": "Mobile processors - Ryzen 4000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "cpu": "4900H",
+        "gpu": "8 (16)",
+        "release_date": "4.4"
+      },
+      {
+        "id": "amd-27a580fe",
+        "series": "Mobile processors - Ryzen 4000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "4800H[111]",
+        "gpu": "2.9",
+        "release_date": "1.6"
+      },
+      {
+        "id": "amd-fc8b7d0d",
+        "series": "Mobile processors - Ryzen 4000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "4600H[112]",
+        "gpu": "6 (12)",
+        "release_date": "4.0"
+      },
+      {
+        "id": "amd-62d370bd",
+        "series": "Mobile processors - Ryzen 4000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "4300U[c]",
+        "gpu": "4 (4)",
+        "release_date": "3.7"
+      }
+    ],
+    "Mobile processors - Ryzen 5000 series": [
+      {
+        "id": "amd-dfee508f",
+        "series": "Mobile processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "5700U",
+        "gpu": "8 (16)",
+        "release_date": "4.3"
+      },
+      {
+        "id": "amd-25c6c9ea",
+        "series": "Mobile processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "5500U[117]",
+        "gpu": "6 (12)",
+        "release_date": "4.0"
+      },
+      {
+        "id": "amd-edc9586e",
+        "series": "Mobile processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "5300U",
+        "gpu": "4 (8)",
+        "release_date": "3.8"
+      },
+      {
+        "id": "amd-b2e0b121",
+        "series": "Mobile processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "cpu": "5980HX",
+        "gpu": "8 (16)",
+        "release_date": "4.8"
+      },
+      {
+        "id": "amd-dfee508f",
+        "series": "Mobile processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "5800H[118]",
+        "gpu": "3.2"
+      },
+      {
+        "id": "amd-25c6c9ea",
+        "series": "Mobile processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "5600H[128]",
+        "gpu": "6 (12)",
+        "release_date": "4.2"
+      },
+      {
+        "id": "amd-edc9586e",
+        "series": "Mobile processors - Ryzen 5000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "5425U[b][c]",
+        "gpu": "2.3",
+        "release_date": "3.8"
+      }
+    ],
+    "Mobile processors - Ryzen 6000 series": [
+      {
+        "id": "amd-a4b2eee4",
+        "series": "Mobile processors - Ryzen 6000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "cpu": "6980HX",
+        "gpu": "8 (16)",
+        "release_date": "5.0"
+      },
+      {
+        "id": "amd-f5c9cfc7",
+        "series": "Mobile processors - Ryzen 6000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "6800H[a]",
+        "gpu": "3.2",
+        "release_date": "2.2"
+      },
+      {
+        "id": "amd-7bf9790b",
+        "series": "Mobile processors - Ryzen 6000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "6600H[a]",
+        "gpu": "6 (12)",
+        "release_date": "4.5"
+      }
+    ],
+    "Mobile processors - Ryzen 7000 series": [
+      {
+        "id": "amd-2385e708",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "7520U[iii]",
+        "gpu": "4 (8)",
+        "release_date": "4.3"
+      },
+      {
+        "id": "amd-908b258e",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "7320U[iii]",
+        "gpu": "2.4"
+      },
+      {
+        "id": "amd-3e25d376",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "(PRO) 7730U",
+        "gpu": "8 (16)",
+        "release_date": "4.5"
+      },
+      {
+        "id": "amd-2385e708",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "(PRO) 7530U",
+        "gpu": "6 (12)"
+      },
+      {
+        "id": "amd-908b258e",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "(PRO) 7330U",
+        "gpu": "4 (8)"
+      },
+      {
+        "id": "amd-3e25d376",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "7735HS",
+        "gpu": "8 (16)",
+        "release_date": "4.75"
+      },
+      {
+        "id": "amd-2385e708",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "7535HS",
+        "gpu": "6 (12)",
+        "release_date": "4.55"
+      },
+      {
+        "id": "amd-908b258e",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "7335U",
+        "gpu": "3.0"
+      },
+      {
+        "id": "amd-43733979",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "cpu": "(PRO) 7940HS",
+        "gpu": "8 (16)",
+        "ryzen　ai": "8 (16)",
+        "release_date": "4.0"
+      },
+      {
+        "id": "amd-3e25d376",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "(PRO) 7840HS",
+        "gpu": "3.8",
+        "ryzen　ai": "5.1",
+        "release_date": "4201"
+      },
+      {
+        "id": "amd-2385e708",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "(PRO) 7640HS",
+        "gpu": "6 (12)",
+        "ryzen　ai": "6 (12)",
+        "release_date": "4.3"
+      },
+      {
+        "id": "amd-908b258e",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "7440U",
+        "gpu": "4 (8)",
+        "ryzen　ai": "1 (2)",
+        "release_date": "3.6 / 2.8[d]"
+      },
+      {
+        "id": "amd-43733979",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "chiplets": "5.4",
+        "coreconfig[a]": "128 MB[ii]"
+      },
+      {
+        "id": "amd-3e25d376",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "chiplets": "January 17, 2024"
+      },
+      {
+        "id": "amd-2385e708",
+        "series": "Mobile processors - Ryzen 7000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "chiplets": "5.0",
+        "coreconfig[a]": "1 × 6"
+      }
+    ],
+    "Mobile processors - Ryzen 8000 series": [
+      {
+        "id": "amd-792fa3e5",
+        "series": "Mobile processors - Ryzen 8000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "cpu": "8945HS",
+        "gpu": "8 (16)",
+        "ryzen_ai": "8 (16)",
+        "release_date": "4.0"
+      },
+      {
+        "id": "amd-dc91a35d",
+        "series": "Mobile processors - Ryzen 8000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "8845HS",
+        "gpu": "3.8",
+        "ryzen_ai": "5.1",
+        "release_date": "4201"
+      },
+      {
+        "id": "amd-7a4b527d",
+        "series": "Mobile processors - Ryzen 8000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "8645HS",
+        "gpu": "6 (12)",
+        "ryzen_ai": "6 (12)",
+        "release_date": "5.0"
+      },
+      {
+        "id": "amd-ec2dab25",
+        "series": "Mobile processors - Ryzen 8000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "8440U",
+        "gpu": "4 (8)",
+        "ryzen_ai": "1 (2)",
+        "release_date": "3.6 / 2.8[b]"
+      },
+      {
+        "id": "amd-792fa3e5",
+        "series": "Mobile processors - Ryzen 8000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "chiplets": "5.4",
+        "coreconfig[a]": "64 MB"
+      },
+      {
+        "id": "amd-dc91a35d",
+        "series": "Mobile processors - Ryzen 8000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "chiplets": "5.1",
+        "coreconfig[a]": "2 × 6"
+      }
+    ],
+    "Mobile processors - Ryzen 9000 series": [
+      {
+        "id": "amd-f37739df",
+        "series": "Mobile processors - Ryzen 9000 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "chiplets": "5.4",
+        "core_config": "128 MB"
+      }
+    ],
+    "Mobile processors - Ryzen 10 Series": [
+      {
+        "id": "amd-1f5704d7",
+        "series": "Mobile processors - Ryzen 10 Series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "40",
+        "gpu": "4 (8)",
+        "release_date": "4.3"
+      },
+      {
+        "id": "amd-535b0316",
+        "series": "Mobile processors - Ryzen 10 Series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "30",
+        "gpu": "2.4"
+      }
+    ],
+    "Mobile processors - Ryzen 100 series": [
+      {
+        "id": "amd-7e27dcbe",
+        "series": "Mobile processors - Ryzen 100 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "170",
+        "gpu": "8 (16)",
+        "release_date": "4.75"
+      },
+      {
+        "id": "amd-163478f4",
+        "series": "Mobile processors - Ryzen 100 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "150",
+        "gpu": "6 (12)",
+        "release_date": "4.55"
+      },
+      {
+        "id": "amd-9b2885ff",
+        "series": "Mobile processors - Ryzen 100 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "110",
+        "gpu": "4 (8)",
+        "release_date": "4.3"
+      }
+    ],
+    "Mobile processors - Ryzen 200 series": [
+      {
+        "id": "amd-d0faa6cc",
+        "series": "Mobile processors - Ryzen 200 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 9",
+        "cpu": "270",
+        "gpu": "8 (16)",
+        "ryzen_ai": "8 (16)",
+        "release_date": "4.0"
+      },
+      {
+        "id": "amd-a3b87aaf",
+        "series": "Mobile processors - Ryzen 200 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 7",
+        "cpu": "260",
+        "gpu": "3.8",
+        "ryzen_ai": "5.1",
+        "release_date": "4201"
+      },
+      {
+        "id": "amd-dfc3cc0c",
+        "series": "Mobile processors - Ryzen 200 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 5",
+        "cpu": "240",
+        "gpu": "6 (12)",
+        "ryzen_ai": "6 (12)",
+        "release_date": "5.0"
+      },
+      {
+        "id": "amd-86e18096",
+        "series": "Mobile processors - Ryzen 200 series",
+        "source": "Wikipedia",
+        "model": "Ryzen 3",
+        "cpu": "(PRO)210",
+        "gpu": "4 (8)",
+        "ryzen_ai": "1 (2)",
+        "release_date": "3.6 / 2.8"
+      }
+    ],
+    "Mobile processors - Ryzen AI 300 series": [
+      {
+        "id": "amd-7567093a",
+        "series": "Mobile processors - Ryzen AI 300 series",
+        "source": "Wikipedia",
+        "model": "Ryzen AI 9",
+        "cpu": "(PRO)HX 375",
+        "gpu": "12 (24)",
+        "npuryzen_ai": "4 (8)",
+        "release_date": "2.0"
+      },
+      {
+        "id": "amd-8a0fba48",
+        "series": "Mobile processors - Ryzen AI 300 series",
+        "source": "Wikipedia",
+        "model": "Ryzen AI 7",
+        "cpu": "PRO 360[156][157]",
+        "gpu": "8 (16)",
+        "npuryzen_ai": "3 (6)"
+      },
+      {
+        "id": "amd-7c342c5b",
+        "series": "Mobile processors - Ryzen AI 300 series",
+        "source": "Wikipedia",
+        "model": "Ryzen AI 5",
+        "cpu": "(PRO)340",
+        "gpu": "6 (12)",
+        "npuryzen_ai": "3 (6)",
+        "release_date": "4.8"
+      },
+      {
+        "id": "amd-581017ce",
+        "series": "Mobile processors - Ryzen AI 300 series",
+        "source": "Wikipedia",
+        "model": "Ryzen AI MAX+",
+        "cpu": "(PRO)395",
+        "gpu": "16 (32)",
+        "memory": "3.0",
+        "npuryzen_ai": "5.1",
+        "chiplets": "64 MB",
+        "coreconfig": "8060S40 CUs",
+        "release_date": "LPDDR5X256-bit(128 GB)"
+      },
+      {
+        "id": "amd-9593ff06",
+        "series": "Mobile processors - Ryzen AI 300 series",
+        "source": "Wikipedia",
+        "model": "Ryzen AI MAX",
+        "cpu": "(PRO)390",
+        "gpu": "8050S32 CUs",
+        "memory": "2.8",
+        "npuryzen_ai": "Q1 2025"
+      },
+      {
+        "id": "amd-581017ce",
+        "series": "Mobile processors - Ryzen AI 300 series",
+        "source": "Wikipedia",
+        "model": "Ryzen AI MAX+",
+        "cpu": "388",
+        "gpu": "8 (16)",
+        "memory": "3.6",
+        "npuryzen_ai": "32 MB",
+        "chiplets": "8060S40 CUs",
+        "coreconfig": "2.9",
+        "tdp": "1 × CCD1 × I/OD with GPU"
+      },
+      {
+        "id": "amd-9593ff06",
+        "series": "Mobile processors - Ryzen AI 300 series",
+        "source": "Wikipedia",
+        "model": "Ryzen AI MAX",
+        "cpu": "(PRO)385",
+        "gpu": "8050S32 CUs",
+        "memory": "2.8",
+        "npuryzen_ai": "Q1 2025"
+      }
+    ],
+    "Mobile processors - Ryzen AI 400 series": [
+      {
+        "id": "amd-b4a7576a",
+        "series": "Mobile processors - Ryzen AI 400 series",
+        "source": "Wikipedia",
+        "model": "Ryzen AI 9",
+        "cpu": "(PRO)HX 475",
+        "gpu": "12 (24)",
+        "npuryzen_ai": "4 (8)",
+        "release_date": "2.0"
+      },
+      {
+        "id": "amd-e1ecc682",
+        "series": "Mobile processors - Ryzen AI 400 series",
+        "source": "Wikipedia",
+        "model": "Ryzen AI 7",
+        "cpu": "(PRO)450[a]",
+        "gpu": "8 (16)",
+        "npuryzen_ai": "4 (8)",
+        "release_date": "5.1"
+      },
+      {
+        "id": "amd-3f43deb6",
+        "series": "Mobile processors - Ryzen AI 400 series",
+        "source": "Wikipedia",
+        "model": "Ryzen AI 5",
+        "cpu": "PRO 440[a]",
+        "gpu": "3 (6)",
+        "npuryzen_ai": "3 (6)"
+      }
+    ],
+    "Handheld gaming PC processors - Ryzen Z1 series (Zen 4/RDNA3 based)": [
+      {
+        "id": "amd-dc2260b7",
+        "series": "Handheld gaming PC processors - Ryzen Z1 series (Zen 4/RDNA3 based)",
+        "source": "Wikipedia",
+        "model": "Ryzen",
+        "cpu": "Z1 Extreme",
+        "gpu": "8 (16)",
+        "release_date": "3.3"
+      }
+    ],
+    "Handheld gaming PC processors - Ryzen Z2 series (multiple architectures)": [
+      {
+        "id": "amd-7adb8b0b",
+        "series": "Handheld gaming PC processors - Ryzen Z2 series (multiple architectures)",
+        "source": "Wikipedia",
+        "model": "Ryzen AI",
+        "codename": "Z2 Extreme",
+        "process": "Strix Point",
+        "cpu": "TSMC4 nm[162]",
+        "gpu": "8 (16)",
+        "npuryzen_ai": "3 (6)(Zen 5)",
+        "release_date": "5.0 / 3.3"
+      },
+      {
+        "id": "amd-979a0b05",
+        "series": "Handheld gaming PC processors - Ryzen Z2 series (multiple architectures)",
+        "source": "Wikipedia",
+        "model": "Ryzen",
+        "codename": "Z2 Extreme",
+        "process": "—N/a",
+        "cpu": "Q1 2025[164]"
+      }
+    ],
+    "Embedded processors - 5000 series": [
+      {
+        "id": "amd-279fdd86",
+        "series": "Embedded processors - 5000 series",
+        "source": "Wikipedia",
+        "processorbranding": "RyzenEmbedded",
+        "cores": "16",
+        "threads": "32",
+        "chiplets": "64 MB",
+        "coreconfig[i]": "2 × CCD1 × I/OD",
+        "model": "RyzenEmbedded"
+      }
+    ],
+    "Embedded processors - 7000 series": [
+      {
+        "id": "amd-ce650100",
+        "series": "Embedded processors - 7000 series",
+        "source": "Wikipedia",
+        "processorbranding": "RyzenEmbedded",
+        "cores": "12",
+        "threads": "24",
+        "chiplets": "64 MB",
+        "coreconfig[i]": "2 × CCD1 × I/OD",
+        "model": "RyzenEmbedded"
+      }
+    ],
+    "Embedded processors - P100 series": [
+      {
+        "id": "amd-84f16564",
+        "series": "Embedded processors - P100 series",
+        "source": "Wikipedia",
+        "processorbranding": "Ryzen AIEmbedded",
+        "cpu": "6 (12)",
+        "gpu": "4.5",
+        "memory": "6 MB",
+        "nputops": "4",
+        "usb4ports": "2.8",
+        "junctiontemperaturerange": "50",
+        "model": "Ryzen AIEmbedded"
+      }
+    ]
+  },
+  "all_cpus": [
+    {
+      "id": "amd-8c5341d0",
+      "series": "Desktop processors - Ryzen 1000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "coreconfig[i]": "4.1",
+      "thermal_solution": "16 MB"
+    },
+    {
+      "id": "amd-da4534fd",
+      "series": "Desktop processors - Ryzen 1000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "coreconfig[i]": "4.1",
+      "thermal_solution": "95 W"
+    },
+    {
+      "id": "amd-73288ee8",
+      "series": "Desktop processors - Ryzen 1000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "coreconfig[i]": "3.9",
+      "thermal_solution": "July 27, 2017"
+    },
+    {
+      "id": "amd-5f509981",
+      "series": "Desktop processors - Ryzen 1000 series",
+      "source": "Wikipedia",
+      "model": "RyzenThreadripper",
+      "chiplets": "4.2",
+      "coreconfig[i]": "32 MB"
+    },
+    {
+      "id": "amd-6285e317",
+      "series": "Desktop processors - Ryzen 2000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "2400G[6][b]",
+      "gpu": "4 (8)",
+      "release_date": "3.9"
+    },
+    {
+      "id": "amd-1b9254ff",
+      "series": "Desktop processors - Ryzen 2000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "2200G[6][b]",
+      "gpu": "4 (4)",
+      "release_date": "3.7"
+    },
+    {
+      "id": "amd-d0b17307",
+      "series": "Desktop processors - Ryzen 2000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "coreconfig[i]": "16 MB",
+      "thermal_solution": "105 W"
+    },
+    {
+      "id": "amd-6285e317",
+      "series": "Desktop processors - Ryzen 2000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "coreconfig[i]": "95 W",
+      "thermal_solution": "2 × 3"
+    },
+    {
+      "id": "amd-1b9254ff",
+      "series": "Desktop processors - Ryzen 2000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3"
+    },
+    {
+      "id": "amd-54da523c",
+      "series": "Desktop processors - Ryzen 2000 series",
+      "source": "Wikipedia",
+      "model": "RyzenThreadripper",
+      "chiplets": "64 MB",
+      "coreconfig[i]": "250 W"
+    },
+    {
+      "id": "amd-34c616ea",
+      "series": "Desktop processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "PRO 3400G",
+      "gpu": "4 (8)",
+      "release_date": "4.2",
+      "msrp": "4 MB"
+    },
+    {
+      "id": "amd-f281dc19",
+      "series": "Desktop processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "PRO 3200G",
+      "gpu": "3.6",
+      "msrp": "1.25"
+    },
+    {
+      "id": "amd-991600d6",
+      "series": "Desktop processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "chiplets[i]": "64 MB",
+      "coreconfig[ii]": "105 W[iii]",
+      "thermal_solution": "2 × CCD1 × I/OD",
+      "msrp": "—N/a"
+    },
+    {
+      "id": "amd-ca39464f",
+      "series": "Desktop processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "chiplets[i]": "32 MB",
+      "coreconfig[ii]": "105 W",
+      "thermal_solution": "1 × CCD1 × I/OD",
+      "msrp": "—N/a"
+    },
+    {
+      "id": "amd-34c616ea",
+      "series": "Desktop processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "chiplets[i]": "95 W",
+      "coreconfig[ii]": "2 × 3",
+      "thermal_solution": "—N/a",
+      "release_date": "Jul 7, 2020",
+      "msrp": "US $249"
+    },
+    {
+      "id": "amd-f281dc19",
+      "series": "Desktop processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "chiplets[i]": "1 × 4",
+      "coreconfig[ii]": "Wraith Stealth",
+      "thermal_solution": "Apr 21, 2020",
+      "release_date": "US $119"
+    },
+    {
+      "id": "amd-0511e852",
+      "series": "Desktop processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "RyzenThreadripperPRO",
+      "chiplets": "256 MB",
+      "coreconfig[i]": "280 W[ii]",
+      "release_date": "8 × CCD1 × I/OD",
+      "msrp": "16 × 4"
+    },
+    {
+      "id": "amd-e0f0fc19",
+      "series": "Desktop processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "RyzenThreadripper",
+      "chiplets": "8 × CCD  1 × I/OD",
+      "coreconfig[i]": "16 × 4",
+      "release_date": "Feb 7, 2020",
+      "msrp": "US $3990"
+    },
+    {
+      "id": "amd-abd10869",
+      "series": "Desktop processors - Ryzen 4000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "coreconfig[i]": "2 × 3",
+      "release_date": "Apr 4, 2022",
+      "msrp": "US $129"
+    },
+    {
+      "id": "amd-db970ea1",
+      "series": "Desktop processors - Ryzen 4000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "coreconfig[i]": "4 MB",
+      "msrp": "US $99"
+    },
+    {
+      "id": "amd-18c74d65",
+      "series": "Desktop processors - Ryzen 4000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "4700G[a]",
+      "gpu": "8 (16)",
+      "release_date": "4.4"
+    },
+    {
+      "id": "amd-abd10869",
+      "series": "Desktop processors - Ryzen 4000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "4600G[a][30]",
+      "gpu": "6 (12)",
+      "release_date": "4.2"
+    },
+    {
+      "id": "amd-db970ea1",
+      "series": "Desktop processors - Ryzen 4000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "4300G[a]",
+      "gpu": "4 (8)",
+      "release_date": "4.0"
+    },
+    {
+      "id": "amd-4fd09415",
+      "series": "Desktop processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "chiplets": "64 MB",
+      "coreconfig[i]": "105 W",
+      "thermalsolution": "2 × CCD1 × I/OD",
+      "msrp": "—N/a"
+    },
+    {
+      "id": "amd-8a202e4e",
+      "series": "Desktop processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "chiplets": "96 MB",
+      "coreconfig[i]": "105 W",
+      "thermalsolution": "1 × CCD1 × I/OD",
+      "msrp": "Apr 20, 2022"
+    },
+    {
+      "id": "amd-673a2937",
+      "series": "Desktop processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "chiplets": "96 MB",
+      "coreconfig[i]": "105 W",
+      "thermalsolution": "1 × 6",
+      "release_date": "Jul 7, 2023",
+      "msrp": "US $229[41]US Only[42]"
+    },
+    {
+      "id": "amd-c8396fdf",
+      "series": "Desktop processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "thermalsolution": "8 (16)",
+      "coreconfig[i]": "16 MB",
+      "msrpusd": "1 × 8"
+    },
+    {
+      "id": "amd-8b26263b",
+      "series": "Desktop processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "thermalsolution": "6 (12)",
+      "coreconfig[i]": "Apr 4, 2022"
+    },
+    {
+      "id": "amd-04aa44e0",
+      "series": "Desktop processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "thermalsolution": "4 (8)",
+      "coreconfig[i]": "1 × 4",
+      "release_date": "2023",
+      "msrpusd": "OEM"
+    },
+    {
+      "id": "amd-8a202e4e",
+      "series": "Desktop processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "5705G",
+      "gpu": "8 (16)",
+      "thermalsolution": "3.8",
+      "msrp": "1 × 8"
+    },
+    {
+      "id": "amd-673a2937",
+      "series": "Desktop processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "5600GT",
+      "gpu": "6 (12)",
+      "thermalsolution": "3.6",
+      "release_date": "1900",
+      "msrp": "448:28:87 CU"
+    },
+    {
+      "id": "amd-97099d34",
+      "series": "Desktop processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "5305G",
+      "gpu": "4 (8)",
+      "thermalsolution": "4.0",
+      "msrp": "1 × 4"
+    },
+    {
+      "id": "amd-d0c0fd5e",
+      "series": "Desktop processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "RyzenThreadripperPRO",
+      "chiplets": "256 MB",
+      "coreconfig[i]": "280 W",
+      "release_date": "8 × CCD1 × I/OD",
+      "msrp": "8 × 8"
+    },
+    {
+      "id": "amd-c2f2d663",
+      "series": "Desktop processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "chiplets": "5.7",
+      "coreconfig[ii]": "128 MB[iii]",
+      "thermalsolution": "2 × 8",
+      "release_date": "120 W",
+      "msrp": "—N/a"
+    },
+    {
+      "id": "amd-a93c5e55",
+      "series": "Desktop processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "chiplets": "5.0",
+      "coreconfig[ii]": "96 MB",
+      "thermalsolution": "1 × 8",
+      "release_date": "120 W",
+      "msrp": "—N/a"
+    },
+    {
+      "id": "amd-97c3fc45",
+      "series": "Desktop processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "chiplets": "4.7",
+      "coreconfig[ii]": "96 MB",
+      "thermalsolution": "—N/a",
+      "release_date": "Aug 31, 2024[v]",
+      "msrp": "US $299"
+    },
+    {
+      "id": "amd-1e7fc3f3",
+      "series": "Desktop processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "RyzenThreadripperPRO",
+      "chiplets": "384 MB",
+      "coreconfig[i]": "350 W",
+      "release_date": "12 × CCD1 × I/OD",
+      "msrp": "12 × 8"
+    },
+    {
+      "id": "amd-7b63883e",
+      "series": "Desktop processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "RyzenThreadripper",
+      "chiplets": "256 MB",
+      "coreconfig[i]": "8 × CCD1 × I/OD",
+      "msrp": "US $4999"
+    },
+    {
+      "id": "amd-81f9dfe1",
+      "series": "Desktop processors - Ryzen 8000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "npu": "5.0",
+      "coreconfig[a]": "Partial[b]",
+      "thermalsolution": "65 WE",
+      "msrp": "Wraith Stealth"
+    },
+    {
+      "id": "amd-4b198e53",
+      "series": "Desktop processors - Ryzen 8000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "npu": "4.7",
+      "coreconfig[a]": "1 × 6"
+    },
+    {
+      "id": "amd-81f9dfe1",
+      "series": "Desktop processors - Ryzen 8000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "8700G[d]",
+      "gpu": "8 (16)",
+      "npu": "8 (16)",
+      "thermalsolution": "4.2",
+      "release_date": "5.1",
+      "msrp": "16 MB"
+    },
+    {
+      "id": "amd-4b198e53",
+      "series": "Desktop processors - Ryzen 8000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "8600G[d]",
+      "gpu": "6 (12)",
+      "npu": "6 (12)",
+      "thermalsolution": "5.0",
+      "msrp": "760M"
+    },
+    {
+      "id": "amd-4e1dbfb0",
+      "series": "Desktop processors - Ryzen 8000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "8300G[d]",
+      "gpu": "4 (8)",
+      "npu": "1 (2)",
+      "thermalsolution": "4.0 / 3.2[e]",
+      "release_date": "4.9 / 3.6[f]",
+      "msrp": "8 MB"
+    },
+    {
+      "id": "amd-358fe046",
+      "series": "Desktop processors - Ryzen 9000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "chiplets": "128 MB[ii]",
+      "coreconfig[i]": "170 W",
+      "thermalsolution": "2 × CCD1 × I/OD",
+      "launch_msrp": "—N/a"
+    },
+    {
+      "id": "amd-70e8a74f",
+      "series": "Desktop processors - Ryzen 9000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "chiplets": "96 MB",
+      "coreconfig[i]": "1 × CCD1 × I/OD",
+      "thermalsolution": "1 × 8",
+      "release_date": "January 29, 2026",
+      "launch_msrp": "US $499"
+    },
+    {
+      "id": "amd-0e65fa21",
+      "series": "Desktop processors - Ryzen 9000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "chiplets": "65 W[iii]",
+      "coreconfig[i]": "1 × 6",
+      "thermalsolution": "August 8, 2024"
+    },
+    {
+      "id": "amd-89c23a43",
+      "series": "Desktop processors - Ryzen 9000 series",
+      "source": "Wikipedia",
+      "model": "RyzenThreadripperPRO",
+      "chiplets": "384 MB",
+      "coreconfig[i]": "350 W",
+      "release_date": "12 × CCD1 × I/OD",
+      "msrp": "12 × 8"
+    },
+    {
+      "id": "amd-f3665d19",
+      "series": "Desktop processors - Ryzen 9000 series",
+      "source": "Wikipedia",
+      "model": "RyzenThreadripper",
+      "chiplets": "8 × CCD1 × I/OD",
+      "coreconfig[i]": "8 × 8"
+    },
+    {
+      "id": "amd-8eb431da",
+      "series": "Mobile processors - Ryzen 2000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "2800H",
+      "gpu": "4 (8)",
+      "release_date": "3.8"
+    },
+    {
+      "id": "amd-82211dee",
+      "series": "Mobile processors - Ryzen 2000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "2600H",
+      "gpu": "3.2"
+    },
+    {
+      "id": "amd-05a8bb14",
+      "series": "Mobile processors - Ryzen 2000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "2300U[b]",
+      "gpu": "4 (4)"
+    },
+    {
+      "id": "amd-d60124f2",
+      "series": "Mobile processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "3250U",
+      "gpu": "2 (4)",
+      "release_date": "3.5"
+    },
+    {
+      "id": "amd-5caedf59",
+      "series": "Mobile processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "3780U[94]",
+      "gpu": "4 (8)",
+      "release_date": "4.0"
+    },
+    {
+      "id": "amd-618af9db",
+      "series": "Mobile processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "3580U[99]",
+      "gpu": "2.1"
+    },
+    {
+      "id": "amd-d60124f2",
+      "series": "Mobile processors - Ryzen 3000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "3350U[105]",
+      "gpu": "4 (4)"
+    },
+    {
+      "id": "amd-026fe3e3",
+      "series": "Mobile processors - Ryzen 4000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "cpu": "4900H",
+      "gpu": "8 (16)",
+      "release_date": "4.4"
+    },
+    {
+      "id": "amd-27a580fe",
+      "series": "Mobile processors - Ryzen 4000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "4800H[111]",
+      "gpu": "2.9",
+      "release_date": "1.6"
+    },
+    {
+      "id": "amd-fc8b7d0d",
+      "series": "Mobile processors - Ryzen 4000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "4600H[112]",
+      "gpu": "6 (12)",
+      "release_date": "4.0"
+    },
+    {
+      "id": "amd-62d370bd",
+      "series": "Mobile processors - Ryzen 4000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "4300U[c]",
+      "gpu": "4 (4)",
+      "release_date": "3.7"
+    },
+    {
+      "id": "amd-dfee508f",
+      "series": "Mobile processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "5700U",
+      "gpu": "8 (16)",
+      "release_date": "4.3"
+    },
+    {
+      "id": "amd-25c6c9ea",
+      "series": "Mobile processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "5500U[117]",
+      "gpu": "6 (12)",
+      "release_date": "4.0"
+    },
+    {
+      "id": "amd-edc9586e",
+      "series": "Mobile processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "5300U",
+      "gpu": "4 (8)",
+      "release_date": "3.8"
+    },
+    {
+      "id": "amd-b2e0b121",
+      "series": "Mobile processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "cpu": "5980HX",
+      "gpu": "8 (16)",
+      "release_date": "4.8"
+    },
+    {
+      "id": "amd-dfee508f",
+      "series": "Mobile processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "5800H[118]",
+      "gpu": "3.2"
+    },
+    {
+      "id": "amd-25c6c9ea",
+      "series": "Mobile processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "5600H[128]",
+      "gpu": "6 (12)",
+      "release_date": "4.2"
+    },
+    {
+      "id": "amd-edc9586e",
+      "series": "Mobile processors - Ryzen 5000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "5425U[b][c]",
+      "gpu": "2.3",
+      "release_date": "3.8"
+    },
+    {
+      "id": "amd-a4b2eee4",
+      "series": "Mobile processors - Ryzen 6000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "cpu": "6980HX",
+      "gpu": "8 (16)",
+      "release_date": "5.0"
+    },
+    {
+      "id": "amd-f5c9cfc7",
+      "series": "Mobile processors - Ryzen 6000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "6800H[a]",
+      "gpu": "3.2",
+      "release_date": "2.2"
+    },
+    {
+      "id": "amd-7bf9790b",
+      "series": "Mobile processors - Ryzen 6000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "6600H[a]",
+      "gpu": "6 (12)",
+      "release_date": "4.5"
+    },
+    {
+      "id": "amd-2385e708",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "7520U[iii]",
+      "gpu": "4 (8)",
+      "release_date": "4.3"
+    },
+    {
+      "id": "amd-908b258e",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "7320U[iii]",
+      "gpu": "2.4"
+    },
+    {
+      "id": "amd-3e25d376",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "(PRO) 7730U",
+      "gpu": "8 (16)",
+      "release_date": "4.5"
+    },
+    {
+      "id": "amd-2385e708",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "(PRO) 7530U",
+      "gpu": "6 (12)"
+    },
+    {
+      "id": "amd-908b258e",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "(PRO) 7330U",
+      "gpu": "4 (8)"
+    },
+    {
+      "id": "amd-3e25d376",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "7735HS",
+      "gpu": "8 (16)",
+      "release_date": "4.75"
+    },
+    {
+      "id": "amd-2385e708",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "7535HS",
+      "gpu": "6 (12)",
+      "release_date": "4.55"
+    },
+    {
+      "id": "amd-908b258e",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "7335U",
+      "gpu": "3.0"
+    },
+    {
+      "id": "amd-43733979",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "cpu": "(PRO) 7940HS",
+      "gpu": "8 (16)",
+      "ryzen　ai": "8 (16)",
+      "release_date": "4.0"
+    },
+    {
+      "id": "amd-3e25d376",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "(PRO) 7840HS",
+      "gpu": "3.8",
+      "ryzen　ai": "5.1",
+      "release_date": "4201"
+    },
+    {
+      "id": "amd-2385e708",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "(PRO) 7640HS",
+      "gpu": "6 (12)",
+      "ryzen　ai": "6 (12)",
+      "release_date": "4.3"
+    },
+    {
+      "id": "amd-908b258e",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "7440U",
+      "gpu": "4 (8)",
+      "ryzen　ai": "1 (2)",
+      "release_date": "3.6 / 2.8[d]"
+    },
+    {
+      "id": "amd-43733979",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "chiplets": "5.4",
+      "coreconfig[a]": "128 MB[ii]"
+    },
+    {
+      "id": "amd-3e25d376",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "chiplets": "January 17, 2024"
+    },
+    {
+      "id": "amd-2385e708",
+      "series": "Mobile processors - Ryzen 7000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "chiplets": "5.0",
+      "coreconfig[a]": "1 × 6"
+    },
+    {
+      "id": "amd-792fa3e5",
+      "series": "Mobile processors - Ryzen 8000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "cpu": "8945HS",
+      "gpu": "8 (16)",
+      "ryzen_ai": "8 (16)",
+      "release_date": "4.0"
+    },
+    {
+      "id": "amd-dc91a35d",
+      "series": "Mobile processors - Ryzen 8000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "8845HS",
+      "gpu": "3.8",
+      "ryzen_ai": "5.1",
+      "release_date": "4201"
+    },
+    {
+      "id": "amd-7a4b527d",
+      "series": "Mobile processors - Ryzen 8000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "8645HS",
+      "gpu": "6 (12)",
+      "ryzen_ai": "6 (12)",
+      "release_date": "5.0"
+    },
+    {
+      "id": "amd-ec2dab25",
+      "series": "Mobile processors - Ryzen 8000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "8440U",
+      "gpu": "4 (8)",
+      "ryzen_ai": "1 (2)",
+      "release_date": "3.6 / 2.8[b]"
+    },
+    {
+      "id": "amd-792fa3e5",
+      "series": "Mobile processors - Ryzen 8000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "chiplets": "5.4",
+      "coreconfig[a]": "64 MB"
+    },
+    {
+      "id": "amd-dc91a35d",
+      "series": "Mobile processors - Ryzen 8000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "chiplets": "5.1",
+      "coreconfig[a]": "2 × 6"
+    },
+    {
+      "id": "amd-f37739df",
+      "series": "Mobile processors - Ryzen 9000 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "chiplets": "5.4",
+      "core_config": "128 MB"
+    },
+    {
+      "id": "amd-1f5704d7",
+      "series": "Mobile processors - Ryzen 10 Series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "40",
+      "gpu": "4 (8)",
+      "release_date": "4.3"
+    },
+    {
+      "id": "amd-535b0316",
+      "series": "Mobile processors - Ryzen 10 Series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "30",
+      "gpu": "2.4"
+    },
+    {
+      "id": "amd-7e27dcbe",
+      "series": "Mobile processors - Ryzen 100 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "170",
+      "gpu": "8 (16)",
+      "release_date": "4.75"
+    },
+    {
+      "id": "amd-163478f4",
+      "series": "Mobile processors - Ryzen 100 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "150",
+      "gpu": "6 (12)",
+      "release_date": "4.55"
+    },
+    {
+      "id": "amd-9b2885ff",
+      "series": "Mobile processors - Ryzen 100 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "110",
+      "gpu": "4 (8)",
+      "release_date": "4.3"
+    },
+    {
+      "id": "amd-d0faa6cc",
+      "series": "Mobile processors - Ryzen 200 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 9",
+      "cpu": "270",
+      "gpu": "8 (16)",
+      "ryzen_ai": "8 (16)",
+      "release_date": "4.0"
+    },
+    {
+      "id": "amd-a3b87aaf",
+      "series": "Mobile processors - Ryzen 200 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 7",
+      "cpu": "260",
+      "gpu": "3.8",
+      "ryzen_ai": "5.1",
+      "release_date": "4201"
+    },
+    {
+      "id": "amd-dfc3cc0c",
+      "series": "Mobile processors - Ryzen 200 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 5",
+      "cpu": "240",
+      "gpu": "6 (12)",
+      "ryzen_ai": "6 (12)",
+      "release_date": "5.0"
+    },
+    {
+      "id": "amd-86e18096",
+      "series": "Mobile processors - Ryzen 200 series",
+      "source": "Wikipedia",
+      "model": "Ryzen 3",
+      "cpu": "(PRO)210",
+      "gpu": "4 (8)",
+      "ryzen_ai": "1 (2)",
+      "release_date": "3.6 / 2.8"
+    },
+    {
+      "id": "amd-7567093a",
+      "series": "Mobile processors - Ryzen AI 300 series",
+      "source": "Wikipedia",
+      "model": "Ryzen AI 9",
+      "cpu": "(PRO)HX 375",
+      "gpu": "12 (24)",
+      "npuryzen_ai": "4 (8)",
+      "release_date": "2.0"
+    },
+    {
+      "id": "amd-8a0fba48",
+      "series": "Mobile processors - Ryzen AI 300 series",
+      "source": "Wikipedia",
+      "model": "Ryzen AI 7",
+      "cpu": "PRO 360[156][157]",
+      "gpu": "8 (16)",
+      "npuryzen_ai": "3 (6)"
+    },
+    {
+      "id": "amd-7c342c5b",
+      "series": "Mobile processors - Ryzen AI 300 series",
+      "source": "Wikipedia",
+      "model": "Ryzen AI 5",
+      "cpu": "(PRO)340",
+      "gpu": "6 (12)",
+      "npuryzen_ai": "3 (6)",
+      "release_date": "4.8"
+    },
+    {
+      "id": "amd-581017ce",
+      "series": "Mobile processors - Ryzen AI 300 series",
+      "source": "Wikipedia",
+      "model": "Ryzen AI MAX+",
+      "cpu": "(PRO)395",
+      "gpu": "16 (32)",
+      "memory": "3.0",
+      "npuryzen_ai": "5.1",
+      "chiplets": "64 MB",
+      "coreconfig": "8060S40 CUs",
+      "release_date": "LPDDR5X256-bit(128 GB)"
+    },
+    {
+      "id": "amd-9593ff06",
+      "series": "Mobile processors - Ryzen AI 300 series",
+      "source": "Wikipedia",
+      "model": "Ryzen AI MAX",
+      "cpu": "(PRO)390",
+      "gpu": "8050S32 CUs",
+      "memory": "2.8",
+      "npuryzen_ai": "Q1 2025"
+    },
+    {
+      "id": "amd-581017ce",
+      "series": "Mobile processors - Ryzen AI 300 series",
+      "source": "Wikipedia",
+      "model": "Ryzen AI MAX+",
+      "cpu": "388",
+      "gpu": "8 (16)",
+      "memory": "3.6",
+      "npuryzen_ai": "32 MB",
+      "chiplets": "8060S40 CUs",
+      "coreconfig": "2.9",
+      "tdp": "1 × CCD1 × I/OD with GPU"
+    },
+    {
+      "id": "amd-9593ff06",
+      "series": "Mobile processors - Ryzen AI 300 series",
+      "source": "Wikipedia",
+      "model": "Ryzen AI MAX",
+      "cpu": "(PRO)385",
+      "gpu": "8050S32 CUs",
+      "memory": "2.8",
+      "npuryzen_ai": "Q1 2025"
+    },
+    {
+      "id": "amd-b4a7576a",
+      "series": "Mobile processors - Ryzen AI 400 series",
+      "source": "Wikipedia",
+      "model": "Ryzen AI 9",
+      "cpu": "(PRO)HX 475",
+      "gpu": "12 (24)",
+      "npuryzen_ai": "4 (8)",
+      "release_date": "2.0"
+    },
+    {
+      "id": "amd-e1ecc682",
+      "series": "Mobile processors - Ryzen AI 400 series",
+      "source": "Wikipedia",
+      "model": "Ryzen AI 7",
+      "cpu": "(PRO)450[a]",
+      "gpu": "8 (16)",
+      "npuryzen_ai": "4 (8)",
+      "release_date": "5.1"
+    },
+    {
+      "id": "amd-3f43deb6",
+      "series": "Mobile processors - Ryzen AI 400 series",
+      "source": "Wikipedia",
+      "model": "Ryzen AI 5",
+      "cpu": "PRO 440[a]",
+      "gpu": "3 (6)",
+      "npuryzen_ai": "3 (6)"
+    },
+    {
+      "id": "amd-dc2260b7",
+      "series": "Handheld gaming PC processors - Ryzen Z1 series (Zen 4/RDNA3 based)",
+      "source": "Wikipedia",
+      "model": "Ryzen",
+      "cpu": "Z1 Extreme",
+      "gpu": "8 (16)",
+      "release_date": "3.3"
+    },
+    {
+      "id": "amd-7adb8b0b",
+      "series": "Handheld gaming PC processors - Ryzen Z2 series (multiple architectures)",
+      "source": "Wikipedia",
+      "model": "Ryzen AI",
+      "codename": "Z2 Extreme",
+      "process": "Strix Point",
+      "cpu": "TSMC4 nm[162]",
+      "gpu": "8 (16)",
+      "npuryzen_ai": "3 (6)(Zen 5)",
+      "release_date": "5.0 / 3.3"
+    },
+    {
+      "id": "amd-979a0b05",
+      "series": "Handheld gaming PC processors - Ryzen Z2 series (multiple architectures)",
+      "source": "Wikipedia",
+      "model": "Ryzen",
+      "codename": "Z2 Extreme",
+      "process": "—N/a",
+      "cpu": "Q1 2025[164]"
+    },
+    {
+      "id": "amd-279fdd86",
+      "series": "Embedded processors - 5000 series",
+      "source": "Wikipedia",
+      "processorbranding": "RyzenEmbedded",
+      "cores": "16",
+      "threads": "32",
+      "chiplets": "64 MB",
+      "coreconfig[i]": "2 × CCD1 × I/OD",
+      "model": "RyzenEmbedded"
+    },
+    {
+      "id": "amd-ce650100",
+      "series": "Embedded processors - 7000 series",
+      "source": "Wikipedia",
+      "processorbranding": "RyzenEmbedded",
+      "cores": "12",
+      "threads": "24",
+      "chiplets": "64 MB",
+      "coreconfig[i]": "2 × CCD1 × I/OD",
+      "model": "RyzenEmbedded"
+    },
+    {
+      "id": "amd-84f16564",
+      "series": "Embedded processors - P100 series",
+      "source": "Wikipedia",
+      "processorbranding": "Ryzen AIEmbedded",
+      "cpu": "6 (12)",
+      "gpu": "4.5",
+      "memory": "6 MB",
+      "nputops": "4",
+      "usb4ports": "2.8",
+      "junctiontemperaturerange": "50",
+      "model": "Ryzen AIEmbedded"
+    }
+  ],
+  "source": "https://en.wikipedia.org/wiki/List_of_AMD_Ryzen_processors",
+  "scraped_at": "2026-02-04T23:33:07.796228"
+}

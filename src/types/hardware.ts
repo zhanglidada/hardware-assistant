@@ -83,3 +83,17 @@ export interface PhoneSpecs extends BaseHardware {
   /** 是否支持5G */
   support5G: boolean;
 }
+
+/**
+ * CPU 系列信息接口
+ */
+export interface CpuSeriesInfo {
+  /** 系列代码，主键，如 'intel_i9', 'amd_r7' */
+  series_code: string;
+  /** 显示名称，如 'Intel® Core™ i9' */
+  display_name: string;
+  /** 图标云存储ID，'cloud://...' 格式 */
+  icon_cloud_id: string;
+  /** 品牌色，用于做图片背景兜底 */
+  bg_color: string;
+}

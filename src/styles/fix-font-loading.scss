@@ -14,6 +14,13 @@
 }
 
 @font-face {
+  font-family: 'wd-icons';
+  src: local('Arial');
+  font-display: block;
+  unicode-range: U+0-10FFFF;
+}
+
+@font-face {
   font-family: 'wot-design-uni-icons';
   src: local('Arial');
   font-display: block;
@@ -75,6 +82,12 @@
 .wd-icon,
 [class*="wd-icon-"],
 [class^="wd-icon-"] {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+page .wd-icon,
+page [class*="wd-icon-"],
+page [class^="wd-icon-"] {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
 }
 
